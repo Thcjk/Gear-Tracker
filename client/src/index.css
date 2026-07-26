@@ -929,5 +929,197 @@ h3,
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
 }
 
+/* Lebende Stadt – Bau-Dock & NPCs */
+.living-city-shell {
+  position: relative;
+}
+
+.city-build-dock {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 20;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 0.55rem 0.65rem;
+  background: linear-gradient(180deg, rgba(36, 28, 20, 0.94), rgba(16, 12, 10, 0.97));
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+}
+
+.city-build-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-height: 5.5rem;
+  overflow-y: auto;
+}
+
+.city-build-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--color-parchment);
+  cursor: pointer;
+}
+.city-build-chip.is-selected {
+  border-color: var(--color-gold);
+  background: rgba(212, 175, 55, 0.18);
+  color: var(--color-gold);
+}
+.city-build-chip.is-locked {
+  opacity: 0.4;
+}
+.city-build-chip-name {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+}
+
+.city-build-hint {
+  margin-top: 0.35rem;
+  font-size: 0.62rem;
+  color: rgba(232, 220, 196, 0.7);
+}
+
+.living-settlement.build-mode .settlement-plot.buildable:hover,
+.living-settlement .settlement-plot.can-place {
+  background: rgba(120, 180, 80, 0.22);
+  box-shadow: inset 0 0 0 2px rgba(140, 200, 90, 0.65);
+  border-radius: 4px;
+}
+.living-settlement .settlement-plot.cannot-place {
+  background: rgba(160, 40, 40, 0.2);
+  box-shadow: inset 0 0 0 2px rgba(200, 80, 70, 0.55);
+  border-radius: 4px;
+}
+
+.build-ghost {
+  font-size: 1.4rem;
+  opacity: 0.55;
+  filter: grayscale(0.2);
+  animation: ghostPulse 1s ease-in-out infinite;
+}
+.build-ghost.is-blocked {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+@keyframes ghostPulse {
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+.field-marker {
+  font-size: 1rem;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+.settlement-life-wrap {
+  position: absolute;
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+}
+
+.city-life-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.life-actor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lifeWander var(--life-dur, 4s) ease-in-out var(--life-delay, 0s) infinite alternate;
+  transform: translate(var(--life-x), var(--life-y));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+  z-index: 7;
+}
+
+.life-glyph {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.life-builder .life-hammer {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: #c9a227;
+  animation: hammerTap 0.55s ease-in-out infinite;
+}
+@keyframes hammerTap {
+  50% {
+    transform: translateY(3px) rotate(20deg);
+  }
+}
+
+.life-farmer .life-tool {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 5px;
+  height: 8px;
+  background: #6b5344;
+  border-radius: 1px;
+}
+
+@keyframes lifeWander {
+  from {
+    transform: translate(var(--life-x), var(--life-y));
+  }
+  to {
+    transform: translate(var(--life-tx), var(--life-ty));
+  }
+}
+
+.city-stream {
+  animation: streamShimmer 3.5s ease-in-out infinite;
+}
+@keyframes streamShimmer {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.settlement-plot.is-field-plot {
+  z-index: 2;
+}
+
+@media (max-width: 700px) {
+  .city-build-dock {
+    max-width: none;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    right: 0.25rem;
+  }
+  .city-build-chip-name {
+    display: none;
+  }
+}
+
 
 

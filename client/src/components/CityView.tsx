@@ -21,6 +21,7 @@ import {
   buildingProducesHint,
 } from '../ui/buildHints';
 import { toneClass, toneHighGood, toneHousing, toneJobs } from '../ui/statusTone';
+import { CityLifeLayer } from './CityLifeLayer';
 
 interface CityViewProps {
   province: Province;
@@ -411,9 +412,10 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
           </div>
         </div>
       ) : (
-        <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
-          <div className="shrink-0 lg:w-72 border-b lg:border-b-0 lg:border-r border-gold/20 bg-black/40 overflow-x-auto lg:overflow-y-auto p-2">
-            <div className="flex gap-1 mb-2">
+        <div className="flex-1 min-h-0 flex flex-col relative living-city-shell">
+          {/* Interaktives Bau-Dock auf der Karte */}
+          <div className="city-build-dock">
+            <div className="flex gap-1 mb-1.5">
               {(
                 [
                   ['build', 'Bauen'],
@@ -431,18 +433,17 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                 </button>
               ))}
             </div>
-
             {mode === 'build' && (
               <>
-                <div className="flex flex-wrap gap-1 mb-2">
+                <div className="flex flex-wrap gap-1 mb-1.5">
                   {BUILD_CATEGORIES.map((c) => (
                     <button
                       key={c.id}
                       type="button"
                       className={`text-[10px] px-1.5 py-0.5 rounded border ${
                         category === c.id
-                          ? 'border-gold text-gold bg-gold/10'
-                          : 'border-gold/20 text-parchment/60'
+                          ? 'border-gold text-gold bg-gold/15'
+                          : 'border-gold/25 text-parchment/70'
                       }`}
                       onClick={() => setCategory(c.id)}
                     >
@@ -450,7 +451,7 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                     </button>
                   ))}
                 </div>
-                <div className="flex lg:flex-col gap-1.5 flex-wrap lg:flex-nowrap">
+                <div className="city-build-palette">
                   {palette.map((kind) => {
                     const d = CITY_TILE_DEFS[kind];
                     const locked = cityLevel < d.minCityLevel;
@@ -460,134 +461,151 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                         type="button"
                         disabled={locked || loading}
                         onClick={() => setSelectedKind(kind)}
-                        className={`build-palette-item text-left ${
-                          selectedKind === kind ? 'is-selected' : ''
-                        } ${locked ? 'is-locked' : ''}`}
+                        className={`city-build-chip ${selectedKind === kind ? 'is-selected' : ''} ${
+                          locked ? 'is-locked' : ''
+                        }`}
+                        title={`${d.name} · ${formatBuildCost(kind)} · ${buildTimeLabel(kind)}`}
                       >
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-base leading-none">{d.icon}</span>
-                          <span className="font-display text-[11px] text-gold">{d.name}</span>
-                        </div>
-                        <div className="build-meta">
-                          <span>💰 {formatBuildCost(kind) || '–'}</span>
-                          <span>⏱ {buildTimeLabel(kind)}</span>
-                          <span>👷 {buildingJobsHint(kind)}</span>
-                          <span>📦 {buildingProducesHint(kind)}</span>
-                        </div>
+                        <span className="text-base leading-none">{d.icon}</span>
+                        <span className="city-build-chip-name">{d.name}</span>
                       </button>
                     );
                   })}
                 </div>
                 {def && (
-                  <div className="mt-2 build-detail-panel">
-                    <div className="font-display text-gold text-xs mb-1">{def.name}</div>
-                    <div className="text-[10px] text-parchment/70 space-y-0.5">
-                      <div>Kosten: {formatBuildCost(selectedKind) || '–'}</div>
-                      <div>Bauzeit: {buildTimeLabel(selectedKind)}</div>
-                      <div>Arbeit: {buildingJobsHint(selectedKind)}</div>
-                      <div>Produziert: {buildingProducesHint(selectedKind)}</div>
-                    </div>
+                  <div className="city-build-hint">
+                    <strong>{def.name}</strong> · {formatBuildCost(selectedKind) || 'kostenlos'} ·{' '}
+                    {buildTimeLabel(selectedKind)} · {buildingProducesHint(selectedKind)}
+                    <span className="block text-amber-200/90 mt-0.5">
+                      Auf die Karte klicken, um zu platzieren
+                    </span>
                     {softBlockers.length > 0 && (
-                      <ul className="mt-2 space-y-0.5 text-[10px] text-red-200">
-                        {softBlockers.map((b) => (
-                          <li key={b}>{b}</li>
-                        ))}
-                      </ul>
+                      <span className="block text-red-300 mt-0.5">{softBlockers[0]}</span>
                     )}
                   </div>
                 )}
               </>
             )}
+            {mode === 'upgrade' && (
+              <p className="text-[10px] text-parchment/70">Gebäude auf der Karte anklicken zum Ausbau.</p>
+            )}
+            {mode === 'demolish' && (
+              <p className="text-[10px] text-red-200/90">Gebäude auf der Karte anklicken zum Abreißen.</p>
+            )}
           </div>
 
           <div
-            className="flex-1 min-h-0 overflow-auto p-3 flex flex-col items-center"
+            className="flex-1 min-h-0 overflow-auto p-2 flex flex-col items-center justify-center"
             style={{
               background: `
-                radial-gradient(ellipse at 30% 20%, ${look.sky}88 0%, transparent 50%),
-                linear-gradient(180deg, #3a5a40 0%, #2a4a30 40%, #1e3a24 100%)
+                radial-gradient(ellipse at 30% 15%, ${look.sky}99 0%, transparent 45%),
+                linear-gradient(180deg, #4a7048 0%, #2f5534 45%, #1c3a22 100%)
               `,
             }}
           >
-            <div className="settlement-stage" style={{ width: mapW + 48, height: mapH + 48 }}>
-              {/* Landschaftsgrund – kein Raster */}
+            <div
+              className={`settlement-stage living-settlement ${mode === 'build' ? 'build-mode' : ''}`}
+              style={{ width: mapW + 48, height: mapH + 48 }}
+            >
               <svg className="settlement-ground" width={mapW + 48} height={mapH + 48}>
                 <defs>
                   <pattern id="meadowGrain" width="24" height="24" patternUnits="userSpaceOnUse">
                     <circle cx="4" cy="8" r="1.2" fill="rgba(40,80,30,0.15)" />
                     <circle cx="16" cy="14" r="0.9" fill="rgba(60,100,40,0.12)" />
                   </pattern>
+                  <pattern id="fieldFurrows" width="8" height="8" patternUnits="userSpaceOnUse">
+                    <path d="M0 7 L8 0" stroke="#8a7340" strokeWidth="1.2" opacity="0.45" />
+                  </pattern>
                 </defs>
                 <ellipse
                   cx={(mapW + 48) / 2}
                   cy={(mapH + 48) / 2}
-                  rx={mapW * 0.52}
-                  ry={mapH * 0.52}
-                  fill="#5a8a4a"
+                  rx={mapW * 0.54}
+                  ry={mapH * 0.54}
+                  fill="#5c8f4e"
                 />
                 <ellipse
                   cx={(mapW + 48) / 2}
                   cy={(mapH + 48) / 2}
-                  rx={mapW * 0.52}
-                  ry={mapH * 0.52}
+                  rx={mapW * 0.54}
+                  ry={mapH * 0.54}
                   fill="url(#meadowGrain)"
                 />
-                {/* Bach */}
                 <path
-                  d={`M 20 ${mapH * 0.7} Q ${mapW * 0.4} ${mapH * 0.55}, ${mapW * 0.7} ${mapH * 0.75} T ${mapW + 20} ${mapH * 0.6}`}
+                  d={`M 16 ${mapH * 0.72} Q ${mapW * 0.38} ${mapH * 0.52}, ${mapW * 0.68} ${mapH * 0.76} T ${mapW + 28} ${mapH * 0.58}`}
                   fill="none"
                   stroke="#6a9aaa"
-                  strokeWidth="10"
+                  strokeWidth="12"
                   opacity="0.55"
                   strokeLinecap="round"
+                  className="city-stream"
                 />
-                {/* Hügel */}
-                <path
-                  d={`M ${mapW * 0.1} ${mapH * 0.25} Q ${mapW * 0.2} ${mapH * 0.05}, ${mapW * 0.35} ${mapH * 0.28}`}
-                  fill="none"
-                  stroke="#4a7040"
-                  strokeWidth="14"
-                  opacity="0.4"
-                  strokeLinecap="round"
-                />
-                {/* Straßennetz als organische Linien */}
+                {/* Felder als echte Furchen */}
+                {typedTiles
+                  .filter(
+                    (t) =>
+                      t.kind === CityTileKind.FARM ||
+                      t.kind === CityTileKind.VINEYARD ||
+                      t.kind === CityTileKind.SHEEP_FARM,
+                  )
+                  .map((t) => {
+                    const fx = 24 + t.x * cell + 4;
+                    const fy = 24 + t.y * cell + 4;
+                    return (
+                      <g key={`field-${t.x}-${t.y}`}>
+                        <rect
+                          x={fx}
+                          y={fy}
+                          width={cell - 8}
+                          height={cell - 8}
+                          rx="3"
+                          fill={t.kind === CityTileKind.VINEYARD ? '#6a7a3a' : '#c4a86a'}
+                          stroke="#6b5344"
+                          strokeWidth="1"
+                        />
+                        <rect
+                          x={fx}
+                          y={fy}
+                          width={cell - 8}
+                          height={cell - 8}
+                          rx="3"
+                          fill="url(#fieldFurrows)"
+                          opacity="0.85"
+                        />
+                      </g>
+                    );
+                  })}
+                {/* Straßen */}
                 {roadTiles.map((r) => {
                   const px = 24 + r.x * cell + cell / 2;
                   const py = 24 + r.y * cell + cell / 2;
                   return (
-                    <circle key={`rd-${r.x}-${r.y}`} cx={px} cy={py} r={cell * 0.42} fill="#a89060" opacity="0.85" />
+                    <circle key={`rd-${r.x}-${r.y}`} cx={px} cy={py} r={cell * 0.42} fill="#b89a68" opacity="0.9" />
                   );
                 })}
-                {roadTiles.map((r) => {
-                  const dirs = [
+                {roadTiles.map((r) =>
+                  [
                     [1, 0],
                     [0, 1],
-                  ];
-                  return dirs.map(([dx, dy]) => {
+                  ].map(([dx, dy]) => {
                     const n = roadTiles.find((t) => t.x === r.x + dx && t.y === r.y + dy);
                     if (!n) return null;
-                    const x1 = 24 + r.x * cell + cell / 2;
-                    const y1 = 24 + r.y * cell + cell / 2;
-                    const x2 = 24 + n.x * cell + cell / 2;
-                    const y2 = 24 + n.y * cell + cell / 2;
                     return (
                       <line
                         key={`rl-${r.x}-${r.y}-${dx}-${dy}`}
-                        x1={x1}
-                        y1={y1}
-                        x2={x2}
-                        y2={y2}
+                        x1={24 + r.x * cell + cell / 2}
+                        y1={24 + r.y * cell + cell / 2}
+                        x2={24 + n.x * cell + cell / 2}
+                        y2={24 + n.y * cell + cell / 2}
                         stroke="#8a7348"
-                        strokeWidth={cell * 0.55}
+                        strokeWidth={cell * 0.58}
                         strokeLinecap="round"
-                        opacity="0.9"
                       />
                     );
-                  });
-                })}
+                  }),
+                )}
               </svg>
 
-              {/* Klickbare Bauflächen – unsichtbar außer Hover */}
               <div className="settlement-hitgrid" style={{ width: mapW, height: mapH }}>
                 {Array.from({ length: CITY_GRID_H }, (_, y) =>
                   Array.from({ length: CITY_GRID_W }, (_, x) => {
@@ -604,6 +622,22 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                     const vis = buildingVisual(kind, tile.level);
                     const isEmpty = kind === CityTileKind.EMPTY;
                     const isRoad = kind === CityTileKind.ROAD;
+                    const isField =
+                      kind === CityTileKind.FARM ||
+                      kind === CityTileKind.VINEYARD ||
+                      kind === CityTileKind.SHEEP_FARM;
+                    const hoverBlockers =
+                      mode === 'build' && hover?.x === x && hover?.y === y
+                        ? explainBuildBlockers(selectedKind, province, resources, x, y).filter((b) =>
+                            b.startsWith('❌'),
+                          )
+                        : [];
+                    const canPlace =
+                      mode === 'build' &&
+                      isEmpty &&
+                      hoverBlockers.length === 0 &&
+                      hover?.x === x &&
+                      hover?.y === y;
 
                     return (
                       <button
@@ -612,7 +646,13 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                         disabled={loading}
                         className={`settlement-plot${isEmpty ? ' is-empty' : ''}${isRoad ? ' is-road' : ''}${
                           !isEmpty && !isRoad ? ' has-building' : ''
-                        }${building ? ' is-building' : ''}`}
+                        }${building ? ' is-building' : ''}${isField ? ' is-field-plot' : ''}${
+                          mode === 'build' && isEmpty ? ' buildable' : ''
+                        }${canPlace ? ' can-place' : ''}${
+                          mode === 'build' && hover?.x === x && hover?.y === y && hoverBlockers.length
+                            ? ' cannot-place'
+                            : ''
+                        }`}
                         style={{
                           left: x * cell,
                           top: y * cell,
@@ -622,12 +662,22 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                         onClick={() => handleTileClick(x, y)}
                         onMouseEnter={() => setHover(tile)}
                         onMouseLeave={() => setHover(null)}
-                        title={`${d.name}${tile.level > 1 ? ` Lv${tile.level}` : ''}`}
+                        title={
+                          mode === 'build' && isEmpty
+                            ? `${CITY_TILE_DEFS[selectedKind].name} hier platzieren`
+                            : `${d.name}${tile.level > 1 ? ` Lv${tile.level}` : ''}`
+                        }
                       >
-                        {!isEmpty && !isRoad && (
+                        {/* Geistervorschau beim Bauen */}
+                        {mode === 'build' && isEmpty && hover?.x === x && hover?.y === y && (
+                          <span className={`build-ghost ${hoverBlockers.length ? 'is-blocked' : ''}`}>
+                            {CITY_TILE_DEFS[selectedKind].icon}
+                          </span>
+                        )}
+                        {!isEmpty && !isRoad && !isField && (
                           <span
                             className={`settlement-building ${vis.cls} lv-${tile.level}`}
-                            style={{ width: vis.w * 0.72, height: vis.h * 0.72 }}
+                            style={{ width: vis.w * 0.78, height: vis.h * 0.78 }}
                           >
                             <span className="sb-roof" />
                             <span className="sb-body">{d.icon}</span>
@@ -637,21 +687,36 @@ export default function CityView({ province, gameState, onUpdate, onBack }: City
                             {tile.level >= 2 && !building && <span className="sb-smoke" />}
                           </span>
                         )}
+                        {isField && (
+                          <span className="field-marker" title={d.name}>
+                            {d.icon}
+                          </span>
+                        )}
                       </button>
                     );
                   }),
                 )}
+              </div>
+
+              {/* Lebende Bewohner */}
+              <div className="settlement-life-wrap" style={{ left: 24, top: 24, width: mapW, height: mapH }}>
+                <CityLifeLayer tiles={tiles} cell={cell} seedName={province.name} />
               </div>
             </div>
 
             {hover && (
               <div className="city-tooltip mt-2">
                 <div className="font-display text-gold text-xs">
-                  {(CITY_TILE_DEFS[hover.kind as CityTileKind] ?? CITY_TILE_DEFS[CityTileKind.EMPTY]).name}
-                  {hover.level > 1 ? ` · Stufe ${hover.level}` : ''}
+                  {mode === 'build' && hover.kind === 'EMPTY'
+                    ? `${CITY_TILE_DEFS[selectedKind].name} platzieren`
+                    : (CITY_TILE_DEFS[hover.kind as CityTileKind] ?? CITY_TILE_DEFS[CityTileKind.EMPTY])
+                        .name}
+                  {hover.level > 1 && hover.kind !== 'EMPTY' ? ` · Stufe ${hover.level}` : ''}
                 </div>
                 <div className="text-[10px] text-parchment/70">
-                  {buildingProducesHint(hover.kind as CityTileKind)} · {buildingJobsHint(hover.kind as CityTileKind)}
+                  {mode === 'build' && hover.kind === 'EMPTY'
+                    ? `${formatBuildCost(selectedKind)} · ${buildingJobsHint(selectedKind)}`
+                    : `${buildingProducesHint(hover.kind as CityTileKind)} · ${buildingJobsHint(hover.kind as CityTileKind)}`}
                 </div>
               </div>
             )}
