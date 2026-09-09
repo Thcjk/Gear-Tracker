@@ -37,29 +37,29 @@ interface AppStoreValue {
 
 const AppStoreContext = createContext<AppStoreValue | null>(null);
 
+function applyThemeClass(theme: ThemeMode) {
+  if (typeof document === "undefined") return;
+  document.documentElement.classList.toggle("dark", theme === "dark");
+}
+
 export function AppStoreProvider({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(false);
-  const [data, setData] = useState<AppData>({
-    gearItems: [],
-    packingLists: [],
-    theme: "light",
-  });
+  const [data, setData] = useState<AppData | null>(null);
 
   useEffect(() => {
     const loaded = loadData();
+    applyThemeClass(loaded.theme);
     setData(loaded);
-    document.documentElement.classList.toggle("dark", loaded.theme === "dark");
-    setReady(true);
   }, []);
 
   useEffect(() => {
-    if (!ready) return;
+    if (!data) return;
     saveData(data);
-    document.documentElement.classList.toggle("dark", data.theme === "dark");
-  }, [data, ready]);
+    applyThemeClass(data.theme);
+  }, [data]);
 
   const setTheme = useCallback((theme: ThemeMode) => {
-    setData((prev) => ({ ...prev, theme }));
+    applyThemeClass(theme);
+    setData((prev) => (prev ? { ...prev, theme } : prev));
   }, []);
 
   const addGearItem = useCallback(
@@ -69,31 +69,37 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         id: createId(),
         createdAt: new Date().toISOString(),
       };
-      setData((prev) => ({
-        ...prev,
-        gearItems: upsertGearItem(prev.gearItems, next),
-      }));
+      setData((prev) =>
+        prev
+          ? { ...prev, gearItems: upsertGearItem(prev.gearItems, next) }
+          : prev,
+      );
     },
     [],
   );
 
   const updateGearItem = useCallback((item: GearItem) => {
-    setData((prev) => ({
-      ...prev,
-      gearItems: upsertGearItem(prev.gearItems, item),
-    }));
+    setData((prev) =>
+      prev
+        ? { ...prev, gearItems: upsertGearItem(prev.gearItems, item) }
+        : prev,
+    );
   }, []);
 
   const removeGearItem = useCallback((id: string) => {
-    setData((prev) => ({
-      ...prev,
-      gearItems: deleteGearItem(prev.gearItems, id),
-      packingLists: prev.packingLists.map((list) => ({
-        ...list,
-        items: list.items.filter((i) => i.gearItemId !== id),
-        updatedAt: new Date().toISOString(),
-      })),
-    }));
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            gearItems: deleteGearItem(prev.gearItems, id),
+            packingLists: prev.packingLists.map((list) => ({
+              ...list,
+              items: list.items.filter((i) => i.gearItemId !== id),
+              updatedAt: new Date().toISOString(),
+            })),
+          }
+        : prev,
+    );
   }, []);
 
   const addPackingList = useCallback((name: string) => {
@@ -105,41 +111,57 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       createdAt: now,
       updatedAt: now,
     };
-    setData((prev) => ({
-      ...prev,
-      packingLists: upsertPackingList(prev.packingLists, list),
-    }));
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            packingLists: upsertPackingList(prev.packingLists, list),
+          }
+        : prev,
+    );
     return list;
   }, []);
 
   const updatePackingList = useCallback((list: PackingList) => {
-    setData((prev) => ({
-      ...prev,
-      packingLists: upsertPackingList(prev.packingLists, {
-        ...list,
-        updatedAt: new Date().toISOString(),
-      }),
-    }));
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            packingLists: upsertPackingList(prev.packingLists, {
+              ...list,
+              updatedAt: new Date().toISOString(),
+            }),
+          }
+        : prev,
+    );
   }, []);
 
   const removePackingList = useCallback((id: string) => {
-    setData((prev) => ({
-      ...prev,
-      packingLists: deletePackingList(prev.packingLists, id),
-    }));
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            packingLists: deletePackingList(prev.packingLists, id),
+          }
+        : prev,
+    );
   }, []);
 
   const replaceData = useCallback((next: AppData) => {
+    applyThemeClass(next.theme);
     setData(next);
   }, []);
 
   const clearAll = useCallback(() => {
-    setData(resetData());
+    const next = resetData();
+    applyThemeClass(next.theme);
+    setData(next);
   }, []);
 
-  const value = useMemo(
-    () => ({
-      ready,
+  const value = useMemo<AppStoreValue | null>(() => {
+    if (!data) return null;
+    return {
+      ready: true,
       data,
       setTheme,
       addGearItem,
@@ -150,21 +172,27 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       removePackingList,
       replaceData,
       clearAll,
-    }),
-    [
-      ready,
-      data,
-      setTheme,
-      addGearItem,
-      updateGearItem,
-      removeGearItem,
-      addPackingList,
-      updatePackingList,
-      removePackingList,
-      replaceData,
-      clearAll,
-    ],
-  );
+    };
+  }, [
+    data,
+    setTheme,
+    addGearItem,
+    updateGearItem,
+    removeGearItem,
+    addPackingList,
+    updatePackingList,
+    removePackingList,
+    replaceData,
+    clearAll,
+  ]);
+
+  if (!value) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 pt-10 text-sm text-earth-500">
+        Lade Ultralight Gear-Tracker…
+      </div>
+    );
+  }
 
   return (
     <AppStoreContext.Provider value={value}>{children}</AppStoreContext.Provider>

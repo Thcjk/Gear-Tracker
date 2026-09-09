@@ -24,6 +24,11 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=JSON.parse(localStorage.getItem("ultralight-gear-tracker-v1")||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
+          }}
+        />
         <AppStoreProvider>
           <div className="mx-auto min-h-screen max-w-3xl px-4 pb-28 pt-6">
             <header className="mb-6">
