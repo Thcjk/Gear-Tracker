@@ -11,8 +11,8 @@ import { STORAGE_KEY } from "@/lib/storage";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** forest-900 – identisch in Manifest, Splash und Statusleiste. */
-const THEME_COLOR = "#16392b";
+/** Black Kite – identisch in Manifest, Splash und Statusleiste. */
+const THEME_COLOR = "#351E1C";
 import "./globals.css";
 
 const inter = Inter({

@@ -26,7 +26,7 @@ export function StorageWarning() {
     return (
       <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="alert">
         <AlertTriangle
-          className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-400"
+          className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-200"
           aria-hidden
         />
         <div className="min-w-0 flex-1">
@@ -38,7 +38,7 @@ export function StorageWarning() {
             gesichert und nicht überschrieben – unter{" "}
             <Link
               href="/settings"
-              className="font-semibold text-ember-800 underline dark:text-ember-400"
+              className="font-semibold text-ember-800 underline dark:text-ember-200"
             >
               Einstellungen → Daten &amp; Backup
             </Link>{" "}
@@ -62,7 +62,7 @@ export function StorageWarning() {
   return (
     <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="status">
       <AlertTriangle
-        className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-400"
+        className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-200"
         aria-hidden
       />
       <p className="text-sm text-clay-700 dark:text-clay-300">

@@ -83,7 +83,7 @@ export function QuickItemForm({
         </label>
       </div>
 
-      <Button type="submit" variant="forest" disabled={!valid}>
+      <Button type="submit" variant="cool" disabled={!valid}>
         <Plus className="h-4 w-4" />
         Anlegen und übernehmen
       </Button>

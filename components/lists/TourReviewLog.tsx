@@ -16,7 +16,7 @@ import type { GearItem, TourReview, WeightFeeling } from "@/types";
 
 const FEELING_STYLES: Record<WeightFeeling, string> = {
   "zu schwer": "text-red-700 dark:text-red-300",
-  "genau richtig": "text-forest-700 dark:text-forest-300",
+  "genau richtig": "text-aqua-700 dark:text-aqua-300",
   "zu leicht": "text-clay-700 dark:text-clay-300",
 };
 
@@ -42,7 +42,7 @@ export function TourReviewLog({
   return (
     <SurfaceCard as="section" className="p-4">
       <h3 className="mb-1 flex items-center gap-2 text-base font-bold text-clay-900 dark:text-clay-50">
-        <Flag className="h-4 w-4 text-ember-700 dark:text-ember-400" aria-hidden />
+        <Flag className="h-4 w-4 text-ember-700 dark:text-ember-200" aria-hidden />
         Tourbuch
       </h3>
       <p className="mb-4 text-sm text-clay-700 dark:text-clay-400">

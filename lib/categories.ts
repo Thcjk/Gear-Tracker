@@ -7,48 +7,59 @@ export interface CategoryMeta {
   chartColor: string;
 }
 
+/**
+ * Kategoriefarben aus der Palette.
+ *
+ * chartColor zeigt auf eine CSS-Variable statt auf einen festen Wert: der
+ * Ton muss sich mit dem Theme drehen, weil dieselbe Farbe nicht auf beiden
+ * Kartenfarben funktioniert – Aqua Mist hat auf Amazon Mist 1.5:1, Garnet
+ * auf der Garnet-Karte gar nichts. Die Werte stehen in globals.css.
+ *
+ * Die Badge-Klassen sind Paare aus Fläche und Schrift: jede Kombination
+ * erreicht auf ihrer Karte mindestens 6:1.
+ */
 export const CATEGORIES: CategoryMeta[] = [
   {
     id: "shelter",
     label: "Shelter",
-    color: "bg-forest-100 text-forest-800 dark:bg-forest-900 dark:text-forest-200",
-    chartColor: "#256b4c",
+    color: "bg-ember-100 text-ember-800 dark:bg-ember-900 dark:text-ember-200",
+    chartColor: "var(--cat-shelter)",
   },
   {
     id: "sleep-system",
     label: "Sleep System",
-    color: "bg-earth-100 text-earth-800 dark:bg-earth-900 dark:text-earth-200",
-    chartColor: "#8a5d3f",
+    color: "bg-clay-300 text-clay-800 dark:bg-clay-900 dark:text-clay-300",
+    chartColor: "var(--cat-sleep-system)",
   },
   {
     id: "backpack",
     label: "Backpack",
-    color: "bg-ember-100 text-ember-800 dark:bg-ember-950 dark:text-ember-200",
-    chartColor: "#ea580c",
+    color: "bg-aqua-100 text-aqua-800 dark:bg-aqua-900 dark:text-aqua-200",
+    chartColor: "var(--cat-backpack)",
   },
   {
     id: "kitchen",
     label: "Kitchen",
-    color: "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200",
-    chartColor: "#d97706",
+    color: "bg-ember-200 text-ember-900 dark:bg-ember-950 dark:text-ember-100",
+    chartColor: "var(--cat-kitchen)",
   },
   {
     id: "clothing",
     label: "Clothing",
-    color: "bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-200",
-    chartColor: "#0284c7",
+    color: "bg-aqua-200 text-aqua-900 dark:bg-aqua-800 dark:text-aqua-100",
+    chartColor: "var(--cat-clothing)",
   },
   {
     id: "electronics",
     label: "Electronics",
-    color: "bg-violet-100 text-violet-900 dark:bg-violet-950 dark:text-violet-200",
-    chartColor: "#7c3aed",
+    color: "bg-clay-400 text-clay-900 dark:bg-clay-950 dark:text-clay-200",
+    chartColor: "var(--cat-electronics)",
   },
   {
     id: "hygiene-misc",
     label: "Hygiene & Misc",
-    color: "bg-stone-100 text-stone-800 dark:bg-stone-800 dark:text-stone-200",
-    chartColor: "#78716c",
+    color: "bg-clay-200 text-clay-800 dark:bg-clay-700 dark:text-clay-100",
+    chartColor: "var(--cat-hygiene-misc)",
   },
 ];
 

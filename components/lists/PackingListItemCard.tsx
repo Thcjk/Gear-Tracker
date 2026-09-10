@@ -64,7 +64,7 @@ export function PackingListItemCard({
       {celebrating && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-forest-400"
+          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-aqua-300"
         />
       )}
       <div className="relative flex items-start gap-3">
@@ -73,7 +73,7 @@ export function PackingListItemCard({
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-600 checked:shadow-neu-in-sm dark:bg-clay-950 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-600 checked:shadow-neu-in-sm dark:bg-clay-800 ${
               celebrating ? "animate-pop" : ""
             }`}
           />
@@ -93,13 +93,13 @@ export function PackingListItemCard({
             <h3
               className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
-                  ? "text-clay-700 line-through dark:text-clay-500"
+                  ? "text-clay-700 line-through dark:text-clay-400"
                   : "text-clay-900 dark:text-clay-50"
               }`}
             >
               {gear.name}
             </h3>
-            <p className="shrink-0 whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-aqua-700 dark:text-aqua-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>

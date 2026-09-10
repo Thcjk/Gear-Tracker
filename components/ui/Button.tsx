@@ -7,22 +7,25 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
  *
  * "raised" liegt auf derselben Fläche wie der Hintergrund und wird nur
  * durch den Doppelschatten plastisch; beim Tippen kippt der Schatten nach
- * innen, der Button wirkt eingedrückt. "accent" trägt Orange bzw. Grün als
- * Fläche – bewusst sparsam, nur für die primäre Aktion eines Screens.
+ * innen, der Button wirkt eingedrückt. "accent" trägt Toxic Orange, "cool"
+ * Aqua Mist – bewusst sparsam, nur für die primäre Aktion eines Screens.
+ *
+ * Beide farbigen Flächen tragen Black Kite als Schrift, nicht Weiss: auf
+ * Toxic Orange erreicht Weiss nur 3.0:1, Black Kite dagegen 5.2:1.
  */
-type Variant = "raised" | "accent" | "forest" | "quiet" | "danger";
+type Variant = "raised" | "accent" | "cool" | "quiet" | "danger";
 
 const VARIANTS: Record<Variant, string> = {
   raised:
-    "bg-clay-200 text-clay-800 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-100",
+    "bg-clay-200 text-clay-800 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-100",
   accent:
-    "bg-ember-700 text-white shadow-neu-accent active:shadow-neu-in-sm active:bg-ember-800",
-  forest:
-    "bg-forest-600 text-white shadow-neu-accent active:shadow-neu-in-sm active:bg-forest-700",
+    "bg-ember-500 text-clay-900 shadow-neu-accent active:shadow-neu-in-sm active:bg-ember-600",
+  cool:
+    "bg-aqua-300 text-clay-900 shadow-neu-accent active:shadow-neu-in-sm active:bg-aqua-400",
   quiet:
     "bg-transparent text-clay-700 hover:text-clay-900 dark:text-clay-300 dark:hover:text-clay-50",
   danger:
-    "bg-clay-200 text-red-700 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-950 dark:text-red-300",
+    "bg-clay-200 text-red-700 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-800 dark:text-red-300",
 };
 
 export function Button({

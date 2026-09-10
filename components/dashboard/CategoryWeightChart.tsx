@@ -122,7 +122,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
         <div
           role="tablist"
           aria-label="Diagrammtyp"
-          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-950"
+          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-800"
         >
           {(
             [
@@ -138,7 +138,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
               onClick={() => setMode(id)}
               className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
                 mode === id
-                  ? "bg-clay-200 text-ember-800 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400"
+                  ? "bg-clay-200 text-ember-800 shadow-neu-sm dark:bg-clay-800 dark:text-ember-200"
                   : "text-clay-700 dark:text-clay-400"
               }`}
             >

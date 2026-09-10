@@ -131,7 +131,7 @@ function PackingListDetailInner() {
         <p className="text-sm text-clay-700 dark:text-clay-400">
           Packliste nicht gefunden.
         </p>
-        <Link href="/lists" className="text-ember-800 underline dark:text-ember-400">
+        <Link href="/lists" className="text-ember-800 underline dark:text-ember-200">
           Zurück zu den Listen
         </Link>
       </div>
@@ -214,7 +214,7 @@ function PackingListDetailInner() {
           <Share2 className="h-4 w-4" />
           Für Vergleich exportieren
         </Button>
-        <Button variant="forest" onClick={() => setReviewing("new")}>
+        <Button variant="cool" onClick={() => setReviewing("new")}>
           <Flag className="h-4 w-4" />
           Tour beenden
         </Button>
@@ -251,7 +251,7 @@ function PackingListDetailInner() {
           <p className="text-sm text-clay-700 dark:text-clay-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
             leer.{" "}
-            <Link href="/library" className="text-ember-800 underline dark:text-ember-400">
+            <Link href="/library" className="text-ember-800 underline dark:text-ember-200">
               Zur Library
             </Link>
           </p>

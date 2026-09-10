@@ -51,7 +51,7 @@ export function GearItemCard({
               )}
             </div>
             <div className="shrink-0 text-right">
-              <p className="text-lg font-extrabold text-forest-700 dark:text-forest-300">
+              <p className="text-lg font-extrabold text-aqua-700 dark:text-aqua-300">
                 {formatWeight(item.weightGrams)}
               </p>
               {item.price != null && (

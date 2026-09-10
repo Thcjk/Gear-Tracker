@@ -27,7 +27,7 @@ export function ProgressBar({
       </div>
       <div
         className={`h-2.5 overflow-hidden rounded-full ${
-          onDark ? "bg-black/25" : "bg-clay-200 shadow-neu-in-sm dark:bg-clay-950"
+          onDark ? "bg-black/25" : "bg-clay-200 shadow-neu-in-sm dark:bg-clay-800"
         }`}
       >
         <div

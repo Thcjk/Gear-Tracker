@@ -42,7 +42,7 @@ export function LibraryPicker({
                 className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150 ${
                   chosen
                     ? "bg-ember-600 shadow-neu-in-sm"
-                    : "bg-clay-200 shadow-neu-sm dark:bg-clay-950"
+                    : "bg-clay-200 shadow-neu-sm dark:bg-clay-800"
                 }`}
               >
                 <Check
@@ -78,7 +78,7 @@ export function LibraryPicker({
                     }
                     disabled={chosen.quantity <= 1}
                     aria-label="Menge verringern"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-clay-950 dark:text-clay-300"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-clay-800 dark:text-clay-300"
                   >
                     <Minus className="h-3.5 w-3.5" />
                   </button>
@@ -89,7 +89,7 @@ export function LibraryPicker({
                     type="button"
                     onClick={() => onQuantity(item.id, chosen.quantity + 1)}
                     aria-label="Menge erhöhen"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-300"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-300"
                   >
                     <Plus className="h-3.5 w-3.5" />
                   </button>
