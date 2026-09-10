@@ -1,23 +1,24 @@
-import { SketchFrame, type SketchProps } from "./Sketch";
+import { Campfire } from "@/components/sketch/parts";
+import { Ground, SketchFrame, type SketchProps } from "./Sketch";
 
-/** Lagerfeuer mit Funken – Abschluss einer Tour. */
+const ID = "sk-fire";
+
+/** Lagerfeuer mit Rauch und zwei Steinen – Abschluss einer Tour. */
 export function CampfireSketch({ className = "h-28 w-28", title }: SketchProps) {
   return (
-    <SketchFrame viewBox="0 0 140 140" className={className} title={title}>
-      <g strokeWidth="1.4">
-        {/* Flamme, zweischalig */}
-        <path d="M52 100 Q44 66 70 30 Q65 62 84 74 Q101 87 92 100" />
-        <path d="M66 99 Q60 78 75 58 Q73 79 83 86 Q90 93 84 99" strokeWidth="1" opacity="0.7" />
-        {/* Scheite, gekreuzt */}
-        <path d="M34 108 Q70 118 108 106" />
-        <path d="M36 116 Q70 106 106 118" />
+    <SketchFrame
+      viewBox="0 0 140 140"
+      filterId={ID}
+      className={className}
+      title={title}
+    >
+      <Ground filterId={ID} y={118} x1={16} x2={124} opacity={0.5} />
+      {/* Zwei Steine als Feuerstelle, der linke im Schatten */}
+      <g fill="currentColor" stroke="none" opacity="0.55">
+        <path d="M26 114 Q24 104 33 103 Q43 102 44 111 Q44 117 34 118 Q27 118 26 114 Z" />
+        <path d="M106 113 Q104 105 112 104 Q120 104 121 111 Q121 116 113 117 Q107 117 106 113 Z" />
       </g>
-      <g strokeWidth="0.9" opacity="0.5">
-        {/* Funken */}
-        <path d="M96 44 Q99 41 101 44" />
-        <path d="M40 56 Q43 53 45 56" />
-        <path d="M104 66 Q107 63 109 66" />
-      </g>
+      <Campfire x={72} y={116} scale={1.55} />
     </SketchFrame>
   );
 }
