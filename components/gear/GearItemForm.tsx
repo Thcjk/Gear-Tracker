@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
@@ -26,6 +26,7 @@ const emptyValues: GearFormValues = {
 export function GearItemForm({
   initial,
   title,
+  hint,
   submitLabel,
   hideCategory = false,
   onSubmit,
@@ -33,6 +34,8 @@ export function GearItemForm({
 }: {
   initial?: Partial<GearFormValues>;
   title: string;
+  /** Platz für Herkunftshinweise, etwa beim Import per Link. */
+  hint?: ReactNode;
   submitLabel: string;
   /** Kommt die Kategorie aus dem Kontext (Library-Sektion), entfällt die Auswahl. */
   hideCategory?: boolean;
@@ -80,6 +83,7 @@ export function GearItemForm({
       <h2 className="text-lg font-bold text-clay-900 dark:text-clay-50">
         {title}
       </h2>
+      {hint}
       <div className="mt-4 grid gap-3">
         <label className="grid gap-1 text-sm">
           <span className="neu-label">

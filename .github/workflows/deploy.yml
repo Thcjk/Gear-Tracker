@@ -35,6 +35,15 @@ jobs:
 
       - name: Build (next build → statischer Export nach out/)
         run: npm run build
+        env:
+          # Adresse des Produkt-Import-Workers (siehe worker/README.md).
+          # Sie steht als Repository-Variable, nicht im Klartext hier: so
+          # lässt sie sich nach einem Neu-Deploy des Workers ändern, ohne
+          # den Workflow anzufassen. Ist sie nicht gesetzt, bleibt die
+          # Import-Fläche in der Library aus und die App läuft wie bisher.
+          # Anlegen unter Settings → Secrets and variables → Actions →
+          # Variables → New repository variable.
+          NEXT_PUBLIC_IMPORT_WORKER_URL: ${{ vars.NEXT_PUBLIC_IMPORT_WORKER_URL }}
 
       - name: Disable Jekyll processing
         run: touch out/.nojekyll

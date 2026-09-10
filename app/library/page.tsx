@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ChevronsDownUp, ChevronsUpDown, Plus } from "lucide-react";
 import { CategorySection } from "@/components/gear/CategorySection";
 import { GearItemCard } from "@/components/gear/GearItemCard";
+import { ProductImport } from "@/components/gear/ProductImport";
 import {
   GearItemForm,
   gearItemToFormValues,
@@ -63,6 +64,12 @@ export default function LibraryPage() {
     setCreatingIn(null);
   }
 
+  /** Nach dem Import die Zielsektion aufklappen – sonst sieht man nichts. */
+  function handleImported(values: GearFormValues, category: Category) {
+    addGearItem(values);
+    openCategory(category);
+  }
+
   function handleUpdate(values: GearFormValues) {
     if (!editing) return;
     updateGearItem({ ...editing, ...values });
@@ -110,6 +117,8 @@ export default function LibraryPage() {
           {allOpen ? "Zuklappen" : "Aufklappen"}
         </Button>
       </div>
+
+      <ProductImport onCreate={handleImported} />
 
       <div className="space-y-3">
         {CATEGORIES.map((meta) => {
