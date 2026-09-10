@@ -22,6 +22,37 @@ const iconMap = {
   "hygiene-misc": Droplets,
 } as const;
 
+/**
+ * Nacktes Icon ohne Pillen-Hintergrund. Rendert ein <svg>, das sich auch
+ * innerhalb eines anderen SVG (z. B. als Recharts-Achsenbeschriftung)
+ * über x/y positionieren lässt.
+ */
+export function CategoryGlyph({
+  category,
+  size = 16,
+  x,
+  y,
+  className,
+}: {
+  category: Category;
+  size?: number;
+  x?: number;
+  y?: number;
+  className?: string;
+}) {
+  const Icon = iconMap[category];
+  return (
+    <Icon
+      x={x}
+      y={y}
+      width={size}
+      height={size}
+      className={className}
+      aria-hidden
+    />
+  );
+}
+
 export function CategoryIcon({
   category,
   className = "h-4 w-4",
