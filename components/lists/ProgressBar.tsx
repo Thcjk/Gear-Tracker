@@ -17,7 +17,7 @@ export function ProgressBar({
     <div>
       <div
         className={`mb-1 flex justify-between text-sm ${
-          onDark ? "text-forest-100" : "text-earth-600 dark:text-earth-300"
+          onDark ? "text-white/85" : "text-earth-600 dark:text-earth-300"
         }`}
       >
         <span>
@@ -27,12 +27,22 @@ export function ProgressBar({
       </div>
       <div
         className={`h-2 overflow-hidden rounded-full ${
-          onDark ? "bg-forest-950/50" : "bg-forest-100 dark:bg-forest-800"
+          onDark ? "bg-black/25" : "bg-forest-100 dark:bg-forest-800"
         }`}
       >
         <div
-          className="h-full rounded-full bg-ember-500 transition-all"
-          style={{ width: `${pct}%` }}
+          className={`h-full rounded-full transition-all ${
+            onDark ? "" : "bg-ember-500"
+          }`}
+          style={{
+            width: `${pct}%`,
+            // Saison-Akzent kommt als CSS-Variable vom Banner; inline statt
+            // als Tailwind-Arbitrary-Value, weil var()-Fallbacks mit Komma
+            // beim Purge nicht zuverlässig erzeugt werden.
+            ...(onDark
+              ? { backgroundColor: "var(--season-accent, #fb923c)" }
+              : {}),
+          }}
         />
       </div>
     </div>

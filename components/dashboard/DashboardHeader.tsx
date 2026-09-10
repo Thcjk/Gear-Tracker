@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowLeft, FileDown, Pencil } from "lucide-react";
 import { TopoPattern } from "@/components/ui/TopoPattern";
 import { ProgressBar } from "@/components/lists/ProgressBar";
+import { getSeasonalTheme } from "@/lib/seasons";
 
 export function DashboardHeader({
   name,
@@ -22,6 +23,9 @@ export function DashboardHeader({
 }) {
   const [renaming, setRenaming] = useState(false);
   const [draft, setDraft] = useState(name);
+  // Das Banner rendert erst nach dem Laden aus dem LocalStorage, also rein
+  // client-seitig – das Datum kann hier keine Hydration-Differenz auslösen.
+  const [theme] = useState(() => getSeasonalTheme());
 
   function submitRename(e: FormEvent) {
     e.preventDefault();
@@ -32,20 +36,32 @@ export function DashboardHeader({
   }
 
   return (
-    <header className="relative isolate overflow-hidden rounded-card bg-gradient-to-br from-forest-800 via-forest-700 to-forest-900 p-5 text-forest-50 shadow-soft dark:from-forest-900 dark:via-forest-800 dark:to-forest-950">
-      {/* Höhenlinien: helles Waldgrün auf dunklem Grün – Kontrast ohne Textablenkung */}
-      <TopoPattern className="text-forest-200" opacity={0.13} />
+    <header
+      data-season={theme.season}
+      style={theme.vars as CSSProperties}
+      className="relative isolate overflow-hidden rounded-card bg-[linear-gradient(135deg,var(--season-from),var(--season-via)_55%,var(--season-to))] p-5 text-white shadow-soft transition-colors duration-500"
+    >
+      {/* Höhenlinien im Saison-Aufhellton – Kontrast ohne Ablenkung vom Text */}
+      <TopoPattern
+        className="text-[color:var(--season-topo)]"
+        opacity={0.13}
+      />
 
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <button
-            type="button"
-            onClick={onBack}
-            className="inline-flex items-center gap-1 rounded-lg text-sm text-forest-200 transition hover:text-white"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Listen
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onBack}
+              className="inline-flex items-center gap-1 rounded-lg text-sm text-white/75 transition hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Listen
+            </button>
+            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[color:var(--season-topo)]">
+              {theme.label}
+            </span>
+          </div>
 
           {renaming ? (
             <form onSubmit={submitRename} className="mt-2 flex flex-wrap gap-2">
@@ -54,7 +70,7 @@ export function DashboardHeader({
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 onBlur={() => setRenaming(false)}
-                className="min-w-0 flex-1 rounded-xl border border-forest-500/60 bg-forest-950/50 px-3 py-1.5 text-lg font-bold text-white placeholder:text-forest-300 focus:outline-none focus:ring-2 focus:ring-ember-400"
+                className="min-w-0 flex-1 rounded-xl border border-white/30 bg-black/25 px-3 py-1.5 text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-[color:var(--season-accent)]"
               />
               <button
                 type="submit"
@@ -76,7 +92,7 @@ export function DashboardHeader({
               <h2 className="truncate text-2xl font-extrabold tracking-tight text-white">
                 {name}
               </h2>
-              <Pencil className="h-4 w-4 shrink-0 text-forest-300 opacity-0 transition group-hover:opacity-100" />
+              <Pencil className="h-4 w-4 shrink-0 text-white/70 opacity-0 transition group-hover:opacity-100" />
             </button>
           )}
         </div>
