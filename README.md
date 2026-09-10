@@ -1,52 +1,85 @@
 # Ultralight Gear-Tracker
 
-Web-App zum Verwalten und Analysieren von Ultralight-Trekking-Ausrüstung.
+Web-App zum Verwalten und Analysieren von Ultralight-Trekking-Ausrüstung: Gear-Library
+pflegen, Packlisten zusammenstellen, Gewicht und Kosten im Blick behalten.
 
-## Live
+**Live:** https://thcjk.github.io/Gear-Tracker/
 
-**App:** https://thcjk.github.io/Gear-Tracker/
-
-> Statischer Export auf GitHub Pages. Daten liegen in LocalStorage im Browser.
-> Nach Code-Änderungen: `npm run publish:pages` und die generierten Root-Dateien committen
-> (oder Pages-Source auf **GitHub Actions** umstellen, dann reicht Push auf `main`).
+Die App ist eine rein statische Single-Page-Anwendung. Es gibt **kein Backend und kein
+Konto** – alle Daten liegen ausschliesslich im LocalStorage des Browsers.
 
 ## Features
 
-- **Gear-Library** – Items anlegen, bearbeiten, löschen, sortieren und filtern
-- **Produkt-Import per Link** – lokal/`next dev` via `/api/import-product`; auf GitHub Pages öffnet sich das Formular mit Link-Referenz (keine Server-API)
-- **Packlisten** – mehrere Listen, Mengen, „gepackt“-Checkbox + Fortschritt
-- **Dashboard** – Gesamtgewicht, Gesamtwert, Kategorie-Chart, Top-5 schwerste Items
-- **Vergleich** – 2+ Listen nebeneinander mit Differenz
-- **PDF-Export** – Packliste als PDF
-- **Light/Dark Mode** – Zustand in LocalStorage
+- **Gear-Library** – Items anlegen, bearbeiten, löschen; sortieren nach Name, Gewicht
+  oder Preis; filtern nach Kategorie. Gewicht und Preis werden manuell erfasst.
+- **Packlisten** – beliebig viele Listen, die Items aus der Library referenzieren
+  (inkl. Menge)
+- **Fortschritt** – „gepackt"-Checkbox pro Item und Anzeige „X von Y gepackt"
+- **Dashboard pro Liste** – Kennzahlen-Karten (Gesamtgewicht, Gesamtwert, Anzahl Items),
+  Balkendiagramm „Gewicht pro Kategorie" und Top-5 der schwersten Items
+- **Vergleich** – zwei oder mehr Packlisten nebeneinander mit Gewicht, Wert und Differenz
+- **PDF-Export** – Packliste als PDF, vollständig im Browser erzeugt (jsPDF)
+- **Light/Dark Mode** – Umschalter in den Einstellungen, Zustand im LocalStorage
+- **Backup** – Daten als JSON exportieren und wieder importieren
 
-## Tech
+Kategorien (fest): `shelter`, `sleep-system`, `backpack`, `kitchen`, `clothing`,
+`electronics`, `hygiene-misc`.
 
-- Next.js 14 (App Router) + TypeScript
-- Tailwind CSS
-- Recharts
-- jsPDF
-- lucide-react
+## Tech-Stack
 
-## Entwicklung
+- Next.js 14 (App Router) mit `output: 'export'` – statischer Export, keine Server-Routes
+- TypeScript
+- Tailwind CSS (Dark Mode über `class`)
+- Recharts (Diagramme)
+- jsPDF + jspdf-autotable (PDF-Export)
+- lucide-react (Icons)
+
+## Lokales Dev-Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-## GitHub Pages Build (lokal)
+Die App läuft dann unter http://localhost:3000/Gear-Tracker/ – der Pfad-Präfix kommt
+vom `basePath` in `next.config.js` und gilt auch im Dev-Server.
+
+Produktionsbuild lokal prüfen:
 
 ```bash
-npm run build:pages
-npx serve out
+npm run build      # erzeugt den statischen Export in out/
+npx serve out      # danach http://localhost:3000/Gear-Tracker/ öffnen
 ```
 
-## Deploy
+> `npm start` gibt es bewusst nicht: `next start` funktioniert mit `output: 'export'`
+> nicht, weil kein Node-Server im Spiel ist.
 
-Push auf `main` triggert `.github/workflows/pages.yml`.
+## Deployment auf GitHub Pages
 
-In GitHub: **Settings → Pages → Source = GitHub Actions**.
+Jeder Push auf `main` startet den Workflow
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
+
+1. `npm ci`
+2. `npm run build` → statischer Export nach `out/`
+3. `actions/upload-pages-artifact` lädt `out/` hoch
+4. `actions/deploy-pages` veröffentlicht das Artefakt
+
+### Einmalige Einrichtung im Repo
+
+**In den Repo-Settings unter „Pages" muss als Source „GitHub Actions" eingestellt
+werden** (Settings → Pages → Build and deployment → Source = *GitHub Actions*).
+Ohne diese Einstellung schlägt der Deploy-Schritt fehl bzw. es wird weiterhin der alte
+Branch-Inhalt ausgeliefert.
+
+Der Build-Output gehört **nicht** ins Repository – `out/` ist in `.gitignore`.
+
+### basePath
+
+GitHub Pages hostet das Projekt unter einem Unterpfad, deshalb setzt
+`next.config.js` `basePath` und `assetPrefix` auf den Repo-Namen (`Gear-Tracker`).
+Bei einer Umbenennung des Repos muss dieser Wert dort angepasst werden.
+
+Finale URL: **https://thcjk.github.io/Gear-Tracker/**
 
 ## Lizenz
 

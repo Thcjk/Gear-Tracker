@@ -14,7 +14,6 @@ export interface GearItem {
   weightGrams: number;
   price?: number;
   notes?: string;
-  sourceUrl?: string;
   createdAt: string;
 }
 
@@ -39,12 +38,4 @@ export interface AppData {
   gearItems: GearItem[];
   packingLists: PackingList[];
   theme: ThemeMode;
-}
-
-export interface ProductImportSuggestion {
-  name?: string;
-  weightGrams?: number;
-  price?: number;
-  found: boolean;
-  sourceUrl: string;
 }
