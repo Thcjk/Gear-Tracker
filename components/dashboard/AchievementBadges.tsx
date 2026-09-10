@@ -39,7 +39,7 @@ export function AchievementBadges({
       id: "lighter",
       label: `${formatWeight(
         reference.weightGrams - totalWeight,
-      )} leichter als „${reference.name}"`,
+      )} leichter als „${reference.name}“`,
       Icon: TrendingDown,
       className:
         "text-forest-700 dark:text-forest-300",

@@ -23,7 +23,7 @@ export function LibraryPicker({
     return (
       <p className="px-1 py-3 text-sm text-clay-600 dark:text-clay-400">
         In dieser Kategorie liegt noch nichts in der Library. Leg unter „Neu
-        anlegen" direkt etwas an.
+        anlegen“ direkt etwas an.
       </p>
     );
   }
