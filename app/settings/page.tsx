@@ -19,7 +19,7 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "ultralight-gear-tracker-backup.json";
+    a.download = "gear-tracker-backup.json";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -104,7 +104,7 @@ export default function SettingsPage() {
       <SurfaceCard as="section" className="p-4 text-sm text-clay-700 dark:text-clay-400">
         <p>
           <strong className="text-clay-900 dark:text-clay-50">
-            Ultralight Gear-Tracker
+            Gear-Tracker
           </strong>{" "}
           · {data.gearItems.length} Items · {data.packingLists.length} Listen
         </p>

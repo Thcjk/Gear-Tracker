@@ -1,4 +1,4 @@
-# Ultralight Gear-Tracker
+# Gear-Tracker
 
 Web-App zum Verwalten und Analysieren von Ultralight-Trekking-Ausrüstung: Gear-Library
 pflegen, Packlisten zusammenstellen, Gewicht und Kosten im Blick behalten.

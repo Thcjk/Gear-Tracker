@@ -1,8 +1,8 @@
 {
-  "name": "ultralight-gear-tracker",
+  "name": "gear-tracker",
   "version": "1.0.0",
   "private": true,
-  "description": "Ultralight Gear-Tracker – Packlisten und Gewichte für Leichtgewicht-Trekking (statische App, LocalStorage)",
+  "description": "Gear-Tracker – Packlisten und Gewichte für Leichtgewicht-Trekking (statische App, LocalStorage)",
   "scripts": {
     "dev": "next dev",
     "build": "next build && node scripts/generate-sw.mjs",

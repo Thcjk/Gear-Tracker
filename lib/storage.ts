@@ -13,7 +13,19 @@ import {
   hasComfortTemp,
 } from "@/lib/categories";
 
-/** Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-Skript genutzt). */
+/**
+ * Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-
+ * Skript genutzt).
+ *
+ * Der Präfix "ultralight-" bleibt trotz der Umbenennung der App zu
+ * "Gear-Tracker" stehen, und dasselbe gilt für die Schlüssel in
+ * backups.ts, shareFormat.ts und weightHistory.ts. Er ist keine Anzeige,
+ * sondern die Adresse, unter der die Daten im Gerät liegen: wird er
+ * geändert, findet die App die Bestände der Nutzer nicht mehr und startet
+ * für sie mit leerer Library. Eine Umbenennung bräuchte eine Migration,
+ * die die alten Schlüssel ausliest und überträgt – der Gewinn wäre ein
+ * hübscherer Name in den Entwicklerwerkzeugen.
+ */
 export const STORAGE_KEY = "ultralight-gear-tracker-v1";
 
 /**
