@@ -7,6 +7,7 @@ import { ComparisonTable } from "@/components/compare/ComparisonTable";
 import { Button, IconButton } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { BootsSketch } from "@/components/sketch/BootsSketch";
 import { entryFromPackingList, entryFromShared } from "@/lib/calculations";
 import { parseSharedList } from "@/lib/shareFormat";
 import { useAppStore } from "@/lib/store";
@@ -77,7 +78,9 @@ export default function ComparePage() {
       />
 
       {data.packingLists.length === 0 ? (
-        <EmptyState>Noch keine eigenen Packlisten zum Vergleichen.</EmptyState>
+        <EmptyState illustration={<BootsSketch />}>
+          Noch keine eigenen Packlisten zum Vergleichen.
+        </EmptyState>
       ) : (
         <SurfaceCard className="space-y-2 p-4">
           {data.packingLists.map((list) => (

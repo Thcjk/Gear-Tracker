@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
+import { CampfireSketch } from "@/components/sketch/CampfireSketch";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -76,6 +77,8 @@ export function TourReviewDialog({
 }) {
   const [step, setStep] = useState<1 | 2>(1);
   const [draft, setDraft] = useState<Draft>(() => draftFrom(list, existing));
+  /** Nach dem Speichern: kurzer Abschluss statt sofortigem Verschwinden. */
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -130,6 +133,7 @@ export function TourReviewDialog({
       };
     });
     onSave(answers, itemReviews);
+    setDone(true);
   }
 
   function trimmed(key: "whatWorked" | "whatWasMissing" | "whatToLeaveOut" | "notes") {
@@ -138,6 +142,41 @@ export function TourReviewDialog({
   }
 
   const unusedCount = [...draft.reviews.values()].filter((r) => !r.used).length;
+
+  if (done) {
+    return (
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Tour ausgewertet"
+        className="fixed inset-0 z-50 flex items-end justify-center bg-black/30 p-4 backdrop-blur-sm sm:items-center"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <SurfaceCard className="animate-rise w-full max-w-md p-6 text-center">
+          <CampfireSketch className="mx-auto h-28 w-28 text-accent" />
+          <h2 className="mt-4 text-xl font-bold text-clay-900 dark:text-clay-50">
+            Tour im Buch
+          </h2>
+          <p className="mx-auto mt-2 max-w-xs text-sm text-clay-700 dark:text-clay-300">
+            {unusedCount === 0
+              ? "Alles gebraucht – so kann die Liste bleiben."
+              : `${unusedCount} ${unusedCount === 1 ? "Item war" : "Items waren"} umsonst dabei. Beim nächsten Packen weisst du es.`}
+          </p>
+          <Button
+            type="button"
+            variant="accent"
+            onClick={onClose}
+            className="mt-5 w-full"
+          >
+            <Check className="h-4 w-4" />
+            Fertig
+          </Button>
+        </SurfaceCard>
+      </div>
+    );
+  }
 
   return (
     <div

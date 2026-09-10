@@ -3,6 +3,7 @@
 import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { BootsSketch } from "@/components/sketch/BootsSketch";
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
 
@@ -27,7 +28,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
 export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
-      <EmptyState>
+      <EmptyState illustration={<BootsSketch />}>
         Wähle mindestens zwei Packlisten zum Vergleichen – eigene oder eine
         importierte Datei.
       </EmptyState>

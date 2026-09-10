@@ -3,7 +3,8 @@
 import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, PartyPopper } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { BackpackSketch } from "@/components/sketch/BackpackSketch";
 import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
@@ -121,9 +122,9 @@ function WizardInner() {
     return (
       <div className="flex min-h-[70vh] flex-col">
         <div className="flex flex-col items-center py-2 text-center">
-          <span className="animate-icon-in flex h-24 w-24 items-center justify-center rounded-full bg-clay-200 text-accent shadow-neu-lg dark:bg-clay-800">
-            <PartyPopper className="h-11 w-11" />
-          </span>
+          {/* Der Rucksack ist gepackt – dieselbe Bildsprache wie im Splash
+              und in den Leerzuständen, hier als Abschluss. */}
+          <BackpackSketch className="animate-icon-in h-32 w-28 text-accent" />
           <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-clay-900 [animation-delay:90ms] dark:text-clay-50">
             {list.name}
           </h2>
