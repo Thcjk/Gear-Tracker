@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 import { Suspense } from "react";
+import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { CategoryWeightChart } from "@/components/dashboard/CategoryWeightChart";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
@@ -21,6 +22,11 @@ import {
 import { formatPrice, formatWeight } from "@/lib/categories";
 import { exportPackingListPdf } from "@/lib/pdfExport";
 import { useAppStore } from "@/lib/store";
+import {
+  getPreviousReference,
+  recordListWeight,
+  type WeightSnapshot,
+} from "@/lib/weightHistory";
 
 function PackingListDetailInner() {
   const searchParams = useSearchParams();
@@ -28,11 +34,20 @@ function PackingListDetailInner() {
   const router = useRouter();
   const { ready, data, updatePackingList } = useAppStore();
   const [selectedGearId, setSelectedGearId] = useState("");
+  const [reference, setReference] = useState<WeightSnapshot | null>(null);
 
   const list = useMemo(
     () => data.packingLists.find((l) => l.id === id),
     [data.packingLists, id],
   );
+
+  const currentWeight = list ? listTotalWeight(list, data.gearItems) : 0;
+
+  useEffect(() => {
+    if (!ready || !list) return;
+    setReference(getPreviousReference(list.id));
+    recordListWeight(list.id, list.name, currentWeight);
+  }, [ready, list, currentWeight]);
 
   if (!ready) {
     return <p className="text-sm text-earth-500">Lade Packliste…</p>;
@@ -52,7 +67,7 @@ function PackingListDetailInner() {
   }
 
   const progress = listPackedProgress(list);
-  const totalWeight = listTotalWeight(list, data.gearItems);
+  const totalWeight = currentWeight;
   const totalPrice = listTotalPrice(list, data.gearItems);
   const itemCount = listItemCount(list);
   const chartData = weightByCategory(list, data.gearItems);
@@ -103,6 +118,13 @@ function PackingListDetailInner() {
         />
         <StatCard label="Anzahl Items" value={String(itemCount)} />
       </div>
+
+      <AchievementBadges
+        totalWeight={totalWeight}
+        packed={progress.packed}
+        total={progress.total}
+        reference={reference}
+      />
 
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
