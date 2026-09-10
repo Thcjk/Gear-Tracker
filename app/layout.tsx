@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { PageTransition } from "@/components/nav/PageTransition";
+import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/ui/SplashScreen";
 import { splashCriticalCss } from "@/components/ui/splashCss";
 import { AppStoreProvider } from "@/lib/store";
@@ -85,6 +86,7 @@ export default function RootLayout({
           </div>
           <BottomNav />
         </AppStoreProvider>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
