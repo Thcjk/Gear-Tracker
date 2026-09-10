@@ -10,7 +10,6 @@ export type GearFormValues = {
   weightGrams: number;
   price?: number;
   notes?: string;
-  sourceUrl?: string;
 };
 
 const emptyValues: GearFormValues = {
@@ -19,7 +18,6 @@ const emptyValues: GearFormValues = {
   weightGrams: 0,
   price: undefined,
   notes: "",
-  sourceUrl: "",
 };
 
 export function GearItemForm({
@@ -51,7 +49,6 @@ export function GearItemForm({
       ...values,
       name: values.name.trim(),
       notes: values.notes?.trim() || undefined,
-      sourceUrl: values.sourceUrl?.trim() || undefined,
       price:
         values.price === undefined || Number.isNaN(values.price)
           ? undefined
@@ -152,11 +149,6 @@ export function GearItemForm({
             className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
           />
         </label>
-        {values.sourceUrl && (
-          <p className="truncate text-xs text-earth-500 dark:text-earth-400">
-            Quelle: {values.sourceUrl}
-          </p>
-        )}
       </div>
       <div className="mt-4 flex gap-2">
         <button
@@ -184,6 +176,5 @@ export function gearItemToFormValues(item: GearItem): GearFormValues {
     weightGrams: item.weightGrams,
     price: item.price,
     notes: item.notes,
-    sourceUrl: item.sourceUrl,
   };
 }

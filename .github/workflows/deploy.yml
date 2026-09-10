@@ -1,21 +1,24 @@
-name: Deploy GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+# Rechte für das Pages-Deployment via OIDC
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Nur ein Deployment gleichzeitig; laufende Deploys nicht abbrechen
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
+    name: Build static export
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,14 +30,14 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Install
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
-        run: npm run build:pages
-        env:
-          GITHUB_PAGES: "true"
-          PAGES_REPO_NAME: ${{ github.event.repository.name }}
+      - name: Build (next build → statischer Export nach out/)
+        run: npm run build
+
+      - name: Disable Jekyll processing
+        run: touch out/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -42,6 +45,7 @@ jobs:
           path: out
 
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
     environment:

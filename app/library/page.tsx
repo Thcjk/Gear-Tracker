@@ -8,10 +8,9 @@ import {
   gearItemToFormValues,
   type GearFormValues,
 } from "@/components/gear/GearItemForm";
-import { ImportFromLinkForm } from "@/components/gear/ImportFromLinkForm";
 import { CATEGORIES } from "@/lib/categories";
 import { useAppStore } from "@/lib/store";
-import type { Category, GearItem, ProductImportSuggestion, SortKey } from "@/types";
+import type { Category, GearItem, SortKey } from "@/types";
 
 export default function LibraryPage() {
   const { ready, data, addGearItem, updateGearItem, removeGearItem } =
@@ -20,9 +19,6 @@ export default function LibraryPage() {
   const [category, setCategory] = useState<Category | "all">("all");
   const [editing, setEditing] = useState<GearItem | null>(null);
   const [creating, setCreating] = useState(false);
-  const [importDraft, setImportDraft] = useState<Partial<GearFormValues> | null>(
-    null,
-  );
 
   const items = useMemo(() => {
     let list = [...data.gearItems];
@@ -40,25 +36,12 @@ export default function LibraryPage() {
   function handleCreate(values: GearFormValues) {
     addGearItem(values);
     setCreating(false);
-    setImportDraft(null);
   }
 
   function handleUpdate(values: GearFormValues) {
     if (!editing) return;
     updateGearItem({ ...editing, ...values });
     setEditing(null);
-  }
-
-  function handleImport(suggestion: ProductImportSuggestion) {
-    setCreating(true);
-    setEditing(null);
-    setImportDraft({
-      name: suggestion.name ?? "",
-      weightGrams: suggestion.weightGrams ?? 0,
-      price: suggestion.price,
-      sourceUrl: suggestion.sourceUrl,
-      category: "hygiene-misc",
-    });
   }
 
   if (!ready) {
@@ -81,7 +64,6 @@ export default function LibraryPage() {
           onClick={() => {
             setCreating(true);
             setEditing(null);
-            setImportDraft(null);
           }}
           className="inline-flex items-center gap-2 rounded-2xl bg-ember-500 px-4 py-2 text-sm font-semibold text-white hover:bg-ember-600"
         >
@@ -90,22 +72,15 @@ export default function LibraryPage() {
         </button>
       </div>
 
-      <ImportFromLinkForm onImported={handleImport} />
-
       {(creating || editing) && (
         <GearItemForm
           title={editing ? "Item bearbeiten" : "Neues Item"}
           submitLabel={editing ? "Speichern" : "Hinzufügen"}
-          initial={
-            editing
-              ? gearItemToFormValues(editing)
-              : importDraft ?? undefined
-          }
+          initial={editing ? gearItemToFormValues(editing) : undefined}
           onSubmit={editing ? handleUpdate : handleCreate}
           onCancel={() => {
             setCreating(false);
             setEditing(null);
-            setImportDraft(null);
           }}
         />
       )}
@@ -139,7 +114,7 @@ export default function LibraryPage() {
       <div className="space-y-3">
         {items.length === 0 ? (
           <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
-            Noch keine Items. Lege dein erstes Gear an oder importiere per Link.
+            Noch keine Items. Lege dein erstes Gear mit Gewicht und Preis an.
           </div>
         ) : (
           items.map((item) => (
@@ -149,7 +124,6 @@ export default function LibraryPage() {
               onEdit={(g) => {
                 setEditing(g);
                 setCreating(false);
-                setImportDraft(null);
               }}
               onDelete={(id) => {
                 if (confirm("Item wirklich löschen?")) removeGearItem(id);
