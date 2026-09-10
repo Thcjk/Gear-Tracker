@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GradientField } from "@/components/ui/GradientField";
-import { SplashEmblem } from "@/components/splash/SplashEmblem";
+import { CampScene } from "@/components/splash/CampScene";
 import { useAppStore } from "@/lib/store";
 import {
   SPLASH_FADE_MS,
@@ -17,11 +16,11 @@ import {
  * Diese Variante läuft überall gleich – auch im Browser-Tab.
  *
  * Markup und Gestaltung stecken im vorgerenderten HTML bzw. als <style> im
- * <head> (siehe splashCss.ts): Emblem und Schriftzug erscheinen mit dem
+ * <head> (siehe splashCss.ts): Szene und Schriftzug erscheinen mit dem
  * ersten Paint, statt auf das Tailwind-Stylesheet zu warten. Deshalb
- * tragen die Elemente eigene splash__-Klassen und keine Tailwind-Klassen –
- * und die Farbflecken der GradientField-Ebene bekommen ihre Lage,
- * Rundung und Unschärfe ebenfalls aus dem kritischen CSS.
+ * tragen die Elemente eigene splash__-Klassen und keine Tailwind-Klassen,
+ * und die Szene zeichnet mit currentColor statt mit var(--accent) – die
+ * Variable ist zu diesem Zeitpunkt noch nicht definiert.
  *
  * Ablauf: der Splash steht SPLASH_MIN_VISIBLE_MS, auch wenn die App längst
  * bereit ist. Braucht das Laden länger, wird nicht künstlich verlängert –
@@ -84,9 +83,8 @@ export function SplashScreen() {
 
   return (
     <div aria-hidden className="splash">
-      <GradientField variant="warm" className="splash__field" />
       <div className="splash__stage">
-        <SplashEmblem />
+        <CampScene className="splash__mark" />
         <p className="splash__title">Gear-Tracker</p>
       </div>
       <p className="splash__tagline">Pack leicht. Wandere weit.</p>
