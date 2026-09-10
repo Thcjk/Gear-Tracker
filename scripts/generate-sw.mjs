@@ -75,6 +75,8 @@ const BASE = ${JSON.stringify(`${basePath}/`)};
 const PRECACHE = ${JSON.stringify(urls, null, 2)};
 /* Der Einstiegspunkt, wenn eine unbekannte Seite offline angefragt wird. */
 const FALLBACK = ${JSON.stringify(`${basePath}/library/`)};
+/* Wie viele Build-Generationen im Gerät bleiben – siehe activate. */
+const KEEP_GENERATIONS = 2;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -90,10 +92,24 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) =>
-        Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))),
-      )
-      .then(() => self.clients.claim()),
+      .then((keys) => {
+        // Die vorige Generation bleibt liegen: der gerade offene Tab läuft
+        // noch mit dem alten HTML und lädt seine Chunks unter den alten,
+        // gehashten Namen nach. Die sind nach einem Deployment nicht mehr
+        // auf dem Server – ohne den alten Cache bricht die laufende
+        // Sitzung mitten im Benutzen ab.
+        const stale = keys.filter((key) => key.startsWith("gear-tracker-") && key !== CACHE);
+        return Promise.all(
+          stale.slice(0, Math.max(0, stale.length - (KEEP_GENERATIONS - 1))).map((key) => caches.delete(key)),
+        );
+      })
+      .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: "window" }))
+      .then((clients) => {
+        // Erst jetzt steht fest, dass dieser Worker die Seiten bedient.
+        // Die Seite entscheidet selbst, ob ein Reload gerade passt.
+        for (const client of clients) client.postMessage({ type: "sw-activated" });
+      }),
   );
 });
 
@@ -110,6 +126,11 @@ function revalidate(request) {
     .catch(() => undefined);
 }
 
+/** Nur im Cache dieses Builds suchen. */
+function matchCurrent(request, options) {
+  return caches.open(CACHE).then((cache) => cache.match(request, options));
+}
+
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
@@ -119,7 +140,9 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Gehashte Build-Artefakte ändern sich nie unter demselben Namen.
+  // Gehashte Build-Artefakte ändern sich nie unter demselben Namen, deshalb
+  // darf hier über alle Generationen gesucht werden – so findet eine noch
+  // offene alte Sitzung ihre Chunks auch nach dem Deployment.
   if (url.pathname.startsWith(BASE + "_next/static/")) {
     event.respondWith(
       caches.match(request).then((hit) => hit || revalidate(request)),
@@ -129,20 +152,21 @@ self.addEventListener("fetch", (event) => {
 
   // Seitenaufrufe zuerst aus dem Cache: das ist der Start vom Home-Bildschirm
   // und soll sofort zeichnen. Die Auffrischung läuft daneben und greift beim
-  // nächsten Start.
+  // nächsten Start. Gesucht wird nur im aktuellen Cache – aus dem alten käme
+  // das HTML des vorigen Builds und der Start hinge eine Version zurück.
   if (request.mode === "navigate") {
     event.respondWith(
-      caches.match(request, { ignoreSearch: true }).then((hit) => {
+      matchCurrent(request, { ignoreSearch: true }).then((hit) => {
         const fresh = revalidate(request);
         if (hit) return hit;
-        return fresh.then((response) => response || caches.match(FALLBACK));
+        return fresh.then((response) => response || matchCurrent(FALLBACK));
       }),
     );
     return;
   }
 
   event.respondWith(
-    caches.match(request).then((hit) => {
+    matchCurrent(request).then((hit) => {
       const fresh = revalidate(request);
       return hit || fresh;
     }),
