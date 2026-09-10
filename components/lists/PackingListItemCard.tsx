@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
+import { ComfortTempBadge } from "@/components/gear/ComfortTempBadge";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -102,6 +103,9 @@ export function PackingListItemCard({
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
+          {gear.comfortTempC != null && (
+            <ComfortTempBadge celsius={gear.comfortTempC} className="mt-2" />
+          )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <label className="inline-flex items-center gap-2 text-sm text-clay-600 dark:text-clay-400">
               Menge

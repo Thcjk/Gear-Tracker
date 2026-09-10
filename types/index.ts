@@ -13,6 +13,12 @@ export interface GearItem {
   category: Category;
   weightGrams: number;
   price?: number;
+  /**
+   * Komforttemperatur in °C, nur für Schlafsysteme. Sie entscheidet, ob
+   * ein Schlafsack zur geplanten Tour passt, und gehört damit neben das
+   * Gewicht – nicht in die Notizen, wo sich nicht danach filtern lässt.
+   */
+  comfortTempC?: number;
   notes?: string;
   createdAt: string;
 }
@@ -95,6 +101,7 @@ export interface SharedListItem {
   weightGrams: number;
   quantity: number;
   price?: number;
+  comfortTempC?: number;
 }
 
 export interface SharedPackingList {

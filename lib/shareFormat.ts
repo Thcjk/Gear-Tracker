@@ -7,7 +7,12 @@ import type {
   SharedListItem,
   SharedPackingList,
 } from "@/types";
-import { CATEGORIES } from "@/lib/categories";
+import {
+  CATEGORIES,
+  COMFORT_TEMP_MAX,
+  COMFORT_TEMP_MIN,
+  hasComfortTemp,
+} from "@/lib/categories";
 import { indexGearItems } from "@/lib/calculations";
 import { readJson, writeJson } from "@/lib/storage";
 
@@ -41,6 +46,9 @@ export function buildSharedList(
         weightGrams: gear.weightGrams,
         quantity: entry.quantity,
         ...(gear.price !== undefined ? { price: gear.price } : {}),
+        ...(gear.comfortTempC !== undefined
+          ? { comfortTempC: gear.comfortTempC }
+          : {}),
       },
     ];
   });
@@ -98,6 +106,7 @@ function parseItem(raw: unknown): SharedListItem | null {
   const weightGrams = Number(raw.weightGrams);
   const quantity = Number(raw.quantity);
   const price = Number(raw.price);
+  const comfortTempC = Number(raw.comfortTempC);
   if (!name || !Number.isFinite(weightGrams) || weightGrams < 0) return null;
 
   const category =
@@ -112,6 +121,12 @@ function parseItem(raw: unknown): SharedListItem | null {
     quantity:
       Number.isFinite(quantity) && quantity >= 1 ? Math.floor(quantity) : 1,
     ...(Number.isFinite(price) && price >= 0 ? { price } : {}),
+    ...(hasComfortTemp(category) &&
+    Number.isFinite(comfortTempC) &&
+    comfortTempC >= COMFORT_TEMP_MIN &&
+    comfortTempC <= COMFORT_TEMP_MAX
+      ? { comfortTempC }
+      : {}),
   };
 }
 

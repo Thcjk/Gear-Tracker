@@ -2,6 +2,7 @@
 
 import { Pencil, Trash2 } from "lucide-react";
 import type { GearItem } from "@/types";
+import { ComfortTempBadge } from "@/components/gear/ComfortTempBadge";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { Button } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -60,6 +61,9 @@ export function GearItemCard({
               )}
             </div>
           </div>
+          {item.comfortTempC != null && (
+            <ComfortTempBadge celsius={item.comfortTempC} className="mt-2" />
+          )}
           {item.notes && (
             <p className="mt-2 line-clamp-2 text-sm text-clay-600 dark:text-clay-400">
               {item.notes}
