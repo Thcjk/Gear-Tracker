@@ -1,7 +1,14 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { AppStoreProvider } from "@/lib/store";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Ultralight Gear-Tracker",
@@ -22,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" suppressHydrationWarning>
-      <body>
+    <html lang="de" className={inter.variable} suppressHydrationWarning>
+      <body className={inter.className}>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var d=JSON.parse(localStorage.getItem("ultralight-gear-tracker-v1")||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
