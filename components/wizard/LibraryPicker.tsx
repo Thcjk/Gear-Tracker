@@ -2,7 +2,7 @@
 
 import { Check, Minus, Plus } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
-import { formatWeight } from "@/lib/categories";
+import { formatComfortTemp, formatWeight } from "@/lib/categories";
 
 /**
  * Mehrfachauswahl aus der Gear-Library für genau eine Kategorie,
@@ -59,11 +59,13 @@ export function LibraryPicker({
                 onClick={() => onToggle(item.id)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
                   {item.name}
                 </p>
                 <p className="text-xs text-clay-700 dark:text-clay-400">
                   {formatWeight(item.weightGrams)}
+                  {item.comfortTempC != null &&
+                    ` · ${formatComfortTemp(item.comfortTempC)}`}
                 </p>
               </button>
 

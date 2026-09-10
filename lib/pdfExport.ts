@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { GearItem, PackingList } from "@/types";
 import { indexGearItems, listTotalWeight } from "./calculations";
-import { formatWeight, getCategoryMeta } from "./categories";
+import { formatComfortTemp, formatWeight, getCategoryMeta } from "./categories";
 
 export function exportPackingListPdf(
   list: PackingList,
@@ -21,7 +21,13 @@ export function exportPackingListPdf(
   const rows = list.items.map((item) => {
     const gear = index.get(item.gearItemId);
     return [
-      gear?.name ?? "Unbekannt",
+      // Die Komforttemperatur hängt am Namen statt in einer eigenen Spalte:
+      // sie betrifft nur Schlafsysteme, eine Spalte wäre fast überall leer.
+      gear
+        ? gear.comfortTempC != null
+          ? `${gear.name} (${formatComfortTemp(gear.comfortTempC)})`
+          : gear.name
+        : "Unbekannt",
       gear ? getCategoryMeta(gear.category).label : "—",
       String(item.quantity),
       gear ? formatWeight(gear.weightGrams) : "—",

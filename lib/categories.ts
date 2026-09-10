@@ -63,6 +63,23 @@ export function formatWeight(grams: number): string {
   return `${Math.round(grams)} g`;
 }
 
+/**
+ * Nur beim Schlafsystem ergibt eine Komforttemperatur einen Sinn – ein
+ * Kocher hat keine. Die Abfrage steckt hier, damit Formular, Anzeige und
+ * Normalisierung dieselbe Regel benutzen.
+ */
+export function hasComfortTemp(category: Category): boolean {
+  return category === "sleep-system";
+}
+
+/** Grenzen der Eingabe: alles ausserhalb ist ein Tippfehler, kein Schlafsack. */
+export const COMFORT_TEMP_MIN = -50;
+export const COMFORT_TEMP_MAX = 40;
+
+export function formatComfortTemp(celsius: number): string {
+  return `${Math.round(celsius * 10) / 10} °C`;
+}
+
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat("de-CH", {
     style: "currency",

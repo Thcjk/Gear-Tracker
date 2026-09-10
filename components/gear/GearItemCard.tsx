@@ -2,6 +2,7 @@
 
 import { Pencil, Trash2 } from "lucide-react";
 import type { GearItem } from "@/types";
+import { ComfortTempBadge } from "@/components/gear/ComfortTempBadge";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { Button } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -33,9 +34,14 @@ export function GearItemCard({
       <div className="flex items-start gap-3">
         <CategoryIcon category={item.category} />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <h3 className="truncate text-base font-bold text-clay-900 dark:text-clay-50">
+          <div className="flex items-start justify-between gap-3">
+            {/* min-w-0 lässt die Spalte schmaler werden als der Name lang
+                ist; ohne das schob ein langer Name das Gewicht aus der
+                Karte und eines von beiden war nicht mehr zu sehen. Der
+                Name bricht um, statt abgeschnitten zu werden – er ist das
+                Einzige, woran man ein Item wiedererkennt. */}
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-base font-bold leading-snug text-clay-900 dark:text-clay-50">
                 {item.name}
               </h3>
               {showCategory && (
@@ -44,7 +50,7 @@ export function GearItemCard({
                 </p>
               )}
             </div>
-            <div className="text-right">
+            <div className="shrink-0 text-right">
               <p className="text-lg font-extrabold text-forest-700 dark:text-forest-300">
                 {formatWeight(item.weightGrams)}
               </p>
@@ -55,6 +61,9 @@ export function GearItemCard({
               )}
             </div>
           </div>
+          {item.comfortTempC != null && (
+            <ComfortTempBadge celsius={item.comfortTempC} className="mt-2" />
+          )}
           {item.notes && (
             <p className="mt-2 line-clamp-2 text-sm text-clay-700 dark:text-clay-400">
               {item.notes}

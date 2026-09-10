@@ -4,7 +4,12 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
-import { CATEGORIES } from "@/lib/categories";
+import {
+  CATEGORIES,
+  COMFORT_TEMP_MAX,
+  COMFORT_TEMP_MIN,
+  hasComfortTemp,
+} from "@/lib/categories";
 
 /** Formularwerte entsprechen exakt einem Gear-Item ohne id/createdAt. */
 export type GearFormValues = GearDraft;
@@ -14,6 +19,7 @@ const emptyValues: GearFormValues = {
   category: "shelter",
   weightGrams: 0,
   price: undefined,
+  comfortTempC: undefined,
   notes: "",
 };
 
@@ -42,6 +48,8 @@ export function GearItemForm({
     setValues({ ...emptyValues, ...initial });
   }, [initial]);
 
+  const showComfortTemp = hasComfortTemp(values.category);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!values.name.trim() || values.weightGrams <= 0) return;
@@ -53,6 +61,14 @@ export function GearItemForm({
         values.price === undefined || Number.isNaN(values.price)
           ? undefined
           : values.price,
+      // Nach einem Kategoriewechsel wäre ein stehengebliebener Wert
+      // nirgends mehr sichtbar und damit nicht mehr korrigierbar.
+      comfortTempC:
+        showComfortTemp &&
+        values.comfortTempC !== undefined &&
+        !Number.isNaN(values.comfortTempC)
+          ? values.comfortTempC
+          : undefined,
     });
   }
 
@@ -136,6 +152,30 @@ export function GearItemForm({
             />
           </label>
         </div>
+        {showComfortTemp && (
+          <label className="grid gap-1 text-sm">
+            <span className="neu-label">Komforttemperatur (°C)</span>
+            <input
+              type="number"
+              min={COMFORT_TEMP_MIN}
+              max={COMFORT_TEMP_MAX}
+              step="0.5"
+              // Minuszeichen sind der Normalfall; ohne die Angabe zeigt iOS
+              // ein Ziffernfeld ganz ohne Vorzeichentaste.
+              inputMode="text"
+              placeholder="z. B. -5"
+              value={values.comfortTempC ?? ""}
+              onChange={(e) =>
+                setValues((v) => ({
+                  ...v,
+                  comfortTempC:
+                    e.target.value === "" ? undefined : Number(e.target.value),
+                }))
+              }
+              className="neu-field"
+            />
+          </label>
+        )}
         <label className="grid gap-1 text-sm">
           <span className="neu-label">
             Notizen
@@ -168,6 +208,7 @@ export function gearItemToFormValues(item: GearItem): GearFormValues {
     category: item.category,
     weightGrams: item.weightGrams,
     price: item.price,
+    comfortTempC: item.comfortTempC,
     notes: item.notes,
   };
 }

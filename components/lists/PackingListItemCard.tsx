@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
+import { ComfortTempBadge } from "@/components/gear/ComfortTempBadge";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -86,9 +87,11 @@ export function PackingListItemCard({
         </label>
         <CategoryIcon category={gear.category} />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start justify-between gap-3">
+            {/* Umbrechen statt abschneiden, und das Gewicht darf nicht
+                schrumpfen – sonst verdrängen sich die beiden gegenseitig. */}
             <h3
-              className={`truncate font-bold transition-colors ${
+              className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
                   ? "text-clay-700 line-through dark:text-clay-500"
                   : "text-clay-900 dark:text-clay-50"
@@ -96,10 +99,13 @@ export function PackingListItemCard({
             >
               {gear.name}
             </h3>
-            <p className="whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
+          {gear.comfortTempC != null && (
+            <ComfortTempBadge celsius={gear.comfortTempC} className="mt-2" />
+          )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <label className="inline-flex items-center gap-2 text-sm text-clay-700 dark:text-clay-400">
               Menge
