@@ -10,6 +10,7 @@ dist/
 build/
 *.tsbuildinfo
 next-env.d.ts
+.api-backup-pages/
 
 # Environment
 .env

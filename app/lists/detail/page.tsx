@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, FileDown, Plus } from "lucide-react";
+import { Suspense } from "react";
 import { CategoryWeightChart } from "@/components/dashboard/CategoryWeightChart";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
@@ -21,8 +22,9 @@ import { formatPrice, formatWeight } from "@/lib/categories";
 import { exportPackingListPdf } from "@/lib/pdfExport";
 import { useAppStore } from "@/lib/store";
 
-export default function PackingListDetailPage() {
-  const params = useParams<{ id: string }>();
+function PackingListDetailInner() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id") ?? "";
   const router = useRouter();
   const { ready, data, updatePackingList } = useAppStore();
   const [selectedGearId, setSelectedGearId] = useState("");
@@ -30,8 +32,8 @@ export default function PackingListDetailPage() {
   const [nameDraft, setNameDraft] = useState("");
 
   const list = useMemo(
-    () => data.packingLists.find((l) => l.id === params.id),
-    [data.packingLists, params.id],
+    () => data.packingLists.find((l) => l.id === id),
+    [data.packingLists, id],
   );
 
   if (!ready) {
@@ -232,5 +234,15 @@ export default function PackingListDetailPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PackingListDetailPage() {
+  return (
+    <Suspense
+      fallback={<p className="text-sm text-earth-500">Lade Packliste…</p>}
+    >
+      <PackingListDetailInner />
+    </Suspense>
   );
 }

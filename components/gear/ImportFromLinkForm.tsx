@@ -22,11 +22,15 @@ export function ImportFromLinkForm({
     setMessage(null);
 
     try {
-      const res = await fetch("/api/import-product", {
+      const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+      const res = await fetch(`${base}/api/import-product`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: trimmed }),
       });
+      if (!res.ok) {
+        throw new Error(`Import HTTP ${res.status}`);
+      }
       const data = (await res.json()) as ProductImportSuggestion;
       onImported({ ...data, sourceUrl: trimmed });
       setMessage(
@@ -36,8 +40,12 @@ export function ImportFromLinkForm({
       );
       setUrl("");
     } catch {
+      // GitHub Pages hat keine API-Route — Formular mit Link als Referenz öffnen
       onImported({ found: false, sourceUrl: trimmed });
-      setMessage("Import fehlgeschlagen. Formular manuell ausfüllen.");
+      setMessage(
+        "Automatischer Import nicht verfügbar (z. B. auf GitHub Pages). Formular manuell ausfüllen — Link ist als Quelle hinterlegt.",
+      );
+      setUrl("");
     } finally {
       setLoading(false);
     }

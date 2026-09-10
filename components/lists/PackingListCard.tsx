@@ -29,7 +29,7 @@ export function PackingListCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <Link
-            href={`/lists/${list.id}`}
+            href={`/lists/detail?id=${list.id}`}
             className="text-lg font-semibold text-forest-900 hover:text-ember-600 dark:text-forest-50 dark:hover:text-ember-400"
           >
             {list.name}
