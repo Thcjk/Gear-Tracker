@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { PageTransition } from "@/components/nav/PageTransition";
+import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/ui/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
+import { splashCriticalCss } from "@/components/ui/splashCss";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -58,6 +60,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* Inline, damit der Splash schon beim ersten Paint aussieht wie
+            gedacht – das Tailwind-Stylesheet ist ein eigener Request. */}
+        <style dangerouslySetInnerHTML={{ __html: splashCriticalCss }} />
+      </head>
       <body className={inter.className}>
         <script
           dangerouslySetInnerHTML={{
@@ -81,6 +88,7 @@ export default function RootLayout({
           </div>
           <BottomNav />
         </AppStoreProvider>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
