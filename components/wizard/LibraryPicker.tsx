@@ -59,7 +59,7 @@ export function LibraryPicker({
                 onClick={() => onToggle(item.id)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
                   {item.name}
                 </p>
                 <p className="text-xs text-clay-600 dark:text-clay-400">

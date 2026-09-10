@@ -33,9 +33,14 @@ export function GearItemCard({
       <div className="flex items-start gap-3">
         <CategoryIcon category={item.category} />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <h3 className="truncate text-base font-bold text-clay-900 dark:text-clay-50">
+          <div className="flex items-start justify-between gap-3">
+            {/* min-w-0 lässt die Spalte schmaler werden als der Name lang
+                ist; ohne das schob ein langer Name das Gewicht aus der
+                Karte und eines von beiden war nicht mehr zu sehen. Der
+                Name bricht um, statt abgeschnitten zu werden – er ist das
+                Einzige, woran man ein Item wiedererkennt. */}
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-base font-bold leading-snug text-clay-900 dark:text-clay-50">
                 {item.name}
               </h3>
               {showCategory && (
@@ -44,7 +49,7 @@ export function GearItemCard({
                 </p>
               )}
             </div>
-            <div className="text-right">
+            <div className="shrink-0 text-right">
               <p className="text-lg font-extrabold text-forest-700 dark:text-forest-300">
                 {formatWeight(item.weightGrams)}
               </p>

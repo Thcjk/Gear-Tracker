@@ -34,7 +34,7 @@ export function TopHeaviestItems({
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                  <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
                     {item.name}
                   </p>
                   <p className="text-xs text-clay-600 dark:text-clay-400">

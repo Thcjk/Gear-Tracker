@@ -86,9 +86,11 @@ export function PackingListItemCard({
         </label>
         <CategoryIcon category={gear.category} />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start justify-between gap-3">
+            {/* Umbrechen statt abschneiden, und das Gewicht darf nicht
+                schrumpfen – sonst verdrängen sich die beiden gegenseitig. */}
             <h3
-              className={`truncate font-bold transition-colors ${
+              className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
                   ? "text-clay-500 line-through"
                   : "text-clay-900 dark:text-clay-50"
@@ -96,7 +98,7 @@ export function PackingListItemCard({
             >
               {gear.name}
             </h3>
-            <p className="whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
