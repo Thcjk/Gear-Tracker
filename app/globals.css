@@ -13,6 +13,8 @@ html.dark {
 html,
 body {
   min-height: 100%;
+  /* Der Slide-Übergang schiebt die Seite kurz seitlich herein */
+  overflow-x: hidden;
 }
 
 :root {

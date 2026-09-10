@@ -100,6 +100,15 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "40%": { transform: "scale(1.3)" },
         },
+        // Seitenwechsel: neuer Screen schiebt sich herein
+        "slide-forward": {
+          "0%": { opacity: "0", transform: "translate3d(28px, 0, 0)" },
+          "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" },
+        },
+        "slide-back": {
+          "0%": { opacity: "0", transform: "translate3d(-28px, 0, 0)" },
+          "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" },
+        },
         // Splash: Logo blendet ein und wächst leicht
         "splash-in": {
           "0%": { opacity: "0", transform: "scale(0.86)" },
@@ -116,6 +125,9 @@ const config: Config = {
         pop: "pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
         flash: "flash 650ms ease-out forwards",
         "splash-in": "splash-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "slide-forward":
+          "slide-forward 260ms cubic-bezier(0.32, 0.72, 0, 1) both",
+        "slide-back": "slide-back 260ms cubic-bezier(0.32, 0.72, 0, 1) both",
       },
     },
   },
