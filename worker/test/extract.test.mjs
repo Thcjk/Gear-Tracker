@@ -37,11 +37,11 @@ console.log("\n=== (b) Open Graph / Meta");
 eq(extract(`<meta property="og:title" content="Rucksack Ultra 45 &amp; Co">
 <meta property="product:price:amount" content="199.95">
 <meta property="product:price:currency" content="eur">`),
-{ found: true, name: "Rucksack Ultra 45 & Co", price: 199.95, currency: "EUR", confidence: "high" },
-"og:title + product:price:*");
+{ found: true, name: "Rucksack Ultra 45 & Co", price: 199.95, currency: "EUR", confidence: "low" },
+"og:title + product:price:* → 'low', denn 'high' ist laut Vorgabe JSON-LD vorbehalten");
 
 eq(extract(`<meta name="og:title" content="Matte"><meta property="product:weight:value" content="0.48"><meta property="product:weight:units" content="kg">`),
-{ found: true, name: "Matte", weightGrams: 480, confidence: "high" },
+{ found: true, name: "Matte", weightGrams: 480, confidence: "low" },
 "product:weight in kg");
 
 console.log("\n=== (c) Regex-Fallback");
@@ -61,6 +61,12 @@ eq(extract(`<title>Stirnlampe</title><body>€ 34,95 &middot; 88 gramm</body>`),
 eq(extract(`<title>Trekkingstöcke</title><body>ab $49.00</body>`),
 { found: true, name: "Trekkingstöcke", price: 49, currency: "USD", confidence: "low" },
 "Dollar-Symbol");
+
+eq(extract(`<script type="application/ld+json">{"@type":"Product","name":"Aus JSON-LD",
+"offers":{"price":"10.00","priceCurrency":"CHF"}}</script>
+<meta property="og:title" content="Aus Meta">`),
+{ found: true, name: "Aus JSON-LD", price: 10, currency: "CHF", confidence: "high" },
+"JSON-LD schlägt Meta und bleibt 'high'");
 
 console.log("\n=== Mischung und Nicht-Treffer");
 eq(extract(`<script type="application/ld+json">{"@type":"Product","name":"Sicher benannt"}</script>

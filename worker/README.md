@@ -59,11 +59,15 @@ Der Reihe nach, das erste Ergebnis pro Feld gewinnt:
    oder mit dem Symbol davor. Der Schweizer Tausenderapostroph
    (`1'299.00`) wird erkannt.
 
-`confidence` ist `"high"`, wenn **alle** gelieferten Werte aus Stufe 1
-oder 2 stammen, sonst `"low"`. Es zählt also das schwächste Glied: ein
-sicher gelesener Name rettet ein geratenes Gewicht nicht. Die App zeigt
-`"low"`-Treffer mit einem Hinweis an und übernimmt grundsätzlich nichts
-ungeprüft.
+`confidence` ist `"high"` genau dann, wenn **alle** gelieferten Werte aus
+Stufe 1 (JSON-LD) stammen — sonst `"low"`. Es zählt das schwächste Glied:
+ein sicher gelesener Name rettet ein geratenes Gewicht nicht.
+
+Meta-Tags sind zwar vom Shop gesetzt und nicht geraten, landen aber
+trotzdem bei `"low"`. Die Richtung stimmt so: lieber einmal zu viel
+„bitte prüfen" als ein unsicherer Treffer, der wie eine Tatsache aussieht.
+Die App zeigt `"low"`-Treffer mit einem Hinweis an und übernimmt
+grundsätzlich nichts ungeprüft.
 
 ### Grenzen
 
@@ -158,6 +162,16 @@ Variables).
 ## Tests
 
 ```bash
-npm test        # Auslesen gegen 14 Beispielseiten, ohne Netz
+npm test          # ohne Netz: fetch wird im Handler-Test ersetzt
 npm run typecheck
 ```
+
+`npm test` läuft zweistufig:
+
+- `test/extract.test.mjs` – 15 Beispielseiten durch alle drei Stufen,
+  darunter kaputte JSON-LD-Blöcke, Gewicht ohne Einheit und Seiten ohne
+  jeden Treffer.
+- `test/handler.test.mjs` – der Worker als Ganzes: CORS-Freigabe nur für
+  die erlaubte Herkunft, abgelehnte Methoden, Adressprüfung (`file:`,
+  localhost, private Netze, Metadaten-Adresse der Cloud) und die
+  Antwortform bei Treffer, Nicht-Treffer und Netzfehler.

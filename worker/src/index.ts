@@ -17,8 +17,18 @@ export interface Env {
   ALLOWED_ORIGINS: string;
 }
 
-/** Nur Strukturdaten dürfen "high" sein. Geraten heisst "low". */
+/**
+ * Wie in der Vorgabe: "high" kommt aus JSON-LD, alles andere ist "low".
+ *
+ * Meta-Tags sind zwar vom Shop gesetzt und nicht geraten – sie landen
+ * trotzdem bei "low", weil die Vorgabe "high" ausdrücklich an JSON-LD
+ * bindet. Die Richtung stimmt so: lieber einmal zu viel "bitte prüfen" als
+ * ein unsicherer Treffer, der wie eine Tatsache aussieht.
+ */
 type Confidence = "high" | "low";
+
+/** Aus welcher der drei Stufen ein einzelner Wert stammt. */
+type Source = "json-ld" | "meta" | "text";
 
 interface Found {
   found: true;
@@ -191,7 +201,7 @@ async function loadPage(url: URL): Promise<string> {
 
 interface Field<T> {
   value: T;
-  confidence: Confidence;
+  source: Source;
 }
 
 /**
@@ -215,7 +225,7 @@ export function extract(html: string): Result {
   // Die Angabe gilt für den Treffer als Ganzes, also zählt das schwächste
   // Glied: ein sicherer Name rettet ein geratenes Gewicht nicht.
   const parts = [name, weight, price].filter(Boolean) as Field<unknown>[];
-  const confidence: Confidence = parts.every((p) => p.confidence === "high")
+  const confidence: Confidence = parts.every((p) => p.source === "json-ld")
     ? "high"
     : "low";
 
@@ -256,11 +266,11 @@ function fromJsonLd(html: string): Candidate {
       const product = node as Record<string, unknown>;
 
       const name = firstString(product.name);
-      if (name && !out.name) out.name = { value: name, confidence: "high" };
+      if (name && !out.name) out.name = { value: name, source: "json-ld" };
 
       const weight = weightFromJsonLd(product);
       if (weight !== null && !out.weightGrams) {
-        out.weightGrams = { value: weight, confidence: "high" };
+        out.weightGrams = { value: weight, source: "json-ld" };
       }
 
       for (const offer of flatten(product.offers)) {
@@ -268,11 +278,11 @@ function fromJsonLd(html: string): Candidate {
         const o = offer as Record<string, unknown>;
         const price = toNumber(o.price ?? o.lowPrice);
         if (price !== null && !out.price) {
-          out.price = { value: price, confidence: "high" };
+          out.price = { value: price, source: "json-ld" };
         }
         const currency = firstString(o.priceCurrency);
         if (currency && !out.currency) {
-          out.currency = { value: normalizeCurrency(currency), confidence: "high" };
+          out.currency = { value: normalizeCurrency(currency), source: "json-ld" };
         }
       }
     }
@@ -349,16 +359,16 @@ function quantityToGrams(node: unknown): number | null {
 /* -- (b) Open Graph und Meta-Tags ------------------------------------- */
 
 /**
- * Meta-Tags sind vom Shop bewusst gesetzte Maschinendaten, kein Raten –
- * darum zählen sie wie JSON-LD als "high". Nur der Regex-Fallback unten
- * liefert "low".
+ * Zweite Stufe: vom Shop gesetzte Maschinendaten. Sie sind verlässlicher
+ * als der Regex-Fallback, gelten laut Vorgabe aber trotzdem nicht als
+ * "high" – das bleibt JSON-LD vorbehalten.
  */
 function fromMeta(html: string): Candidate {
   const out: Candidate = {};
   const meta = readMetaTags(html);
 
   const name = meta.get("og:title") ?? meta.get("twitter:title");
-  if (name) out.name = { value: cleanText(name), confidence: "high" };
+  if (name) out.name = { value: cleanText(name), source: "meta" };
 
   const price = toNumber(
     meta.get("product:price:amount") ??
@@ -366,14 +376,14 @@ function fromMeta(html: string): Candidate {
       meta.get("product:price") ??
       meta.get("price"),
   );
-  if (price !== null) out.price = { value: price, confidence: "high" };
+  if (price !== null) out.price = { value: price, source: "meta" };
 
   const currency =
     meta.get("product:price:currency") ??
     meta.get("og:price:currency") ??
     meta.get("priceCurrency");
   if (currency) {
-    out.currency = { value: normalizeCurrency(currency), confidence: "high" };
+    out.currency = { value: normalizeCurrency(currency), source: "meta" };
   }
 
   const weight = meta.get("product:weight:value") ?? meta.get("weight");
@@ -382,7 +392,7 @@ function fromMeta(html: string): Candidate {
     const grams = unit
       ? quantityToGrams({ value: weight, unitText: unit })
       : parseWeight(weight);
-    if (grams !== null) out.weightGrams = { value: grams, confidence: "high" };
+    if (grams !== null) out.weightGrams = { value: grams, source: "meta" };
   }
 
   return out;
@@ -427,7 +437,7 @@ function fromText(html: string): Candidate {
   const title = TITLE_RE.exec(html)?.[1];
   if (title) {
     const value = cleanText(decodeEntities(title));
-    if (value) out.name = { value, confidence: "low" };
+    if (value) out.name = { value, source: "text" };
   }
 
   const text = visibleText(html);
@@ -435,7 +445,7 @@ function fromText(html: string): Candidate {
   const weightMatch = LABELLED_WEIGHT_RE.exec(text) ?? WEIGHT_RE.exec(text);
   if (weightMatch) {
     const grams = toGrams(weightMatch[1], weightMatch[2]);
-    if (grams !== null) out.weightGrams = { value: grams, confidence: "low" };
+    if (grams !== null) out.weightGrams = { value: grams, source: "text" };
   }
 
   const after = PRICE_AFTER_RE.exec(text);
@@ -452,8 +462,8 @@ function fromText(html: string): Candidate {
   if (hit) {
     const price = parseAmount(hit.amount);
     if (price !== null) {
-      out.price = { value: price, confidence: "low" };
-      out.currency = { value: normalizeCurrency(hit.symbol), confidence: "low" };
+      out.price = { value: price, source: "text" };
+      out.currency = { value: normalizeCurrency(hit.symbol), source: "text" };
     }
   }
 
