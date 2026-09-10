@@ -37,6 +37,41 @@ export interface PackingList {
   updatedAt: string;
 }
 
+/* ---------------------------------------------------------------- *
+ * Tourbuch
+ *
+ * Nach der Tour beantwortet: Was war zu schwer, was hat gefehlt, was
+ * blieb im Rucksack. Die Auswertung hängt an der Packliste, mit der
+ * gelaufen wurde – nur so lässt sich beim nächsten Mal nachsehen, was
+ * das letzte Mal ergeben hat.
+ * ---------------------------------------------------------------- */
+
+/** Bewusst die Klartext-Werte: sie stehen so auch in der Oberfläche. */
+export type WeightFeeling = "zu schwer" | "genau richtig" | "zu leicht";
+
+export interface TourGeneralAnswers {
+  weightFeeling: WeightFeeling;
+  whatWorked?: string;
+  whatWasMissing?: string;
+  whatToLeaveOut?: string;
+  notes?: string;
+}
+
+/** Ein Urteil über ein einzelnes mitgenommenes Item. */
+export interface TourItemReview {
+  gearItemId: string;
+  used: boolean;
+  note?: string;
+}
+
+export interface TourReview {
+  id: string;
+  packingListId: string;
+  completedAt: string;
+  generalAnswers: TourGeneralAnswers;
+  itemReviews: TourItemReview[];
+}
+
 /** Gear-Item ohne die vom Store vergebenen Felder – Basis für Formulare. */
 export type GearDraft = Omit<GearItem, "id" | "createdAt">;
 
@@ -122,5 +157,7 @@ export type ThemeMode = "light" | "dark";
 export interface AppData {
   gearItems: GearItem[];
   packingLists: PackingList[];
+  /** Abgeschlossene Touren, neueste zuerst geschrieben. */
+  tourReviews: TourReview[];
   theme: ThemeMode;
 }

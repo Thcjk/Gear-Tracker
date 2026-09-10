@@ -5,6 +5,9 @@ import type {
   PackingList,
   PackingListItem,
   ThemeMode,
+  TourItemReview,
+  TourReview,
+  WeightFeeling,
 } from "@/types";
 import {
   CATEGORIES,
@@ -41,6 +44,7 @@ export const QUARANTINE_KEY = "ultralight-gear-tracker-unreadable-v1";
 const defaultData: AppData = {
   gearItems: [],
   packingLists: [],
+  tourReviews: [],
   theme: "light",
 };
 
@@ -55,20 +59,27 @@ const defaultData: AppData = {
  * ------------------------------------------------------------------ */
 
 /** Aktuelle Version des gespeicherten Formats. */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 /**
  * Version 1 ist der Altbestand ohne schemaVersion-Feld: gearItems,
  * packingLists und theme, sonst nichts. Version 2 ist derselbe Aufbau mit
  * ausgewiesener Version – die Felder, die seither dazukamen
  * (comfortTempC), sind durchweg optional, es gibt also nichts umzurechnen.
- * Die Migration hält den Mechanismus für die nächste Änderung bereit.
+ * Version 3 bringt das Tourbuch (tourReviews) mit.
  */
 const MIGRATIONS: Record<
   number,
   (data: Record<string, unknown>) => Record<string, unknown>
 > = {
   1: (data) => ({ ...data, schemaVersion: 2 }),
+  // Wer die App vorher benutzt hat, hat keine Touren ausgewertet – eine
+  // leere Liste ist die richtige Antwort, kein fehlendes Feld.
+  2: (data) => ({
+    ...data,
+    tourReviews: Array.isArray(data.tourReviews) ? data.tourReviews : [],
+    schemaVersion: 3,
+  }),
 };
 
 /** Liest die Version aus dem gespeicherten Objekt; fehlt sie, ist es Version 1. */
@@ -269,6 +280,73 @@ function normalizePackingList(raw: unknown): PackingList | null {
   };
 }
 
+const WEIGHT_FEELINGS = new Set<string>([
+  "zu schwer",
+  "genau richtig",
+  "zu leicht",
+]);
+
+function normalizeItemReview(raw: unknown): TourItemReview | null {
+  if (!isRecord(raw)) return null;
+  const gearItemId = toText(raw.gearItemId);
+  if (!gearItemId) return null;
+  const note = toText(raw.note);
+  return {
+    gearItemId,
+    used: raw.used === true,
+    ...(note ? { note } : {}),
+  };
+}
+
+/**
+ * Eine Auswertung ohne lesbares Gewichtsgefühl ist trotzdem wertvoll: die
+ * Freitexte sind der eigentliche Inhalt. Fehlt der Wert oder ist er
+ * unbekannt, gilt "genau richtig" als neutrale Annahme, statt den ganzen
+ * Eintrag wegzuwerfen.
+ */
+function normalizeTourReview(raw: unknown): TourReview | null {
+  if (!isRecord(raw)) return null;
+
+  const id = toText(raw.id);
+  const packingListId = toText(raw.packingListId);
+  if (!id || !packingListId) return null;
+
+  const answers = isRecord(raw.generalAnswers) ? raw.generalAnswers : {};
+  const feeling = toText(answers.weightFeeling);
+  const text = (value: unknown) => toText(value)?.trim() || null;
+
+  const whatWorked = text(answers.whatWorked);
+  const whatWasMissing = text(answers.whatWasMissing);
+  const whatToLeaveOut = text(answers.whatToLeaveOut);
+  const notes = text(answers.notes);
+
+  // Doppelte gearItemIds würden doppelte React-Keys erzeugen; der spätere
+  // Eintrag gewinnt, er ist die letzte Aussage des Nutzers.
+  const merged = new Map<string, TourItemReview>();
+  const rawReviews = Array.isArray(raw.itemReviews) ? raw.itemReviews : [];
+  for (const entry of rawReviews) {
+    const review = normalizeItemReview(entry);
+    if (review) merged.set(review.gearItemId, review);
+  }
+
+  return {
+    id,
+    packingListId,
+    completedAt: toIsoDate(raw.completedAt),
+    generalAnswers: {
+      weightFeeling:
+        feeling && WEIGHT_FEELINGS.has(feeling)
+          ? (feeling as WeightFeeling)
+          : "genau richtig",
+      ...(whatWorked ? { whatWorked } : {}),
+      ...(whatWasMissing ? { whatWasMissing } : {}),
+      ...(whatToLeaveOut ? { whatToLeaveOut } : {}),
+      ...(notes ? { notes } : {}),
+    },
+    itemReviews: [...merged.values()],
+  };
+}
+
 /** Macht aus beliebigem geparstem JSON einen garantiert benutzbaren AppData-Stand. */
 export function normalizeAppData(raw: unknown): AppData {
   if (!isRecord(raw)) return { ...defaultData };
@@ -281,9 +359,14 @@ export function normalizeAppData(raw: unknown): AppData {
     .map(normalizePackingList)
     .filter((list): list is PackingList => list !== null);
 
+  const tourReviews = (Array.isArray(raw.tourReviews) ? raw.tourReviews : [])
+    .map(normalizeTourReview)
+    .filter((review): review is TourReview => review !== null);
+
   return {
     gearItems,
     packingLists,
+    tourReviews,
     theme: raw.theme === "dark" ? "dark" : "light",
   };
 }
@@ -407,6 +490,38 @@ export function upsertPackingList(
 
 export function deletePackingList(lists: PackingList[], id: string): PackingList[] {
   return lists.filter((l) => l.id !== id);
+}
+
+export function upsertTourReview(
+  reviews: TourReview[],
+  review: TourReview,
+): TourReview[] {
+  const index = reviews.findIndex((r) => r.id === review.id);
+  if (index === -1) return [review, ...reviews];
+  const next = [...reviews];
+  next[index] = review;
+  return next;
+}
+
+export function deleteTourReview(
+  reviews: TourReview[],
+  id: string,
+): TourReview[] {
+  return reviews.filter((r) => r.id !== id);
+}
+
+/**
+ * Auswertungen einer gelöschten Packliste mitnehmen.
+ *
+ * Sie sind nur über die Liste erreichbar; blieben sie liegen, wüchse der
+ * gespeicherte Stand mit Einträgen, die niemand mehr zu Gesicht bekommt.
+ * Der Löschdialog sagt vorher, wie viele es sind.
+ */
+export function deleteReviewsOfList(
+  reviews: TourReview[],
+  packingListId: string,
+): TourReview[] {
+  return reviews.filter((r) => r.packingListId !== packingListId);
 }
 
 export function setTheme(data: AppData, theme: ThemeMode): AppData {

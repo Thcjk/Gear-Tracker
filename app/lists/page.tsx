@@ -84,7 +84,17 @@ export default function ListsPage() {
               index={index}
               gearItems={data.gearItems}
               onDelete={(id) => {
-                if (confirm("Packliste wirklich löschen?")) {
+                // Die Auswertungen hängen an der Liste und gehen mit ihr –
+                // das gehört in die Frage, nicht in eine Überraschung danach.
+                const attached = data.tourReviews.filter(
+                  (review) => review.packingListId === id,
+                ).length;
+                const question = attached
+                  ? `Packliste wirklich löschen? ${attached} ${
+                      attached === 1 ? "Tour-Auswertung geht" : "Tour-Auswertungen gehen"
+                    } mit.`
+                  : "Packliste wirklich löschen?";
+                if (confirm(question)) {
                   removePackingList(id);
                 }
               }}

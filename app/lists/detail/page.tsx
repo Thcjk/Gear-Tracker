@@ -4,10 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus, Share2, Wand2 } from "lucide-react";
+import { Flag, Plus, Share2, Wand2 } from "lucide-react";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
+import { TourReviewDialog } from "@/components/lists/TourReviewDialog";
+import { TourReviewLog } from "@/components/lists/TourReviewLog";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
@@ -36,6 +38,7 @@ import {
   recordListWeight,
   type WeightSnapshot,
 } from "@/lib/weightHistory";
+import type { TourReview } from "@/types";
 
 /**
  * Recharts ist die mit Abstand grösste Abhängigkeit der Seite. Als
@@ -57,10 +60,19 @@ function PackingListDetailInner() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? "";
   const router = useRouter();
-  const { ready, data, updatePackingList } = useAppStore();
+  const {
+    ready,
+    data,
+    updatePackingList,
+    addTourReview,
+    updateTourReview,
+    removeTourReview,
+  } = useAppStore();
   const [selectedGearId, setSelectedGearId] = useState("");
   const [reference, setReference] = useState<WeightSnapshot | null>(null);
   const [sharing, setSharing] = useState(false);
+  /** null = zu, "new" = neue Auswertung, sonst die zu bearbeitende. */
+  const [reviewing, setReviewing] = useState<TourReview | "new" | null>(null);
 
   const list = useMemo(
     () => data.packingLists.find((l) => l.id === id),
@@ -85,6 +97,15 @@ function PackingListDetailInner() {
       heaviest: topHeaviestItems(list, data.gearItems),
     };
   }, [list, data.gearItems]);
+
+  /** Neueste zuerst – das letzte Fazit ist das, was man sucht. */
+  const reviews = useMemo(
+    () =>
+      data.tourReviews
+        .filter((review) => review.packingListId === id)
+        .sort((a, b) => b.completedAt.localeCompare(a.completedAt)),
+    [data.tourReviews, id],
+  );
 
   const availableGear = useMemo(() => {
     if (!list) return [];
@@ -188,14 +209,27 @@ function PackingListDetailInner() {
         reference={reference}
       />
 
-      <Button
-        variant="raised"
-        onClick={() => setSharing(true)}
-        className="w-full"
-      >
-        <Share2 className="h-4 w-4" />
-        Für Vergleich exportieren
-      </Button>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Button variant="raised" onClick={() => setSharing(true)}>
+          <Share2 className="h-4 w-4" />
+          Für Vergleich exportieren
+        </Button>
+        <Button variant="forest" onClick={() => setReviewing("new")}>
+          <Flag className="h-4 w-4" />
+          Tour beenden
+        </Button>
+      </div>
+
+      <TourReviewLog
+        reviews={reviews}
+        gearIndex={gearIndex}
+        onEdit={(review) => setReviewing(review)}
+        onDelete={(review) => {
+          if (confirm("Diese Auswertung wirklich löschen?")) {
+            removeTourReview(review.id);
+          }
+        }}
+      />
 
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
@@ -293,6 +327,30 @@ function PackingListDetailInner() {
           })
         )}
       </div>
+      {reviewing && (
+        <TourReviewDialog
+          list={list}
+          gearIndex={gearIndex}
+          existing={reviewing === "new" ? undefined : reviewing}
+          onSave={(answers, itemReviews) => {
+            if (reviewing === "new") {
+              addTourReview({
+                packingListId: list.id,
+                generalAnswers: answers,
+                itemReviews,
+              });
+            } else {
+              updateTourReview({
+                ...reviewing,
+                generalAnswers: answers,
+                itemReviews,
+              });
+            }
+            setReviewing(null);
+          }}
+          onClose={() => setReviewing(null)}
+        />
+      )}
       {sharing && (
         <ShareExportDialog
           initialName={loadOwnerName()}

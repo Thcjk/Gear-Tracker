@@ -12,6 +12,11 @@ Konto** – alle Daten liegen ausschliesslich im LocalStorage des Browsers.
 
 - **Gear-Library** – Items anlegen, bearbeiten, löschen; sortieren nach Name, Gewicht
   oder Preis; filtern nach Kategorie. Gewicht und Preis werden manuell erfasst.
+- **Produkt-Import per Link** (optional) – ein Cloudflare Worker liest Name,
+  Gewicht und Preis aus einer Produktseite und füllt das Formular vor. Der
+  Vorschlag wird nie ungeprüft übernommen; unsichere Treffer sind markiert.
+  Siehe [`worker/README.md`](worker/README.md). Ohne eingerichteten Worker
+  bleibt die Fläche aus.
 - **Packlisten** – beliebig viele Listen, die Items aus der Library referenzieren
   (inkl. Menge)
 - **Fortschritt** – „gepackt"-Checkbox pro Item und Anzeige „X von Y gepackt"
@@ -59,6 +64,12 @@ npm run dev
 
 Die App läuft dann unter http://localhost:3000/Gear-Tracker/ – der Pfad-Präfix kommt
 vom `basePath` in `next.config.js` und gilt auch im Dev-Server.
+
+Für den Produkt-Import `.env.example` nach `.env.local` kopieren und
+`NEXT_PUBLIC_IMPORT_WORKER_URL` auf die Adresse setzen, die `wrangler deploy`
+ausgegeben hat. Im GitHub-Actions-Build kommt derselbe Wert aus der
+Repository-Variable gleichen Namens (Settings → Secrets and variables →
+Actions → Variables).
 
 Produktionsbuild lokal prüfen:
 
