@@ -3,14 +3,21 @@
 import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import type { GearDraft, PackingListItem } from "@/types";
+import { ArrowLeft, PartyPopper } from "lucide-react";
+import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
 import { QuickItemForm } from "@/components/wizard/QuickItemForm";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { filterGearItems, sortGearItems } from "@/lib/calculations";
+import {
+  filterGearItems,
+  indexGearItems,
+  listTotalWeight,
+  sortGearItems,
+} from "@/lib/calculations";
+import { formatWeight, getCategoryMeta } from "@/lib/categories";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { useAppStore } from "@/lib/store";
 import { WIZARD_CATEGORIES } from "@/lib/wizardSteps";
 
@@ -27,7 +34,8 @@ function WizardInner() {
     [data.packingLists, id],
   );
 
-  const category = WIZARD_CATEGORIES[stepIndex];
+  const onSummary = stepIndex >= WIZARD_CATEGORIES.length;
+  const category = WIZARD_CATEGORIES[Math.min(stepIndex, WIZARD_CATEGORIES.length - 1)];
 
   const categoryItems = useMemo(
     () =>
@@ -97,13 +105,89 @@ function WizardInner() {
   }
 
   function goNext() {
-    if (stepIndex < WIZARD_CATEGORIES.length - 1) {
-      setStepIndex(stepIndex + 1);
-      setMode("library");
-      window.scrollTo({ top: 0 });
-      return;
-    }
-    router.replace(`/lists/detail?id=${list!.id}`);
+    setStepIndex(stepIndex + 1);
+    setMode("library");
+    window.scrollTo({ top: 0 });
+  }
+
+  if (onSummary) {
+    const gearIndex = indexGearItems(data.gearItems);
+    const rows = list.items
+      .map((item) => ({ item, gear: gearIndex.get(item.gearItemId) }))
+      .filter((row): row is { item: PackingListItem; gear: GearItem } =>
+        Boolean(row.gear),
+      );
+
+    return (
+      <div className="flex min-h-[70vh] flex-col">
+        <div className="flex flex-col items-center py-2 text-center">
+          <span className="animate-icon-in flex h-24 w-24 items-center justify-center rounded-full bg-clay-200 text-ember-500 shadow-neu-lg dark:bg-clay-950">
+            <PartyPopper className="h-11 w-11" />
+          </span>
+          <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-clay-900 [animation-delay:90ms] dark:text-clay-50">
+            {list.name}
+          </h2>
+          <p className="animate-label-in mt-1 text-sm text-clay-600 [animation-delay:140ms] dark:text-clay-400">
+            {rows.length} {rows.length === 1 ? "Item" : "Items"} ·{" "}
+            {formatWeight(listTotalWeight(list, data.gearItems))}
+          </p>
+        </div>
+
+        <SurfaceCard className="mt-6 p-4">
+          {rows.length === 0 ? (
+            <p className="text-sm text-clay-600 dark:text-clay-400">
+              Du hast alle Kategorien übersprungen. Items lassen sich jederzeit
+              im Dashboard ergänzen.
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {rows.map(({ item, gear }) => (
+                <li key={item.gearItemId} className="flex items-center gap-3">
+                  <CategoryIcon category={gear.category} className="h-4 w-4" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                      {gear.name}
+                      {item.quantity > 1 && (
+                        <span className="text-clay-600 dark:text-clay-400">
+                          {" "}
+                          x{item.quantity}
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-xs text-clay-600 dark:text-clay-400">
+                      {getCategoryMeta(gear.category).label}
+                    </p>
+                  </div>
+                  <p className="shrink-0 font-bold tabular-nums text-forest-700 dark:text-forest-300">
+                    {formatWeight(gear.weightGrams * item.quantity)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </SurfaceCard>
+
+        <div className="mt-auto flex items-center gap-3 pt-8">
+          <Button
+            variant="quiet"
+            onClick={() => {
+              setStepIndex(WIZARD_CATEGORIES.length - 1);
+              setMode("library");
+            }}
+            className="px-2"
+          >
+            Zurück
+          </Button>
+          <Button
+            variant="accent"
+            onClick={() => router.replace(`/lists/detail?id=${list.id}`)}
+            className="ml-auto min-w-32"
+          >
+            Fertig
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -179,7 +263,7 @@ function WizardInner() {
           disabled={chosenInStep.length === 0}
           className="ml-auto min-w-32"
         >
-          {stepIndex === WIZARD_CATEGORIES.length - 1 ? "Abschliessen" : "Weiter"}
+          Weiter
         </Button>
       </div>
     </div>

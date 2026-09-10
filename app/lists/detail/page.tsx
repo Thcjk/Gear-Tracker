@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Wand2 } from "lucide-react";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
@@ -178,6 +178,15 @@ function PackingListDetailInner() {
         <h3 className="mb-3 text-base font-bold text-clay-900 dark:text-clay-50">
           Item hinzufügen
         </h3>
+        <Button
+          variant="raised"
+          onClick={() => router.push(`/lists/wizard?id=${list.id}`)}
+          className="mb-3 w-full"
+        >
+          <Wand2 className="h-4 w-4" />
+          Kategorien durchgehen
+        </Button>
+
         {availableGear.length === 0 ? (
           <p className="text-sm text-clay-600 dark:text-clay-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
