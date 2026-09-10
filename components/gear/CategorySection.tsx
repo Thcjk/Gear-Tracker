@@ -55,7 +55,7 @@ export function CategorySection({
         <span
           className={`min-w-7 rounded-full px-2 py-1 text-center text-xs font-bold tabular-nums ${
             count === 0
-              ? "text-clay-500"
+              ? "text-clay-700 dark:text-clay-400"
               : "bg-clay-200 text-clay-700 shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-300"
           }`}
         >

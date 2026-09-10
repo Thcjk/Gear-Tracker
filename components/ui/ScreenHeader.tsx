@@ -21,7 +21,7 @@ export function ScreenHeader({
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-1 text-sm text-clay-600 dark:text-clay-400">
+          <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
             {subtitle}
           </p>
         )}

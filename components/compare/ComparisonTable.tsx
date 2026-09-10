@@ -11,7 +11,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
   return (
     <div className="min-w-0">
       {entry.imported && entry.owner && (
-        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ember-600 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400">
+        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ember-800 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400">
           <Download className="h-3 w-3" aria-hidden />
           importiert
         </span>
@@ -42,7 +42,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
       <SurfaceCard className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="border-b border-clay-300 dark:border-clay-800">
-            <tr className="text-xs uppercase tracking-wider text-clay-600 dark:text-clay-400">
+            <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
               <th className="px-4 py-3 font-medium">Liste</th>
               <th className="px-4 py-3 font-medium">Items</th>
               <th className="px-4 py-3 font-medium">Gewicht</th>
@@ -66,7 +66,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 <td className="px-4 py-3.5 font-semibold text-forest-700 dark:text-forest-300">
                   {formatWeight(row.weightGrams)}
                 </td>
-                <td className="px-4 py-3.5 text-clay-600 dark:text-clay-400">
+                <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
                   {row.isLightest
                     ? "leichteste"
                     : `+${formatWeight(row.weightDiff)}`}
@@ -74,7 +74,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 <td className="px-4 py-3.5 text-forest-700 dark:text-forest-300">
                   {formatPrice(row.price)}
                 </td>
-                <td className="px-4 py-3.5 text-clay-600 dark:text-clay-400">
+                <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
                   {row.isCheapest ? "günstigste" : `+${formatPrice(row.priceDiff)}`}
                 </td>
               </tr>
@@ -87,7 +87,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
         <SurfaceCard className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="border-b border-clay-300 dark:border-clay-800">
-              <tr className="text-xs uppercase tracking-wider text-clay-600 dark:text-clay-400">
+              <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
                 <th className="px-4 py-3 font-medium">Kategorie</th>
                 {rows.map((row) => (
                   <th

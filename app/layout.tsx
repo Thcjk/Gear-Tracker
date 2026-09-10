@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { PageTransition } from "@/components/nav/PageTransition";
 import { SplashScreen } from "@/components/ui/SplashScreen";
+import { StorageWarning } from "@/components/ui/StorageWarning";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -75,6 +76,7 @@ export default function RootLayout({
             className="mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
             style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
           >
+            <StorageWarning />
             <PageTransition>{children}</PageTransition>
           </div>
           <BottomNav />

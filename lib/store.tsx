@@ -15,6 +15,7 @@ import {
   createId,
   deleteGearItem,
   deletePackingList,
+  isStorageWritable,
   loadData,
   resetData,
   saveData,
@@ -25,6 +26,8 @@ import {
 interface AppStoreValue {
   ready: boolean;
   data: AppData;
+  /** true, wenn LocalStorage nicht beschrieben werden kann. */
+  storageBlocked: boolean;
   setTheme: (theme: ThemeMode) => void;
   addGearItem: (item: Omit<GearItem, "id" | "createdAt">) => GearItem;
   updateGearItem: (item: GearItem) => void;
@@ -52,6 +55,7 @@ function applyThemeClass(theme: ThemeMode) {
 export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [data, setData] = useState<AppData>(emptyData);
+  const [storageBlocked, setStorageBlocked] = useState(false);
 
   /**
    * Spiegelt den aktuellen Stand synchron, damit commit() ohne
@@ -64,6 +68,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     applyThemeClass(loaded.theme);
     dataRef.current = loaded;
     setData(loaded);
+    setStorageBlocked(!isStorageWritable());
     setReady(true);
   }, []);
 
@@ -77,7 +82,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const commit = useCallback((mutate: (prev: AppData) => AppData) => {
     const next = mutate(dataRef.current);
     dataRef.current = next;
-    saveData(next);
+    // Schlägt das Schreiben fehl, läuft die App weiter – der Hinweis sagt
+    // aber, dass die Änderung nur bis zum Neuladen hält.
+    setStorageBlocked(!saveData(next));
     applyThemeClass(next.theme);
     setData(next);
   }, []);
@@ -179,6 +186,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     () => ({
       ready,
       data,
+      storageBlocked,
       setTheme,
       addGearItem,
       updateGearItem,
@@ -192,6 +200,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     [
       ready,
       data,
+      storageBlocked,
       setTheme,
       addGearItem,
       updateGearItem,
