@@ -7,6 +7,7 @@ import { PackingListCard } from "@/components/lists/PackingListCard";
 import { Button } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
+import { TentSketch } from "@/components/sketch/TentSketch";
 import { useAppStore } from "@/lib/store";
 
 export default function ListsPage() {
@@ -73,7 +74,7 @@ export default function ListsPage() {
 
       <div className="space-y-3">
         {data.packingLists.length === 0 ? (
-          <EmptyState>
+          <EmptyState illustration={<TentSketch />}>
             Noch keine Packlisten. Erstelle eine für deine nächste Tour.
           </EmptyState>
         ) : (

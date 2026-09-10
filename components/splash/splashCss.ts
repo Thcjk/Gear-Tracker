@@ -22,11 +22,11 @@
  */
 
 /**
- * Mindestens so lange bleiben Logo und Schriftzug stehen – auch wenn die
+ * Mindestens so lange bleiben Szene und Schriftzug stehen – auch wenn die
  * App längst bereit ist. Ist sie es nach dieser Zeit noch nicht, wird nicht
  * künstlich verlängert: der Splash geht, sobald der Store gelesen ist.
  */
-export const SPLASH_MIN_VISIBLE_MS = 5000;
+export const SPLASH_MIN_VISIBLE_MS = 3000;
 /** Weiches Überblenden von Splash zu App. */
 export const SPLASH_FADE_MS = 420;
 /** Einblenden des App-Inhalts, überlappt bewusst mit dem Ausblenden. */
@@ -42,42 +42,48 @@ export const SPLASH_TOTAL_MS = SPLASH_MIN_VISIBLE_MS + SPLASH_FADE_MS;
 
 const EASE_OUT = "cubic-bezier(.22,1,.36,1)";
 
-/** Black Kite – identisch mit Manifest und Statusleiste. */
-const BASE = "#351E1C";
+/**
+ * Der Splash folgt dem Theme. Die Klasse .dark setzt das Anti-Flash-Skript
+ * im <body> noch vor dem ersten Paint, also greifen beide Varianten
+ * sofort – ohne sie stünde in einem der Modi heller Text auf hellem Grund.
+ */
+const LIGHT_BG = "#FFF6E9"; /* Wheat */
+const LIGHT_INK = "#0A171D"; /* Onyx */
+const LIGHT_LINE = "#003F47"; /* Oceanic */
+const DARK_BG = "#0A171D"; /* Onyx */
+const DARK_INK = "#FFF6E9"; /* Wheat */
+const DARK_LINE = "#FFBD76"; /* Nectarine */
 
 export const splashCriticalCss = `
 .splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
-align-items:center;justify-content:center;background:${BASE};pointer-events:none;
+align-items:center;justify-content:center;background:${LIGHT_BG};
+color:${LIGHT_LINE};pointer-events:none;
 animation:splash-out ${SPLASH_FADE_MS}ms ease-out ${SPLASH_MIN_VISIBLE_MS}ms both}
 @keyframes splash-out{
 from{opacity:1;visibility:visible}
 to{opacity:0;visibility:hidden}}
 
-/* Die Farbfeld-Ebene. Ihre Farben, Grössen und Positionen stehen als
-   inline style am Element – nur Lage, Rundung und Unschärfe kommen sonst
-   aus Tailwind, und das Stylesheet ist hier noch nicht da. */
-.splash__field{position:absolute;inset:0;overflow:hidden}
-.splash__field>.gradient-blob{position:absolute;border-radius:9999px;
-filter:blur(64px)}
+html.dark .splash{background:${DARK_BG};color:${DARK_LINE}}
 
 .splash__stage{position:relative;z-index:1;display:flex;
 flex-direction:column;align-items:center}
 
-.splash__mark{width:10rem;height:10rem;
-filter:drop-shadow(0 14px 34px rgba(0,0,0,.5));
+/* Die Szene zeichnet mit currentColor, geerbt von .splash. */
+.splash__mark{width:16rem;height:11rem;
 animation:splash-mark 720ms ${EASE_OUT} both}
 @keyframes splash-mark{
 from{opacity:0;transform:scale(.84)}
 to{opacity:1;transform:scale(1)}}
 
-.splash__title{margin:1.5rem 0 0;font-size:1.875rem;line-height:1.15;
-font-weight:700;letter-spacing:-.02em;color:#F5F4ED;
+.splash__title{margin:1rem 0 0;font-size:1.875rem;line-height:1.15;
+font-weight:700;letter-spacing:-.02em;color:${LIGHT_INK};
 animation:splash-mark 720ms ${EASE_OUT} 180ms both}
+html.dark .splash__title{color:${DARK_INK}}
 
 /* Unten links, oberhalb der Home-Anzeige des Geräts */
 .splash__tagline{position:absolute;z-index:1;left:1.5rem;
 bottom:calc(2rem + env(safe-area-inset-bottom));margin:0;
-font-size:.875rem;letter-spacing:.01em;color:#A0C9CB;
+font-size:.875rem;letter-spacing:.01em;color:inherit;
 animation:splash-mark 720ms ${EASE_OUT} 320ms both}
 
 /* Inhalt und Navigation kommen hinter dem Splash hervor. Der Schlusswert
@@ -114,8 +120,7 @@ html[data-splash="leaving"] .splash__mark,
 html[data-splash="leaving"] .splash__title,
 html[data-splash="leaving"] .splash__tagline{animation:splash-fade-out ${SPLASH_FADE_MS}ms ease-in forwards}
 @keyframes splash-fade-out{to{opacity:0}}
-.splash-reveal,html[data-splash="leaving"] .splash-reveal{animation-name:splash-fade}
-.splash__field>.gradient-blob{filter:none}}
+.splash-reveal,html[data-splash="leaving"] .splash-reveal{animation-name:splash-fade}}
 `;
 
 /**

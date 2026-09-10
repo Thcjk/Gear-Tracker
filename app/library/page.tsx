@@ -5,6 +5,8 @@ import { ChevronsDownUp, ChevronsUpDown, Plus } from "lucide-react";
 import { CategorySection } from "@/components/gear/CategorySection";
 import { GearItemCard } from "@/components/gear/GearItemCard";
 import { ProductImport } from "@/components/gear/ProductImport";
+import { BackpackSketch } from "@/components/sketch/BackpackSketch";
+import { EmptyState } from "@/components/ui/SurfaceCard";
 import {
   GearItemForm,
   gearItemToFormValues,
@@ -85,7 +87,7 @@ export default function LibraryPage() {
   return (
     <div className="space-y-4">
       <ScreenHeader
-        title="Gear-Library"
+        title="Gear-Library "
         subtitle={`${data.gearItems.length} Items in ${CATEGORIES.length} Kategorien`}
       />
 
@@ -119,6 +121,13 @@ export default function LibraryPage() {
       </div>
 
       <ProductImport onCreate={handleImported} />
+
+      {data.gearItems.length === 0 && (
+        <EmptyState illustration={<BackpackSketch />}>
+          Noch nichts in der Library. Klapp eine Kategorie auf und leg dein
+          erstes Item an – oder importiere es per Link.
+        </EmptyState>
+      )}
 
       <div className="space-y-3">
         {CATEGORIES.map((meta) => {

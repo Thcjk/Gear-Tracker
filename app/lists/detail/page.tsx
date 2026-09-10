@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
 import { GradientField } from "@/components/ui/GradientField";
+import { TentSketch } from "@/components/sketch/TentSketch";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -138,7 +139,7 @@ function PackingListDetailInner() {
         </p>
         <Link
           href="/lists"
-          className="text-ember-800 underline dark:text-ember-200"
+          className="text-accent underline"
         >
           Zurück zu den Listen
         </Link>
@@ -271,7 +272,7 @@ function PackingListDetailInner() {
             leer.{" "}
             <Link
               href="/library"
-              className="text-ember-800 underline dark:text-ember-200"
+              className="text-accent underline"
             >
               Zur Library
             </Link>
@@ -305,7 +306,10 @@ function PackingListDetailInner() {
 
       <div className="space-y-3">
         {list.items.length === 0 ? (
-          <EmptyState>Diese Liste ist noch leer.</EmptyState>
+          <EmptyState illustration={<TentSketch />}>
+              Diese Liste ist noch leer. Such dir unten ein Item aus der
+              Library oder geh die Kategorien durch.
+            </EmptyState>
         ) : (
           list.items.map((item, index) => {
             const gear = gearIndex.get(item.gearItemId);
@@ -365,7 +369,8 @@ function PackingListDetailInner() {
                 itemReviews,
               });
             }
-            setReviewing(null);
+            // Der Dialog bleibt stehen und zeigt seinen Abschluss; er
+            // schliesst sich über onClose selbst.
           }}
           onClose={() => setReviewing(null)}
         />

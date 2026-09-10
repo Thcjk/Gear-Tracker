@@ -76,7 +76,7 @@ export function BackupSection() {
       {quarantined && (
         <div className="mb-4 flex items-start gap-3 rounded-control px-3 py-3 shadow-neu-in-sm">
           <ShieldAlert
-            className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-200"
+            className="mt-0.5 h-5 w-5 shrink-0 text-accent"
             aria-hidden
           />
           <div className="min-w-0 flex-1">

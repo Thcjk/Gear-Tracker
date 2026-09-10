@@ -7,6 +7,7 @@ import { ComparisonTable } from "@/components/compare/ComparisonTable";
 import { Button, IconButton } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { BootsSketch } from "@/components/sketch/BootsSketch";
 import { entryFromPackingList, entryFromShared } from "@/lib/calculations";
 import { parseSharedList } from "@/lib/shareFormat";
 import { useAppStore } from "@/lib/store";
@@ -77,7 +78,9 @@ export default function ComparePage() {
       />
 
       {data.packingLists.length === 0 ? (
-        <EmptyState>Noch keine eigenen Packlisten zum Vergleichen.</EmptyState>
+        <EmptyState illustration={<BootsSketch />}>
+          Noch keine eigenen Packlisten zum Vergleichen.
+        </EmptyState>
       ) : (
         <SurfaceCard className="space-y-2 p-4">
           {data.packingLists.map((list) => (
@@ -90,10 +93,10 @@ export default function ComparePage() {
                   type="checkbox"
                   checked={selected.includes(list.id)}
                   onChange={() => toggle(list.id)}
-                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-clay-200 shadow-neu-sm transition-all checked:bg-ember-600 checked:shadow-neu-in-sm dark:bg-clay-800"
+                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-clay-200 shadow-neu-sm transition-all checked:bg-accent checked:shadow-neu-in-sm dark:bg-clay-800"
                 />
                 <Check
-                  className={`pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-white transition-opacity ${
+                  className={`pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-on-accent transition-opacity ${
                     selected.includes(list.id) ? "opacity-100" : "opacity-0"
                   }`}
                   strokeWidth={3}
@@ -123,7 +126,7 @@ export default function ComparePage() {
               key={key}
               className="flex items-center gap-3 rounded-control px-3 py-2.5"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-clay-200 text-ember-700 shadow-neu-sm dark:bg-clay-800 dark:text-ember-200">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800">
                 <Download className="h-4 w-4" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">

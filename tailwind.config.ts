@@ -10,69 +10,78 @@ const config: Config = {
     extend: {
       colors: {
         /* ------------------------------------------------------------ *
-         * Die sechs Farben der Palette, unter ihren Namen.
+         * Die vier Farben der Palette, unter ihren Namen.
          * ------------------------------------------------------------ */
-        "morning-snow": "#F5F4ED",
-        "amazon-mist": "#ECECDC",
-        "aqua-mist": "#A0C9CB",
-        "toxic-orange": "#FF6037",
-        "black-kite": "#351E1C",
-        garnet: "#733635",
+        onyx: "#0A171D",
+        wheat: "#FFF6E9",
+        oceanic: "#003F47",
+        nectarine: "#FFBD76",
 
         /**
-         * Flächen und Text. Die Eckpunkte sind die Palettenfarben, die
-         * Zwischenstufen dazwischen interpoliert – ohne sie gäbe es keinen
-         * lesbaren Sekundärtext und keinen Platzhalter, der die 4.5:1
-         * erreicht.
+         * Semantische Farben, die sich mit dem Theme drehen. Sie zeigen auf
+         * die CSS-Variablen aus globals.css.
          *
-         * 100/200 = Morning Snow / Amazon Mist (Grundfläche und Karte hell)
-         * 800/900 = Garnet / Black Kite (Karte und Grundfläche dunkel)
+         * Der Grund steht in der Palette selbst: Oceanic hat auf Onyx nur
+         * 1.6:1 und Nectarine auf Wheat nur 1.5:1 – keine der beiden
+         * Akzentfarben funktioniert in beiden Themes. "accent" ist deshalb
+         * hell Oceanic und dunkel Nectarine, und jede Stelle, die einfach
+         * "den Akzent" meint, bekommt automatisch den richtigen.
+         */
+        accent: "var(--accent)",
+        "accent-warm": "var(--accent-warm)",
+        "on-accent": "var(--on-accent)",
+        headline: "var(--text-headline)",
+        surface: "var(--bg-surface)",
+
+        /**
+         * Flächen und Text, von Wheat bis Onyx. Die Zwischenstufen sind
+         * interpoliert – ohne sie gäbe es keinen lesbaren Sekundärtext.
+         *
+         * 50/100 = Weiss / Wheat (Karte und Grundfläche hell)
+         * 800/900 = #142229 / Onyx (Karte und Grundfläche dunkel)
          */
         clay: {
-          50: "#FBFAF5",
-          100: "#F5F4ED",
-          200: "#ECECDC",
-          300: "#DCDBC5",
-          400: "#C2BEA9",
-          500: "#8E8878",
-          600: "#6F675A",
-          700: "#574A45",
-          800: "#733635",
-          900: "#351E1C",
-          950: "#241110",
+          50: "#FFFFFF",
+          100: "#FFF6E9",
+          200: "#F6EAD8",
+          300: "#E4D6C1",
+          400: "#C0B2A0",
+          500: "#8C8377",
+          600: "#6B655D",
+          700: "#4A4741",
+          800: "#142229",
+          900: "#0A171D",
+          950: "#050D11",
         },
 
-        /**
-         * Der Hauptakzent. 500 ist Toxic Orange selbst; es trägt schwarze
-         * Schrift (5.2:1), auf hellem Grund als Textfarbe reicht es dagegen
-         * nicht – dafür sind 700 und 800 da.
-         */
-        ember: {
-          50: "#FFF1EC",
-          100: "#FFDFD4",
-          200: "#FFC0AC",
-          300: "#FF9B7C",
-          400: "#FF7C55",
-          500: "#FF6037",
-          600: "#E24A22",
-          700: "#B33D1F",
-          800: "#8F2E15",
-          900: "#6B2311",
-          950: "#3F140A",
+        /** Die Oceanic-Rampe. 800 ist Oceanic selbst. */
+        ocean: {
+          50: "#EBF4F5",
+          100: "#D2E7E9",
+          200: "#A6CFD3",
+          300: "#6FB4BC",
+          400: "#4E9AA2",
+          500: "#2C7F89",
+          600: "#10707D",
+          700: "#0A5A64",
+          800: "#003F47",
+          900: "#002B31",
+          950: "#001A1E",
         },
 
-        /** Der kühle Sekundärakzent. 300 ist Aqua Mist selbst. */
-        aqua: {
-          50: "#F0F7F7",
-          100: "#DCEBEC",
-          200: "#BFDBDC",
-          300: "#A0C9CB",
-          400: "#7BAFB2",
-          500: "#5E9295",
-          600: "#4A7578",
-          700: "#3C5D60",
-          800: "#2F4749",
-          900: "#233436",
+        /** Die Nectarine-Rampe. 300 ist Nectarine selbst. */
+        nectar: {
+          50: "#FFF6EA",
+          100: "#FFE9CF",
+          200: "#FFD5A4",
+          300: "#FFBD76",
+          400: "#F0A24F",
+          500: "#DA8B36",
+          600: "#B5711A",
+          700: "#94590F",
+          800: "#78470C",
+          900: "#5A3509",
+          950: "#3A2206",
         },
       },
       fontFamily: {
@@ -93,7 +102,7 @@ const config: Config = {
           "inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light)",
         // Für farbige Flächen (Akzent-Buttons), die keinen hellen Schein tragen
         "neu-accent": "5px 5px 12px var(--neu-dark)",
-        soft: "0 8px 30px rgba(53, 30, 28, 0.10)",
+        soft: "0 8px 30px rgba(10, 23, 29, 0.10)",
         "soft-dark": "0 8px 30px rgba(0, 0, 0, 0.45)",
       },
       borderRadius: {

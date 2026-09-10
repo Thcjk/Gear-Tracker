@@ -64,7 +64,7 @@ export function PackingListItemCard({
       {celebrating && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-aqua-300"
+          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-accent-warm"
         />
       )}
       <div className="relative flex items-start gap-3">
@@ -73,12 +73,12 @@ export function PackingListItemCard({
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-600 checked:shadow-neu-in-sm dark:bg-clay-800 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-clay-800 ${
               celebrating ? "animate-pop" : ""
             }`}
           />
           <Check
-            className={`pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 text-white transition-opacity ${
+            className={`pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 text-on-accent transition-opacity ${
               item.packed ? "opacity-100" : "opacity-0"
             }`}
             strokeWidth={3}
@@ -99,7 +99,7 @@ export function PackingListItemCard({
             >
               {gear.name}
             </h3>
-            <p className="shrink-0 whitespace-nowrap font-extrabold text-aqua-700 dark:text-aqua-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-ocean-800 dark:text-ocean-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>

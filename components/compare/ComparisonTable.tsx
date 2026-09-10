@@ -3,6 +3,7 @@
 import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { BootsSketch } from "@/components/sketch/BootsSketch";
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
 
@@ -11,7 +12,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
   return (
     <div className="min-w-0">
       {entry.imported && entry.owner && (
-        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ember-800 shadow-neu-sm dark:bg-clay-800 dark:text-ember-200">
+        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent shadow-neu-sm dark:bg-clay-800">
           <Download className="h-3 w-3" aria-hidden />
           importiert
         </span>
@@ -27,7 +28,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
 export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
-      <EmptyState>
+      <EmptyState illustration={<BootsSketch />}>
         Wähle mindestens zwei Packlisten zum Vergleichen – eigene oder eine
         importierte Datei.
       </EmptyState>
@@ -63,7 +64,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-300">
                   {row.itemCount}
                 </td>
-                <td className="px-4 py-3.5 font-semibold text-aqua-700 dark:text-aqua-300">
+                <td className="px-4 py-3.5 font-semibold text-ocean-800 dark:text-ocean-300">
                   {formatWeight(row.weightGrams)}
                 </td>
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
@@ -71,7 +72,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                     ? "leichteste"
                     : `+${formatWeight(row.weightDiff)}`}
                 </td>
-                <td className="px-4 py-3.5 text-aqua-700 dark:text-aqua-300">
+                <td className="px-4 py-3.5 text-ocean-800 dark:text-ocean-300">
                   {formatPrice(row.price)}
                 </td>
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
@@ -123,7 +124,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                         key={rows[index].entry.key}
                         className={`whitespace-nowrap px-4 py-3 tabular-nums ${
                           weight > 0 && weight === min
-                            ? "font-bold text-aqua-700 dark:text-aqua-300"
+                            ? "font-bold text-ocean-800 dark:text-ocean-300"
                             : "text-clay-700 dark:text-clay-300"
                         }`}
                       >

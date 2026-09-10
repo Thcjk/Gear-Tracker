@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowLeft, FileDown, Pencil } from "lucide-react";
-import { TopoPattern } from "@/components/ui/TopoPattern";
+import { MountainSketch } from "@/components/sketch/MountainSketch";
 import { ProgressBar } from "@/components/lists/ProgressBar";
 import { getSeasonalTheme } from "@/lib/seasons";
 
@@ -48,9 +48,12 @@ export function DashboardHeader({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--season-from),var(--season-via)_55%,var(--season-to))] opacity-[0.14] transition-opacity duration-500"
       />
-      <TopoPattern
-        className="text-[color:var(--season-via)]"
-        opacity={0.16}
+      {/* Die Bergkette ersetzt das frühere Höhenlinien-Muster: eine
+          konkrete Zeichnung statt abstrakter Linien, aber genauso zurück-
+          haltend. Sie sitzt unten rechts, damit sie dem Titel und dem
+          Fortschritt nicht in den Weg kommt. */}
+      <MountainSketch
+        className="pointer-events-none absolute -bottom-2 right-0 h-28 w-64 text-[color:var(--season-via)] opacity-20"
       />
 
       <div className="relative flex items-start justify-between gap-3">
@@ -80,7 +83,7 @@ export function DashboardHeader({
               />
               <button
                 type="submit"
-                className="rounded-control bg-ember-700 px-4 py-2 text-sm font-semibold text-white shadow-neu-accent transition-all duration-150 active:translate-y-px active:bg-ember-800"
+                className="rounded-control bg-accent px-4 py-2 text-sm font-semibold text-on-accent shadow-neu-accent transition-all duration-150 active:translate-y-px active:opacity-90"
               >
                 OK
               </button>

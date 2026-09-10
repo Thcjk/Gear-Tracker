@@ -31,18 +31,18 @@ interface Blob {
   size: string;
 }
 
-/** Toxic Orange, Garnet, Black Kite – der Splash und alles Warme. */
+/** Nectarine, Oceanic, Onyx – der Splash und alles Warme. */
 const WARM: Blob[] = [
-  { color: "#FF6037", top: "10%", left: "20%", size: "60%" },
-  { color: "#733635", top: "40%", left: "60%", size: "55%" },
-  { color: "#351E1C", top: "70%", left: "10%", size: "50%" },
+  { color: "#FFBD76", top: "10%", left: "20%", size: "60%" },
+  { color: "#003F47", top: "40%", left: "60%", size: "55%" },
+  { color: "#0A171D", top: "70%", left: "10%", size: "50%" },
 ];
 
-/** Aqua Mist, Amazon Mist, Morning Snow – für helle Flächen. */
+/** Nectarine, helles Oceanic, Wheat – für helle Flächen. */
 const COOL: Blob[] = [
-  { color: "#A0C9CB", top: "10%", left: "15%", size: "60%" },
-  { color: "#ECECDC", top: "45%", left: "55%", size: "55%" },
-  { color: "#F5F4ED", top: "70%", left: "20%", size: "50%" },
+  { color: "#FFBD76", top: "10%", left: "15%", size: "60%" },
+  { color: "#A6CFD3", top: "45%", left: "55%", size: "55%" },
+  { color: "#FFF6E9", top: "70%", left: "20%", size: "50%" },
 ];
 
 export function GradientField({
