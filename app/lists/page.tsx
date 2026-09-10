@@ -85,10 +85,11 @@ export default function ListsPage() {
             Noch keine Packlisten. Erstelle eine für deine nächste Tour.
           </div>
         ) : (
-          data.packingLists.map((list) => (
+          data.packingLists.map((list, index) => (
             <PackingListCard
               key={list.id}
               list={list}
+              index={index}
               gearItems={data.gearItems}
               onDelete={(id) => {
                 if (confirm("Packliste wirklich löschen?")) {

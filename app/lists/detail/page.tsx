@@ -1,15 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, FileDown, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Suspense } from "react";
+import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { CategoryWeightChart } from "@/components/dashboard/CategoryWeightChart";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
-import { ProgressBar } from "@/components/lists/ProgressBar";
 import {
   listItemCount,
   listPackedProgress,
@@ -21,6 +22,11 @@ import {
 import { formatPrice, formatWeight } from "@/lib/categories";
 import { exportPackingListPdf } from "@/lib/pdfExport";
 import { useAppStore } from "@/lib/store";
+import {
+  getPreviousReference,
+  recordListWeight,
+  type WeightSnapshot,
+} from "@/lib/weightHistory";
 
 function PackingListDetailInner() {
   const searchParams = useSearchParams();
@@ -28,13 +34,20 @@ function PackingListDetailInner() {
   const router = useRouter();
   const { ready, data, updatePackingList } = useAppStore();
   const [selectedGearId, setSelectedGearId] = useState("");
-  const [renaming, setRenaming] = useState(false);
-  const [nameDraft, setNameDraft] = useState("");
+  const [reference, setReference] = useState<WeightSnapshot | null>(null);
 
   const list = useMemo(
     () => data.packingLists.find((l) => l.id === id),
     [data.packingLists, id],
   );
+
+  const currentWeight = list ? listTotalWeight(list, data.gearItems) : 0;
+
+  useEffect(() => {
+    if (!ready || !list) return;
+    setReference(getPreviousReference(list.id));
+    recordListWeight(list.id, list.name, currentWeight);
+  }, [ready, list, currentWeight]);
 
   if (!ready) {
     return <p className="text-sm text-earth-500">Lade Packliste…</p>;
@@ -54,7 +67,7 @@ function PackingListDetailInner() {
   }
 
   const progress = listPackedProgress(list);
-  const totalWeight = listTotalWeight(list, data.gearItems);
+  const totalWeight = currentWeight;
   const totalPrice = listTotalPrice(list, data.gearItems);
   const itemCount = listItemCount(list);
   const chartData = weightByCategory(list, data.gearItems);
@@ -81,69 +94,39 @@ function PackingListDetailInner() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <button
-            type="button"
-            onClick={() => router.push("/lists")}
-            className="mb-2 inline-flex items-center gap-1 text-sm text-earth-600 dark:text-earth-300"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Listen
-          </button>
-          {renaming ? (
-            <form
-              className="flex flex-wrap gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!nameDraft.trim()) return;
-                saveList({ ...list, name: nameDraft.trim() });
-                setRenaming(false);
-              }}
-            >
-              <input
-                autoFocus
-                value={nameDraft}
-                onChange={(e) => setNameDraft(e.target.value)}
-                className="rounded-xl border border-forest-200 bg-white px-3 py-2 dark:border-forest-700 dark:bg-forest-900"
-              />
-              <button
-                type="submit"
-                className="rounded-xl bg-forest-700 px-3 py-2 text-sm font-semibold text-white"
-              >
-                OK
-              </button>
-            </form>
-          ) : (
-            <button
-              type="button"
-              onClick={() => {
-                setNameDraft(list.name);
-                setRenaming(true);
-              }}
-              className="text-left text-xl font-bold text-forest-900 dark:text-forest-50"
-            >
-              {list.name}
-            </button>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={() => exportPackingListPdf(list, data.gearItems)}
-          className="inline-flex items-center gap-2 rounded-2xl bg-forest-700 px-3 py-2 text-sm font-semibold text-white dark:bg-forest-600"
-        >
-          <FileDown className="h-4 w-4" />
-          PDF
-        </button>
-      </div>
-
-      <ProgressBar packed={progress.packed} total={progress.total} />
+      <DashboardHeader
+        name={list.name}
+        packed={progress.packed}
+        total={progress.total}
+        onBack={() => router.push("/lists")}
+        onRename={(name) => saveList({ ...list, name })}
+        onExportPdf={() => exportPackingListPdf(list, data.gearItems)}
+      />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <StatCard label="Gesamtgewicht" value={formatWeight(totalWeight)} />
-        <StatCard label="Gesamtwert" value={formatPrice(totalPrice)} />
-        <StatCard label="Anzahl Items" value={String(itemCount)} />
+        <StatCard
+          label="Gesamtgewicht"
+          countTo={totalWeight}
+          format={formatWeight}
+          duration={1100}
+          index={0}
+        />
+        <StatCard
+          label="Gesamtwert"
+          countTo={totalPrice}
+          format={formatPrice}
+          duration={900}
+          index={1}
+        />
+        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
       </div>
+
+      <AchievementBadges
+        totalWeight={totalWeight}
+        packed={progress.packed}
+        total={progress.total}
+        reference={reference}
+      />
 
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
@@ -193,13 +176,14 @@ function PackingListDetailInner() {
             Diese Liste ist noch leer.
           </div>
         ) : (
-          list.items.map((item) => {
+          list.items.map((item, index) => {
             const gear = data.gearItems.find((g) => g.id === item.gearItemId);
             return (
               <PackingListItemCard
                 key={item.gearItemId}
                 item={item}
                 gear={gear}
+                index={index}
                 onTogglePacked={() =>
                   saveList({
                     ...list,

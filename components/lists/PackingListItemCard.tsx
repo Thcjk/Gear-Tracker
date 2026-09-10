@@ -1,22 +1,46 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { GearItem, PackingListItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { formatWeight } from "@/lib/categories";
+import { staggerDelay } from "@/lib/stagger";
 
 export function PackingListItemCard({
   item,
   gear,
+  index = 0,
   onTogglePacked,
   onQuantityChange,
   onRemove,
 }: {
   item: PackingListItem;
   gear: GearItem | undefined;
+  index?: number;
   onTogglePacked: () => void;
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
 }) {
+  const [celebrating, setCelebrating] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    },
+    [],
+  );
+
+  function handleToggle() {
+    // Nur beim Abhaken feiern, nicht beim Wieder-Auspacken
+    if (!item.packed) {
+      setCelebrating(true);
+      if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+      timerRef.current = window.setTimeout(() => setCelebrating(false), 660);
+    }
+    onTogglePacked();
+  }
+
   if (!gear) {
     return (
       <article className="rounded-card bg-red-50 p-4 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
@@ -29,14 +53,25 @@ export function PackingListItemCard({
   }
 
   return (
-    <article className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
-      <div className="flex items-start gap-3">
+    <article
+      className="relative animate-rise overflow-hidden rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark"
+      style={{ animationDelay: staggerDelay(index) }}
+    >
+      {celebrating && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-forest-400"
+        />
+      )}
+      <div className="relative flex items-start gap-3">
         <label className="mt-1 flex items-center">
           <input
             type="checkbox"
             checked={item.packed}
-            onChange={onTogglePacked}
-            className="h-5 w-5 rounded border-forest-300 text-ember-500 focus:ring-ember-400"
+            onChange={handleToggle}
+            className={`h-5 w-5 rounded border-forest-300 text-ember-500 transition focus:ring-ember-400 ${
+              celebrating ? "animate-pop" : ""
+            }`}
           />
         </label>
         <CategoryIcon category={gear.category} />

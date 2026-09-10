@@ -117,10 +117,11 @@ export default function LibraryPage() {
             Noch keine Items. Lege dein erstes Gear mit Gewicht und Preis an.
           </div>
         ) : (
-          items.map((item) => (
+          items.map((item, index) => (
             <GearItemCard
               key={item.id}
               item={item}
+              index={index}
               onEdit={(g) => {
                 setEditing(g);
                 setCreating(false);
