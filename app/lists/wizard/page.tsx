@@ -4,9 +4,10 @@ import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import type { PackingListItem } from "@/types";
+import type { GearDraft, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
+import { QuickItemForm } from "@/components/wizard/QuickItemForm";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { filterGearItems, sortGearItems } from "@/lib/calculations";
@@ -17,8 +18,9 @@ function WizardInner() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? "";
   const router = useRouter();
-  const { ready, data, updatePackingList } = useAppStore();
+  const { ready, data, updatePackingList, addGearItem } = useAppStore();
   const [stepIndex, setStepIndex] = useState(0);
+  const [mode, setMode] = useState<"library" | "new">("library");
 
   const list = useMemo(
     () => data.packingLists.find((l) => l.id === id),
@@ -84,9 +86,20 @@ function WizardInner() {
     );
   }
 
+  /** Neues Item: erst in die Library, dann direkt in die Packliste. */
+  function createAndAdd(draft: GearDraft) {
+    if (!list) return;
+    const created = addGearItem(draft);
+    writeItems([
+      ...list.items,
+      { gearItemId: created.id, quantity: 1, packed: false },
+    ]);
+  }
+
   function goNext() {
     if (stepIndex < WIZARD_CATEGORIES.length - 1) {
       setStepIndex(stepIndex + 1);
+      setMode("library");
       window.scrollTo({ top: 0 });
       return;
     }
@@ -100,7 +113,7 @@ function WizardInner() {
           onClick={() =>
             stepIndex === 0
               ? router.replace(`/lists/detail?id=${list.id}`)
-              : setStepIndex(stepIndex - 1)
+              : (setStepIndex(stepIndex - 1), setMode("library"))
           }
           aria-label={stepIndex === 0 ? "Wizard verlassen" : "Ein Schritt zurück"}
         >
@@ -113,13 +126,47 @@ function WizardInner() {
 
       <CategoryStage category={category} />
 
-      <SurfaceCard className="mt-6 p-4">
-        <LibraryPicker
-          items={categoryItems}
-          selection={selection}
-          onToggle={toggleItem}
-          onQuantity={setQuantity}
-        />
+      <div className="mt-6 flex justify-center">
+        <div
+          role="tablist"
+          aria-label="Eingabeart"
+          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-950"
+        >
+          {(
+            [
+              { id: "library", label: "Aus Library" },
+              { id: "new", label: "Neu anlegen" },
+            ] as const
+          ).map(({ id: modeId, label }) => (
+            <button
+              key={modeId}
+              type="button"
+              role="tab"
+              aria-selected={mode === modeId}
+              onClick={() => setMode(modeId)}
+              className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-150 ${
+                mode === modeId
+                  ? "bg-clay-200 text-ember-600 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400"
+                  : "text-clay-600 dark:text-clay-400"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <SurfaceCard className="mt-4 p-4">
+        {mode === "library" ? (
+          <LibraryPicker
+            items={categoryItems}
+            selection={selection}
+            onToggle={toggleItem}
+            onQuantity={setQuantity}
+          />
+        ) : (
+          <QuickItemForm category={category} onCreate={createAndAdd} />
+        )}
       </SurfaceCard>
 
       <div className="mt-auto flex items-center gap-3 pt-8">
