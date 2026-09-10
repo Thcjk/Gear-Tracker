@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import type { AppData, GearItem, PackingList, ThemeMode } from "@/types";
+import { recordBackup } from "@/lib/backups";
 import {
   createId,
   deleteGearItem,
@@ -28,6 +29,13 @@ interface AppStoreValue {
   data: AppData;
   /** true, wenn LocalStorage nicht beschrieben werden kann. */
   storageBlocked: boolean;
+  /**
+   * Gesetzt, wenn der gespeicherte Stand nicht lesbar war. Die Rohdaten
+   * liegen dann in Quarantäne, die App startet leer – der Nutzer muss das
+   * erfahren, sonst hält er den leeren Start für den Normalfall.
+   */
+  loadFailedAt: string | null;
+  dismissLoadFailure: () => void;
   setTheme: (theme: ThemeMode) => void;
   addGearItem: (item: Omit<GearItem, "id" | "createdAt">) => GearItem;
   updateGearItem: (item: GearItem) => void;
@@ -56,6 +64,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [data, setData] = useState<AppData>(emptyData);
   const [storageBlocked, setStorageBlocked] = useState(false);
+  const [loadFailedAt, setLoadFailedAt] = useState<string | null>(null);
 
   /**
    * Spiegelt den aktuellen Stand synchron, damit commit() ohne
@@ -64,10 +73,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const dataRef = useRef<AppData>(emptyData);
 
   useEffect(() => {
-    const loaded = loadData();
-    applyThemeClass(loaded.theme);
-    dataRef.current = loaded;
-    setData(loaded);
+    const result = loadData();
+    applyThemeClass(result.data.theme);
+    dataRef.current = result.data;
+    setData(result.data);
+    if (result.status === "unreadable") {
+      setLoadFailedAt(result.quarantinedAt ?? new Date().toISOString());
+    }
     setStorageBlocked(!isStorageWritable());
     setReady(true);
   }, []);
@@ -84,7 +96,10 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     dataRef.current = next;
     // Schlägt das Schreiben fehl, läuft die App weiter – der Hinweis sagt
     // aber, dass die Änderung nur bis zum Neuladen hält.
-    setStorageBlocked(!saveData(next));
+    const written = saveData(next);
+    setStorageBlocked(!written);
+    // Sicherung nur, wenn der Hauptstand auch wirklich liegt.
+    if (written) recordBackup(next);
     applyThemeClass(next.theme);
     setData(next);
   }, []);
@@ -182,11 +197,15 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   const clearAll = useCallback(() => commit(() => resetData()), [commit]);
 
+  const dismissLoadFailure = useCallback(() => setLoadFailedAt(null), []);
+
   const value = useMemo(
     () => ({
       ready,
       data,
       storageBlocked,
+      loadFailedAt,
+      dismissLoadFailure,
       setTheme,
       addGearItem,
       updateGearItem,
@@ -201,6 +220,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       ready,
       data,
       storageBlocked,
+      loadFailedAt,
+      dismissLoadFailure,
       setTheme,
       addGearItem,
       updateGearItem,

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
+import { BackupSection } from "@/components/settings/BackupSection";
 import { Button } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -54,7 +55,7 @@ export default function SettingsPage() {
 
       <SurfaceCard as="section" className="p-4">
         <h3 className="mb-4 font-bold text-clay-900 dark:text-clay-50">
-          Daten
+          Daten &amp; Backup
         </h3>
         <p className="mb-4 text-sm text-clay-700 dark:text-clay-400">
           Alles wird nur lokal im Browser gespeichert (LocalStorage). Kein
@@ -97,6 +98,8 @@ export default function SettingsPage() {
           }}
         />
       </SurfaceCard>
+
+      <BackupSection />
 
       <SurfaceCard as="section" className="p-4 text-sm text-clay-700 dark:text-clay-400">
         <p>

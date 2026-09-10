@@ -16,11 +16,78 @@ import {
 /** Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-Skript genutzt). */
 export const STORAGE_KEY = "ultralight-gear-tracker-v1";
 
+/**
+ * Hierhin wandert ein Datenbestand, den JSON.parse nicht lesen kann.
+ *
+ * Vorher startete die App in dem Fall stillschweigend mit leerer Library –
+ * und die nächste beliebige Aktion schrieb diesen leeren Stand über die
+ * noch vollständig vorhandenen Rohdaten. Damit waren sie endgültig weg,
+ * obwohl sie bis zu diesem Moment reparierbar dagewesen wären.
+ */
+export const QUARANTINE_KEY = "ultralight-gear-tracker-unreadable-v1";
+
 const defaultData: AppData = {
   gearItems: [],
   packingLists: [],
   theme: "light",
 };
+
+/* ------------------------------------------------------------------ *
+ * Schema-Versionierung
+ *
+ * Der gespeicherte Stand trägt seine Version mit. Ändert sich das
+ * Datenmodell, kommt hier eine Migration dazu, die fehlende Felder mit
+ * sinnvollen Werten auffüllt – statt dass später jemand versucht ist,
+ * bei unerwarteter Form auf Default-Daten zurückzufallen. Migrationen
+ * dürfen ergänzen und umformen, niemals Einträge wegwerfen.
+ * ------------------------------------------------------------------ */
+
+/** Aktuelle Version des gespeicherten Formats. */
+export const SCHEMA_VERSION = 2;
+
+/**
+ * Version 1 ist der Altbestand ohne schemaVersion-Feld: gearItems,
+ * packingLists und theme, sonst nichts. Version 2 ist derselbe Aufbau mit
+ * ausgewiesener Version – die Felder, die seither dazukamen
+ * (comfortTempC), sind durchweg optional, es gibt also nichts umzurechnen.
+ * Die Migration hält den Mechanismus für die nächste Änderung bereit.
+ */
+const MIGRATIONS: Record<
+  number,
+  (data: Record<string, unknown>) => Record<string, unknown>
+> = {
+  1: (data) => ({ ...data, schemaVersion: 2 }),
+};
+
+/** Liest die Version aus dem gespeicherten Objekt; fehlt sie, ist es Version 1. */
+function readSchemaVersion(raw: Record<string, unknown>): number {
+  const version = toNumber(raw.schemaVersion);
+  return version !== null && version >= 1 ? Math.floor(version) : 1;
+}
+
+/**
+ * Hebt einen gespeicherten Stand Schritt für Schritt auf die aktuelle
+ * Version. Ein Stand aus der Zukunft (neuere App auf einem anderen Gerät)
+ * wird unverändert durchgereicht: die Normalisierung ist nachsichtig, und
+ * fremde Felder wegzuwerfen wäre schlimmer als sie zu ignorieren.
+ */
+function migrate(raw: Record<string, unknown>): Record<string, unknown> {
+  let current = raw;
+  let version = readSchemaVersion(raw);
+
+  while (version < SCHEMA_VERSION) {
+    const step = MIGRATIONS[version];
+    if (!step) break;
+    current = step(current);
+    const next = readSchemaVersion(current);
+    // Setzt eine Migration die Version nicht hoch, bricht die Schleife ab
+    // statt endlos zu laufen.
+    if (next <= version) break;
+    version = next;
+  }
+
+  return current;
+}
 
 const CATEGORY_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
 const FALLBACK_CATEGORY: Category = "hygiene-misc";
@@ -209,13 +276,91 @@ export function normalizeAppData(raw: unknown): AppData {
   };
 }
 
-export function loadData(): AppData {
-  return normalizeAppData(readJson<unknown>(STORAGE_KEY, null));
+/**
+ * Ergebnis des Ladens. "unreadable" ist ausdrücklich kein leerer Start:
+ * die Rohdaten liegen dann in Quarantäne und lassen sich wiederherstellen.
+ */
+export type LoadStatus = "ok" | "empty" | "unreadable";
+
+export interface LoadResult {
+  status: LoadStatus;
+  data: AppData;
+  /** Bei "unreadable": wann die Rohdaten weggelegt wurden. */
+  quarantinedAt: string | null;
+}
+
+/** Legt unlesbare Rohdaten weg, ohne eine frühere Quarantäne zu überschreiben. */
+function quarantine(raw: string): string | null {
+  if (!canUseStorage()) return null;
+  try {
+    const existing = localStorage.getItem(QUARANTINE_KEY);
+    if (existing) {
+      // Schon etwas in Quarantäne: der ältere Stand ist der wertvollere,
+      // er stammt aus der Zeit vor dem ersten Fehlversuch.
+      const parsed = JSON.parse(existing) as { at?: string };
+      return typeof parsed.at === "string" ? parsed.at : null;
+    }
+    const at = new Date().toISOString();
+    localStorage.setItem(QUARANTINE_KEY, JSON.stringify({ at, raw }));
+    return at;
+  } catch {
+    return null;
+  }
+}
+
+export function loadData(): LoadResult {
+  if (!canUseStorage()) {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  if (!raw) {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    // Nicht lesbar: Rohdaten sichern, bevor irgendetwas darüber schreibt.
+    return {
+      status: "unreadable",
+      data: { ...defaultData },
+      quarantinedAt: quarantine(raw),
+    };
+  }
+
+  const migrated = isRecord(parsed) ? migrate(parsed) : parsed;
+  return { status: "ok", data: normalizeAppData(migrated), quarantinedAt: null };
+}
+
+/** Die weggelegten Rohdaten, damit die Oberfläche sie anbieten kann. */
+export function readQuarantine(): { at: string; raw: string } | null {
+  const stored = readJson<unknown>(QUARANTINE_KEY, null);
+  if (!isRecord(stored)) return null;
+  const at = toText(stored.at);
+  const raw = typeof stored.raw === "string" ? stored.raw : null;
+  return at && raw ? { at, raw } : null;
+}
+
+export function clearQuarantine(): void {
+  if (!canUseStorage()) return;
+  try {
+    localStorage.removeItem(QUARANTINE_KEY);
+  } catch {
+    // Nicht kritisch – der Eintrag stört nur.
+  }
 }
 
 /** Gibt zurück, ob geschrieben werden konnte. */
 export function saveData(data: AppData): boolean {
-  return writeJson(STORAGE_KEY, data);
+  return writeJson(STORAGE_KEY, { schemaVersion: SCHEMA_VERSION, ...data });
 }
 
 export function createId(): string {
@@ -261,7 +406,8 @@ export function exportJson(data: AppData): string {
 }
 
 export function importJson(raw: string): AppData {
-  return normalizeAppData(JSON.parse(raw));
+  const parsed: unknown = JSON.parse(raw);
+  return normalizeAppData(isRecord(parsed) ? migrate(parsed) : parsed);
 }
 
 export function resetData(): AppData {

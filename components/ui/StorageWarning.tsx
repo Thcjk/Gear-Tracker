@@ -1,26 +1,68 @@
 "use client";
 
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, X } from "lucide-react";
+import Link from "next/link";
+import { IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAppStore } from "@/lib/store";
 
 /**
- * Hinweis, wenn LocalStorage nicht beschrieben werden kann – etwa im
- * privaten Modus von Safari oder bei vollem Kontingent. Ohne diesen
- * Hinweis wirkt es so, als würde alles funktionieren, bis der nächste
- * Reload sämtliche Änderungen verschluckt.
+ * Zwei Lagen, in denen der Nutzer nicht im Unklaren bleiben darf:
+ *
+ * - LocalStorage lässt sich nicht beschreiben (privater Modus, voller
+ *   Speicher). Ohne Hinweis wirkt alles normal, bis der nächste Reload
+ *   sämtliche Änderungen verschluckt.
+ * - Der gespeicherte Stand war nicht lesbar. Die App startet dann leer –
+ *   das sieht aus wie Datenverlust und ist auch einer, wenn niemand sagt,
+ *   dass die Rohdaten gesichert wurden und wiederhergestellt werden können.
  */
 export function StorageWarning() {
-  const { ready, storageBlocked } = useAppStore();
-  if (!ready || !storageBlocked) return null;
+  const { ready, storageBlocked, loadFailedAt, dismissLoadFailure } =
+    useAppStore();
+
+  if (!ready) return null;
+
+  if (loadFailedAt) {
+    return (
+      <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="alert">
+        <AlertTriangle
+          className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-400"
+          aria-hidden
+        />
+        <div className="min-w-0 flex-1">
+          <p className="text-sm text-clay-700 dark:text-clay-300">
+            <strong className="font-bold text-clay-900 dark:text-clay-50">
+              Deine Daten konnten nicht gelesen werden.
+            </strong>{" "}
+            Der gespeicherte Stand ist beschädigt. Er wurde unverändert
+            gesichert und nicht überschrieben – unter{" "}
+            <Link
+              href="/settings"
+              className="font-semibold text-ember-800 underline dark:text-ember-400"
+            >
+              Einstellungen → Daten &amp; Backup
+            </Link>{" "}
+            kannst du ihn herunterladen oder ein automatisches Backup
+            wiederherstellen.
+          </p>
+        </div>
+        <IconButton
+          variant="quiet"
+          onClick={dismissLoadFailure}
+          aria-label="Hinweis ausblenden"
+        >
+          <X className="h-5 w-5" />
+        </IconButton>
+      </SurfaceCard>
+    );
+  }
+
+  if (!storageBlocked) return null;
 
   return (
-    <SurfaceCard
-      className="mb-4 flex items-start gap-3 p-4"
-      role="status"
-    >
+    <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="status">
       <AlertTriangle
-        className="mt-0.5 h-5 w-5 shrink-0 text-ember-800 dark:text-ember-400"
+        className="mt-0.5 h-5 w-5 shrink-0 text-ember-700 dark:text-ember-400"
         aria-hidden
       />
       <p className="text-sm text-clay-700 dark:text-clay-300">
