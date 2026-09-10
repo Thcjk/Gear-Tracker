@@ -42,9 +42,30 @@ export interface CategoryWeightRow {
   color: string;
 }
 
+/**
+ * Ein Vergleichsteilnehmer, losgelöst von der Herkunft: eine eigene
+ * Packliste oder eine importierte Datei. Die Berechnung interessiert nur
+ * noch Kategorie, Gewicht, Menge und Preis je Eintrag.
+ */
+export interface ComparisonSourceItem {
+  category: Category;
+  weightGrams: number;
+  quantity: number;
+  price?: number;
+}
+
+export interface ComparisonEntry {
+  key: string;
+  title: string;
+  /** Nur bei importierten Listen gesetzt. */
+  owner?: string;
+  imported: boolean;
+  items: ComparisonSourceItem[];
+}
+
 /** Eine Zeile des Packlisten-Vergleichs. */
 export interface ComparisonRow {
-  list: PackingList;
+  entry: ComparisonEntry;
   weightGrams: number;
   price: number;
   itemCount: number;
@@ -52,6 +73,40 @@ export interface ComparisonRow {
   priceDiff: number;
   isLightest: boolean;
   isCheapest: boolean;
+}
+
+/** Eine Kategoriezeile der Gegenüberstellung: ein Gewicht je Teilnehmer. */
+export interface CategoryComparisonRow {
+  category: Category;
+  label: string;
+  color: string;
+  weights: number[];
+}
+
+/* ---------------------------------------------------------------- *
+ * Austauschformat: eine Packliste, die eine andere Person als Datei
+ * bekommt. Items sind vollständig aufgelöst – Referenzen auf GearItems
+ * wären beim Empfänger wertlos, seine Library kennt sie nicht.
+ * ---------------------------------------------------------------- */
+
+export interface SharedListItem {
+  name: string;
+  category: Category;
+  weightGrams: number;
+  quantity: number;
+  price?: number;
+}
+
+export interface SharedPackingList {
+  /** Kennung des Formats, damit fremde JSON-Dateien früh auffallen. */
+  format: "gear-tracker-share";
+  version: 1;
+  ownerName: string;
+  listName: string;
+  exportedAt: string;
+  items: SharedListItem[];
+  totalWeightGrams: number;
+  totalPrice: number;
 }
 
 export type SortKey = "name" | "weightGrams" | "price";
