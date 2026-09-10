@@ -11,11 +11,14 @@ import { staggerDelay } from "@/lib/stagger";
 export function GearItemCard({
   item,
   index = 0,
+  showCategory = true,
   onEdit,
   onDelete,
 }: {
   item: GearItem;
   index?: number;
+  /** In einer Kategorie-Sektion wäre die Zeile auf jeder Karte redundant. */
+  showCategory?: boolean;
   onEdit: (item: GearItem) => void;
   onDelete: (id: string) => void;
 }) {
@@ -35,9 +38,11 @@ export function GearItemCard({
               <h3 className="truncate text-base font-bold text-clay-900 dark:text-clay-50">
                 {item.name}
               </h3>
-              <p className="mt-0.5 text-sm text-clay-600 dark:text-clay-400">
-                {meta.label}
-              </p>
+              {showCategory && (
+                <p className="mt-0.5 text-sm text-clay-600 dark:text-clay-400">
+                  {meta.label}
+                </p>
+              )}
             </div>
             <div className="text-right">
               <p className="text-lg font-extrabold text-forest-700 dark:text-forest-300">
