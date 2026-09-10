@@ -15,19 +15,20 @@ body {
   min-height: 100%;
 }
 
-body {
-  @apply bg-forest-50 font-sans text-forest-950 antialiased dark:bg-forest-950 dark:text-forest-50;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(249, 115, 22, 0.12), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(37, 107, 76, 0.18), transparent 50%),
-    linear-gradient(180deg, rgba(242, 247, 244, 0.95), rgba(235, 227, 214, 0.55));
+:root {
+  /* Farben der beiden Schlagschatten. Die Geometrie steckt in den
+     Tailwind-Utilities shadow-neu*, hier wechselt nur die Färbung. */
+  --neu-light: rgba(255, 255, 255, 0.95);
+  --neu-dark: rgba(160, 172, 154, 0.5);
 }
 
-html.dark body {
-  background-image:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(249, 115, 22, 0.16), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(37, 107, 76, 0.28), transparent 50%),
-    linear-gradient(180deg, #0c2118, #16392b);
+html.dark {
+  --neu-light: rgba(52, 70, 58, 0.55);
+  --neu-dark: rgba(6, 12, 9, 0.75);
+}
+
+body {
+  @apply bg-clay-200 font-sans text-clay-900 antialiased dark:bg-clay-950 dark:text-clay-100;
 }
 
 * {

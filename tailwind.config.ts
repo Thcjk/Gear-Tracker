@@ -35,6 +35,22 @@ const config: Config = {
           900: "#51362c",
           950: "#2d1b16",
         },
+        // Neumorphism-Grundfläche: leicht grünstichiges Beige-Grau.
+        // Karten haben dieselbe Farbe wie der Hintergrund – die Plastik
+        // entsteht ausschliesslich über die Doppelschatten.
+        clay: {
+          50: "#f4f6f1",
+          100: "#eceee7",
+          200: "#e8ebe4",
+          300: "#dadfd3",
+          400: "#c2c9bd",
+          500: "#a4ad9d",
+          600: "#7f8a78",
+          700: "#5d665a",
+          800: "#3a4139",
+          900: "#232a22",
+          950: "#1b2820",
+        },
         ember: {
           50: "#fff7ed",
           100: "#ffedd5",
@@ -52,11 +68,26 @@ const config: Config = {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       boxShadow: {
+        // Doppelschatten: heller Schein oben links, dunkler unten rechts.
+        // Die Farben stecken in CSS-Variablen (globals.css) und wechseln
+        // mit dem Theme, die Geometrie bleibt gleich.
+        neu: "7px 7px 16px var(--neu-dark), -7px -7px 16px var(--neu-light)",
+        "neu-sm": "4px 4px 9px var(--neu-dark), -4px -4px 9px var(--neu-light)",
+        "neu-lg":
+          "12px 12px 26px var(--neu-dark), -12px -12px 26px var(--neu-light)",
+        // Eingedrückt – für aktive Tabs, Eingabefelder und getippte Buttons
+        "neu-in":
+          "inset 5px 5px 11px var(--neu-dark), inset -5px -5px 11px var(--neu-light)",
+        "neu-in-sm":
+          "inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light)",
+        // Für farbige Flächen (Akzent-Buttons), die keinen hellen Schein tragen
+        "neu-accent": "5px 5px 12px var(--neu-dark)",
         soft: "0 8px 30px rgba(22, 57, 43, 0.08)",
         "soft-dark": "0 8px 30px rgba(0, 0, 0, 0.35)",
       },
       borderRadius: {
-        card: "1.25rem",
+        card: "1.5rem",
+        control: "1rem",
       },
       keyframes: {
         // Karten: sanft einblenden und leicht nach oben gleiten
