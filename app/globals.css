@@ -113,6 +113,26 @@ body {
   }
 }
 
+/**
+ * Die unscharfen Farbflecken der GradientField-Ebene.
+ *
+ * will-change schiebt die Unschärfe einmalig auf die GPU. Ohne das rechnet
+ * der Browser blur(64px) über drei grosse Flächen bei jedem Bildaufbau neu
+ * – auf älteren Telefonen sieht man das.
+ */
+.gradient-blob {
+  will-change: transform;
+}
+
+/* Wer reduzierte Bewegung eingestellt hat, will keine teure Optik: die
+   Unschärfe fällt weg, die Farbflächen bleiben als weiche Kreise. */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-blob {
+    filter: none;
+    will-change: auto;
+  }
+}
+
 @layer components {
   /* Eingabefelder wirken eingelassen statt aufgesetzt */
   .neu-field {
