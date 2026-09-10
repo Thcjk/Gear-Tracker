@@ -23,6 +23,9 @@ export function BottomNav() {
   const pathname = usePathname();
   const activeIndex = tabIndexForPath(pathname);
 
+  // Der Wizard ist ein geführter Flow und bringt eigene Navigation mit
+  if (pathname.startsWith("/lists/wizard")) return null;
+
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 bg-clay-200 px-4 pt-2 dark:bg-clay-950"
