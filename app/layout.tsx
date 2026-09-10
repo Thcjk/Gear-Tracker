@@ -3,6 +3,11 @@ import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** forest-900 – identisch in Manifest, Splash und Statusleiste. */
+const THEME_COLOR = "#16392b";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,13 +20,32 @@ export const metadata: Metadata = {
   title: "Ultralight Gear-Tracker",
   description:
     "Packlisten und Gewichte für Ultralight-Trekking – lokal im Browser.",
+  applicationName: "Gear-Tracker",
+  manifest: `${BASE_PATH}/manifest.json`,
+  icons: {
+    icon: [
+      { url: `${BASE_PATH}/favicon.svg`, type: "image/svg+xml" },
+      { url: `${BASE_PATH}/icon-192.png`, sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: `${BASE_PATH}/apple-touch-icon.png`, sizes: "180x180" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Gear-Tracker",
+    // Die Statusleiste liegt dadurch über der App-Fläche; oben wird per
+    // safe-area-inset-top freigehalten, damit nichts darunter rutscht.
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a4533",
+  themeColor: THEME_COLOR,
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  // Ohne das bleibt bei black-translucent unter der Notch ein weisser Balken
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
