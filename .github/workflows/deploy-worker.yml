@@ -1,0 +1,58 @@
+name: Deploy Import-Worker
+
+# Nur von Hand, nicht bei jedem Push: der Worker ändert sich selten, und ein
+# Deploy soll eine Entscheidung sein, kein Nebeneffekt.
+#
+# Dieser Weg existiert, weil "wrangler login" einen Browser braucht. Der
+# Runner hat den Token aus den Repository-Secrets, wrangler erkennt
+# CLOUDFLARE_API_TOKEN von allein – kein Login nötig.
+#
+# Einmalig einzurichten: Settings → Secrets and variables → Actions →
+# Secrets → New repository secret, Name CLOUDFLARE_API_TOKEN.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: wrangler deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Auslesen prüfen
+        run: npm test
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Das Secret CLOUDFLARE_API_TOKEN fehlt. Settings → Secrets and variables → Actions → Secrets → New repository secret."
+            exit 1
+          fi
+          npx wrangler deploy | tee deploy.log
+          # Die Adresse noch einmal gross in die Zusammenfassung des Laufs,
+          # damit sie nicht im Protokoll untergeht.
+          {
+            echo "## Worker-Adresse"
+            echo ""
+            echo '```'
+            grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1
+            echo '```'
+            echo ""
+            echo "Diese Adresse als Repository-Variable **NEXT_PUBLIC_IMPORT_WORKER_URL** eintragen (Settings → Secrets and variables → Actions → Variables) und danach den Pages-Workflow laufen lassen."
+          } >> "$GITHUB_STEP_SUMMARY"

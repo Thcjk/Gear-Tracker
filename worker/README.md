@@ -93,6 +93,19 @@ Published gear-tracker-import
   https://gear-tracker-import.<dein-subdomain>.workers.dev
 ```
 
+### Über GitHub Actions (ohne Terminal)
+
+Geht beides nicht – kein Terminal, kein Browser-Login – deployt der Workflow
+`.github/workflows/deploy-worker.yml` den Worker auf Knopfdruck:
+
+1. Im Repository unter Settings → Secrets and variables → Actions → Secrets
+   ein Secret `CLOUDFLARE_API_TOKEN` anlegen (Vorlage "Edit Cloudflare
+   Workers").
+2. Unter Actions → „Deploy Import-Worker" → „Run workflow".
+3. Die ausgegebene Adresse steht in der Zusammenfassung des Laufs.
+
+Der Token liegt dabei ausschliesslich in den GitHub-Secrets, nie im Code.
+
 ### Ohne Browser-Login
 
 Geht der interaktive Login nicht (zum Beispiel auf dem Handy), erkennt
