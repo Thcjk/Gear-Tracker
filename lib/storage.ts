@@ -32,6 +32,63 @@ const defaultData: AppData = {
   theme: "light",
 };
 
+/* ------------------------------------------------------------------ *
+ * Schema-Versionierung
+ *
+ * Der gespeicherte Stand trägt seine Version mit. Ändert sich das
+ * Datenmodell, kommt hier eine Migration dazu, die fehlende Felder mit
+ * sinnvollen Werten auffüllt – statt dass später jemand versucht ist,
+ * bei unerwarteter Form auf Default-Daten zurückzufallen. Migrationen
+ * dürfen ergänzen und umformen, niemals Einträge wegwerfen.
+ * ------------------------------------------------------------------ */
+
+/** Aktuelle Version des gespeicherten Formats. */
+export const SCHEMA_VERSION = 2;
+
+/**
+ * Version 1 ist der Altbestand ohne schemaVersion-Feld: gearItems,
+ * packingLists und theme, sonst nichts. Version 2 ist derselbe Aufbau mit
+ * ausgewiesener Version – die Felder, die seither dazukamen
+ * (comfortTempC), sind durchweg optional, es gibt also nichts umzurechnen.
+ * Die Migration hält den Mechanismus für die nächste Änderung bereit.
+ */
+const MIGRATIONS: Record<
+  number,
+  (data: Record<string, unknown>) => Record<string, unknown>
+> = {
+  1: (data) => ({ ...data, schemaVersion: 2 }),
+};
+
+/** Liest die Version aus dem gespeicherten Objekt; fehlt sie, ist es Version 1. */
+function readSchemaVersion(raw: Record<string, unknown>): number {
+  const version = toNumber(raw.schemaVersion);
+  return version !== null && version >= 1 ? Math.floor(version) : 1;
+}
+
+/**
+ * Hebt einen gespeicherten Stand Schritt für Schritt auf die aktuelle
+ * Version. Ein Stand aus der Zukunft (neuere App auf einem anderen Gerät)
+ * wird unverändert durchgereicht: die Normalisierung ist nachsichtig, und
+ * fremde Felder wegzuwerfen wäre schlimmer als sie zu ignorieren.
+ */
+function migrate(raw: Record<string, unknown>): Record<string, unknown> {
+  let current = raw;
+  let version = readSchemaVersion(raw);
+
+  while (version < SCHEMA_VERSION) {
+    const step = MIGRATIONS[version];
+    if (!step) break;
+    current = step(current);
+    const next = readSchemaVersion(current);
+    // Setzt eine Migration die Version nicht hoch, bricht die Schleife ab
+    // statt endlos zu laufen.
+    if (next <= version) break;
+    version = next;
+  }
+
+  return current;
+}
+
 const CATEGORY_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
 const FALLBACK_CATEGORY: Category = "hygiene-misc";
 
@@ -279,7 +336,8 @@ export function loadData(): LoadResult {
     };
   }
 
-  return { status: "ok", data: normalizeAppData(parsed), quarantinedAt: null };
+  const migrated = isRecord(parsed) ? migrate(parsed) : parsed;
+  return { status: "ok", data: normalizeAppData(migrated), quarantinedAt: null };
 }
 
 /** Die weggelegten Rohdaten, damit die Oberfläche sie anbieten kann. */
@@ -302,7 +360,7 @@ export function clearQuarantine(): void {
 
 /** Gibt zurück, ob geschrieben werden konnte. */
 export function saveData(data: AppData): boolean {
-  return writeJson(STORAGE_KEY, data);
+  return writeJson(STORAGE_KEY, { schemaVersion: SCHEMA_VERSION, ...data });
 }
 
 export function createId(): string {
@@ -348,7 +406,8 @@ export function exportJson(data: AppData): string {
 }
 
 export function importJson(raw: string): AppData {
-  return normalizeAppData(JSON.parse(raw));
+  const parsed: unknown = JSON.parse(raw);
+  return normalizeAppData(isRecord(parsed) ? migrate(parsed) : parsed);
 }
 
 export function resetData(): AppData {
