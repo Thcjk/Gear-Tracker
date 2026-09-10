@@ -16,6 +16,16 @@ import {
 /** Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-Skript genutzt). */
 export const STORAGE_KEY = "ultralight-gear-tracker-v1";
 
+/**
+ * Hierhin wandert ein Datenbestand, den JSON.parse nicht lesen kann.
+ *
+ * Vorher startete die App in dem Fall stillschweigend mit leerer Library –
+ * und die nächste beliebige Aktion schrieb diesen leeren Stand über die
+ * noch vollständig vorhandenen Rohdaten. Damit waren sie endgültig weg,
+ * obwohl sie bis zu diesem Moment reparierbar dagewesen wären.
+ */
+export const QUARANTINE_KEY = "ultralight-gear-tracker-unreadable-v1";
+
 const defaultData: AppData = {
   gearItems: [],
   packingLists: [],
@@ -209,8 +219,85 @@ export function normalizeAppData(raw: unknown): AppData {
   };
 }
 
-export function loadData(): AppData {
-  return normalizeAppData(readJson<unknown>(STORAGE_KEY, null));
+/**
+ * Ergebnis des Ladens. "unreadable" ist ausdrücklich kein leerer Start:
+ * die Rohdaten liegen dann in Quarantäne und lassen sich wiederherstellen.
+ */
+export type LoadStatus = "ok" | "empty" | "unreadable";
+
+export interface LoadResult {
+  status: LoadStatus;
+  data: AppData;
+  /** Bei "unreadable": wann die Rohdaten weggelegt wurden. */
+  quarantinedAt: string | null;
+}
+
+/** Legt unlesbare Rohdaten weg, ohne eine frühere Quarantäne zu überschreiben. */
+function quarantine(raw: string): string | null {
+  if (!canUseStorage()) return null;
+  try {
+    const existing = localStorage.getItem(QUARANTINE_KEY);
+    if (existing) {
+      // Schon etwas in Quarantäne: der ältere Stand ist der wertvollere,
+      // er stammt aus der Zeit vor dem ersten Fehlversuch.
+      const parsed = JSON.parse(existing) as { at?: string };
+      return typeof parsed.at === "string" ? parsed.at : null;
+    }
+    const at = new Date().toISOString();
+    localStorage.setItem(QUARANTINE_KEY, JSON.stringify({ at, raw }));
+    return at;
+  } catch {
+    return null;
+  }
+}
+
+export function loadData(): LoadResult {
+  if (!canUseStorage()) {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  if (!raw) {
+    return { status: "empty", data: { ...defaultData }, quarantinedAt: null };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    // Nicht lesbar: Rohdaten sichern, bevor irgendetwas darüber schreibt.
+    return {
+      status: "unreadable",
+      data: { ...defaultData },
+      quarantinedAt: quarantine(raw),
+    };
+  }
+
+  return { status: "ok", data: normalizeAppData(parsed), quarantinedAt: null };
+}
+
+/** Die weggelegten Rohdaten, damit die Oberfläche sie anbieten kann. */
+export function readQuarantine(): { at: string; raw: string } | null {
+  const stored = readJson<unknown>(QUARANTINE_KEY, null);
+  if (!isRecord(stored)) return null;
+  const at = toText(stored.at);
+  const raw = typeof stored.raw === "string" ? stored.raw : null;
+  return at && raw ? { at, raw } : null;
+}
+
+export function clearQuarantine(): void {
+  if (!canUseStorage()) return;
+  try {
+    localStorage.removeItem(QUARANTINE_KEY);
+  } catch {
+    // Nicht kritisch – der Eintrag stört nur.
+  }
 }
 
 /** Gibt zurück, ob geschrieben werden konnte. */
