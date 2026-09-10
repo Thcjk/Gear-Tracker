@@ -30,7 +30,7 @@ export const importAvailable = ((): boolean => {
   }
 })();
 
-/** "high" nur bei strukturierten Daten – siehe worker/README.md. */
+/** "high" nur, wenn alle Werte aus JSON-LD stammen – siehe worker/README.md. */
 export type ImportConfidence = "high" | "low";
 
 export interface ImportHit {
