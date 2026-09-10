@@ -42,8 +42,11 @@ export function CategoryIcon({
   const meta = getCategoryMeta(category);
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full p-2 ${meta.color}`}
+      // Weiche erhabene Scheibe in der Grundfläche; die Kategoriefarbe
+      // steckt nur noch im Strich des Icons, nicht mehr in der Fläche.
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 shadow-neu-sm dark:bg-clay-950"
       title={meta.label}
+      style={{ color: meta.chartColor }}
     >
       <SketchIcon type={CATEGORY_SKETCH[category]} className={className} />
     </span>

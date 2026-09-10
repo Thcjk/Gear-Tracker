@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
+import { Button } from "@/components/ui/Button";
+import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { CATEGORIES } from "@/lib/categories";
 
 /** Formularwerte entsprechen exakt einem Gear-Item ohne id/createdAt. */
@@ -54,25 +56,25 @@ export function GearItemForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-card border border-forest-200 bg-white p-4 shadow-soft dark:border-forest-800 dark:bg-forest-900 dark:shadow-soft-dark"
+      className={`${SURFACE_CLASSES} animate-rise p-5`}
     >
-      <h2 className="text-lg font-semibold text-forest-900 dark:text-forest-50">
+      <h2 className="text-lg font-bold text-clay-900 dark:text-clay-50">
         {title}
       </h2>
       <div className="mt-4 grid gap-3">
         <label className="grid gap-1 text-sm">
-          <span className="font-medium text-earth-700 dark:text-earth-200">
+          <span className="neu-label">
             Name
           </span>
           <input
             required
             value={values.name}
             onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
-            className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+            className="neu-field"
           />
         </label>
         <label className="grid gap-1 text-sm">
-          <span className="font-medium text-earth-700 dark:text-earth-200">
+          <span className="neu-label">
             Kategorie
           </span>
           <select
@@ -83,7 +85,7 @@ export function GearItemForm({
                 category: e.target.value as Category,
               }))
             }
-            className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+            className="neu-field"
           >
             {CATEGORIES.map((c) => (
               <option key={c.id} value={c.id}>
@@ -94,7 +96,7 @@ export function GearItemForm({
         </label>
         <div className="grid grid-cols-2 gap-3">
           <label className="grid gap-1 text-sm">
-            <span className="font-medium text-earth-700 dark:text-earth-200">
+            <span className="neu-label">
               Gewicht (g)
             </span>
             <input
@@ -108,11 +110,11 @@ export function GearItemForm({
                   weightGrams: Number(e.target.value),
                 }))
               }
-              className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+              className="neu-field"
             />
           </label>
           <label className="grid gap-1 text-sm">
-            <span className="font-medium text-earth-700 dark:text-earth-200">
+            <span className="neu-label">
               Preis (CHF)
             </span>
             <input
@@ -127,12 +129,12 @@ export function GearItemForm({
                     e.target.value === "" ? undefined : Number(e.target.value),
                 }))
               }
-              className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+              className="neu-field"
             />
           </label>
         </div>
         <label className="grid gap-1 text-sm">
-          <span className="font-medium text-earth-700 dark:text-earth-200">
+          <span className="neu-label">
             Notizen
           </span>
           <textarea
@@ -141,24 +143,17 @@ export function GearItemForm({
             onChange={(e) =>
               setValues((v) => ({ ...v, notes: e.target.value }))
             }
-            className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+            className="neu-field"
           />
         </label>
       </div>
       <div className="mt-4 flex gap-2">
-        <button
-          type="submit"
-          className="rounded-2xl bg-ember-500 px-4 py-2 text-sm font-semibold text-white hover:bg-ember-600"
-        >
+        <Button type="submit" variant="accent">
           {submitLabel}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-2xl bg-forest-100 px-4 py-2 text-sm font-medium text-forest-800 dark:bg-forest-800 dark:text-forest-100"
-        >
+        </Button>
+        <Button type="button" variant="raised" onClick={onCancel}>
           Abbrechen
-        </button>
+        </Button>
       </div>
     </form>
   );

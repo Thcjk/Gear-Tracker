@@ -11,6 +11,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
+import { Button } from "@/components/ui/Button";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   indexGearItems,
@@ -92,13 +93,13 @@ function PackingListDetailInner() {
   }, [ready, list, currentWeight]);
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Packliste…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Packliste…</p>;
   }
 
   if (!list || !stats) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-earth-600 dark:text-earth-300">
+        <p className="text-sm text-clay-600 dark:text-clay-400">
           Packliste nicht gefunden.
         </p>
         <Link href="/lists" className="text-ember-600 underline">
@@ -145,7 +146,7 @@ function PackingListDetailInner() {
         onExportPdf={handleExportPdf}
       />
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-3 gap-3">
         <StatCard
           label="Gesamtgewicht"
           countTo={totalWeight}
@@ -174,11 +175,11 @@ function PackingListDetailInner() {
       <TopHeaviestItems items={heaviest} />
 
       <SurfaceCard className="p-4">
-        <h3 className="mb-3 text-base font-semibold text-forest-900 dark:text-forest-50">
+        <h3 className="mb-3 text-base font-bold text-clay-900 dark:text-clay-50">
           Item hinzufügen
         </h3>
         {availableGear.length === 0 ? (
-          <p className="text-sm text-earth-500 dark:text-earth-400">
+          <p className="text-sm text-clay-600 dark:text-clay-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
             leer.{" "}
             <Link href="/library" className="text-ember-600 underline">
@@ -190,7 +191,7 @@ function PackingListDetailInner() {
             <select
               value={selectedGearId}
               onChange={(e) => setSelectedGearId(e.target.value)}
-              className="min-w-0 flex-1 rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 text-sm dark:border-forest-700 dark:bg-forest-950"
+              className="neu-field min-w-0 flex-1 text-sm"
             >
               <option value="">Item wählen…</option>
               {availableGear.map((g) => (
@@ -199,15 +200,15 @@ function PackingListDetailInner() {
                 </option>
               ))}
             </select>
-            <button
-              type="button"
+            <Button
+              variant="accent"
               onClick={addItem}
               disabled={!selectedGearId}
-              className="inline-flex items-center gap-1 rounded-2xl bg-ember-500 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
+              className="px-3"
             >
               <Plus className="h-4 w-4" />
               Add
-            </button>
+            </Button>
           </div>
         )}
       </SurfaceCard>
@@ -264,7 +265,7 @@ function PackingListDetailInner() {
 export default function PackingListDetailPage() {
   return (
     <Suspense
-      fallback={<p className="text-sm text-earth-500">Lade Packliste…</p>}
+      fallback={<p className="text-sm text-clay-600 dark:text-clay-400">Lade Packliste…</p>}
     >
       <PackingListDetailInner />
     </Suspense>

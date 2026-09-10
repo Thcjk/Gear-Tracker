@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Check } from "lucide-react";
 import { ComparisonTable } from "@/components/compare/ComparisonTable";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -22,7 +23,7 @@ export default function ComparePage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Vergleich…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Vergleich…</p>;
   }
 
   return (
@@ -36,15 +37,25 @@ export default function ComparePage() {
           {data.packingLists.map((list) => (
             <label
               key={list.id}
-              className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-forest-50 dark:hover:bg-forest-800"
+              className="flex cursor-pointer items-center gap-3 rounded-control px-3 py-2.5 transition-shadow active:shadow-neu-in-sm"
             >
-              <input
-                type="checkbox"
-                checked={selected.includes(list.id)}
-                onChange={() => toggle(list.id)}
-                className="h-4 w-4 rounded border-forest-300 text-ember-500"
-              />
-              <span className="font-medium text-forest-900 dark:text-forest-50">
+              <span className="relative flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(list.id)}
+                  onChange={() => toggle(list.id)}
+                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-clay-200 shadow-neu-sm transition-all checked:bg-ember-500 checked:shadow-neu-in-sm dark:bg-clay-950"
+                />
+                {/* appearance-none nimmt der Checkbox den Haken */}
+                <Check
+                  className={`pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-white transition-opacity ${
+                    selected.includes(list.id) ? "opacity-100" : "opacity-0"
+                  }`}
+                  strokeWidth={3}
+                  aria-hidden
+                />
+              </span>
+              <span className="font-semibold text-clay-900 dark:text-clay-50">
                 {list.name}
               </span>
             </label>

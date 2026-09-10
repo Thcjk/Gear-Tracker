@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -34,7 +35,7 @@ export default function SettingsPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Einstellungen…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Einstellungen…</p>;
   }
 
   return (
@@ -45,39 +46,31 @@ export default function SettingsPage() {
       />
 
       <SurfaceCard as="section" className="p-4">
-        <h3 className="mb-3 font-semibold text-forest-900 dark:text-forest-50">
+        <h3 className="mb-4 font-bold text-clay-900 dark:text-clay-50">
           Design-Modus
         </h3>
         <ThemeToggle />
       </SurfaceCard>
 
       <SurfaceCard as="section" className="p-4">
-        <h3 className="mb-3 font-semibold text-forest-900 dark:text-forest-50">
+        <h3 className="mb-4 font-bold text-clay-900 dark:text-clay-50">
           Daten
         </h3>
-        <p className="mb-4 text-sm text-earth-600 dark:text-earth-300">
+        <p className="mb-4 text-sm text-clay-600 dark:text-clay-400">
           Alles wird nur lokal im Browser gespeichert (LocalStorage). Kein
           Backend, kein Konto.
         </p>
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={handleExport}
-            className="inline-flex items-center gap-2 rounded-2xl bg-forest-700 px-4 py-2 text-sm font-semibold text-white"
-          >
+          <Button variant="forest" onClick={handleExport}>
             <Download className="h-4 w-4" />
             JSON exportieren
-          </button>
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            className="inline-flex items-center gap-2 rounded-2xl bg-forest-100 px-4 py-2 text-sm font-medium text-forest-800 dark:bg-forest-800 dark:text-forest-100"
-          >
+          </Button>
+          <Button onClick={() => fileRef.current?.click()}>
             <Upload className="h-4 w-4" />
             JSON importieren
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="danger"
             onClick={() => {
               if (
                 confirm(
@@ -87,11 +80,10 @@ export default function SettingsPage() {
                 clearAll();
               }
             }}
-            className="inline-flex items-center gap-2 rounded-2xl bg-red-50 px-4 py-2 text-sm font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
           >
             <Trash2 className="h-4 w-4" />
             Alles zurücksetzen
-          </button>
+          </Button>
         </div>
         <input
           ref={fileRef}
@@ -106,9 +98,9 @@ export default function SettingsPage() {
         />
       </SurfaceCard>
 
-      <SurfaceCard as="section" className="p-4 text-sm text-earth-600 dark:text-earth-300">
+      <SurfaceCard as="section" className="p-4 text-sm text-clay-600 dark:text-clay-400">
         <p>
-          <strong className="text-forest-900 dark:text-forest-50">
+          <strong className="text-clay-900 dark:text-clay-50">
             Ultralight Gear-Tracker
           </strong>{" "}
           · {data.gearItems.length} Items · {data.packingLists.length} Listen

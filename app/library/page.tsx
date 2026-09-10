@@ -41,7 +41,7 @@ export default function LibraryPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Library…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Library…</p>;
   }
 
   return (
@@ -82,7 +82,7 @@ export default function LibraryPage() {
           onChange={(e) =>
             setCategory(e.target.value as Category | "all")
           }
-          className="rounded-xl border border-forest-200 bg-white px-3 py-2 text-sm dark:border-forest-700 dark:bg-forest-900"
+          className="neu-field w-auto flex-1 py-2 text-sm"
         >
           <option value="all">Alle Kategorien</option>
           {CATEGORIES.map((c) => (
@@ -94,7 +94,7 @@ export default function LibraryPage() {
         <select
           value={sortKey}
           onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="rounded-xl border border-forest-200 bg-white px-3 py-2 text-sm dark:border-forest-700 dark:bg-forest-900"
+          className="neu-field w-auto flex-1 py-2 text-sm"
         >
           <option value="name">Sortierung: Name</option>
           <option value="weightGrams">Sortierung: Gewicht</option>

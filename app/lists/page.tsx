@@ -23,7 +23,7 @@ export default function ListsPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Listen…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Listen…</p>;
   }
 
   return (
@@ -42,10 +42,10 @@ export default function ListsPage() {
       {showForm && (
         <form
           onSubmit={handleCreate}
-          className={`${SURFACE_CLASSES} p-4`}
+          className={`${SURFACE_CLASSES} animate-rise p-5`}
         >
           <label className="grid gap-2 text-sm">
-            <span className="font-medium text-earth-700 dark:text-earth-200">
+            <span className="neu-label">
               Listenname
             </span>
             <input
@@ -53,23 +53,16 @@ export default function ListsPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="z.B. Weekend Alps"
-              className="rounded-xl border border-forest-200 bg-forest-50 px-3 py-2 dark:border-forest-700 dark:bg-forest-950"
+              className="neu-field"
             />
           </label>
           <div className="mt-3 flex gap-2">
-            <button
-              type="submit"
-              className="rounded-2xl bg-forest-700 px-4 py-2 text-sm font-semibold text-white"
-            >
+            <Button type="submit" variant="forest">
               Erstellen
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className="rounded-2xl bg-forest-100 px-4 py-2 text-sm font-medium text-forest-800 dark:bg-forest-800 dark:text-forest-100"
-            >
+            </Button>
+            <Button type="button" onClick={() => setShowForm(false)}>
               Abbrechen
-            </button>
+            </Button>
           </div>
         </form>
       )}

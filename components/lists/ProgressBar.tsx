@@ -17,7 +17,7 @@ export function ProgressBar({
     <div>
       <div
         className={`mb-1 flex justify-between text-sm ${
-          onDark ? "text-white/85" : "text-earth-600 dark:text-earth-300"
+          onDark ? "text-white/85" : "text-clay-600 dark:text-clay-400"
         }`}
       >
         <span>
@@ -26,8 +26,8 @@ export function ProgressBar({
         <span>{pct}%</span>
       </div>
       <div
-        className={`h-2 overflow-hidden rounded-full ${
-          onDark ? "bg-black/25" : "bg-forest-100 dark:bg-forest-800"
+        className={`h-2.5 overflow-hidden rounded-full ${
+          onDark ? "bg-black/25" : "bg-clay-200 shadow-neu-in-sm dark:bg-clay-950"
         }`}
       >
         <div

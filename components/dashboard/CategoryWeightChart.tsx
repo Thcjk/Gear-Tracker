@@ -45,23 +45,51 @@ function CategoryTick({
 
   return (
     <g transform={`translate(${x - 128}, ${y})`}>
-      <CategoryGlyph
-        category={row.category}
-        size={16}
-        x={0}
-        y={-8}
-        className="text-forest-600 dark:text-forest-300"
-      />
+      {/* Icon in der Kategoriefarbe, wie auf den Item-Karten */}
+      <g style={{ color: row.color }}>
+        <CategoryGlyph category={row.category} size={16} x={0} y={-8} />
+      </g>
       <text
         x={22}
         y={0}
         dy={4}
-        className="fill-earth-700 dark:fill-earth-200"
+        className="fill-clay-700 dark:fill-clay-300"
         fontSize={12}
       >
         {row.label}
       </text>
     </g>
+  );
+}
+
+/**
+ * Eigener Renderer statt LabelList-Standard: Recharts umbricht den Text
+ * sonst automatisch, "210 g" landete dadurch auf zwei Zeilen.
+ */
+function BarValueLabel({
+  x,
+  y,
+  width,
+  height,
+  value,
+}: {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  value?: number;
+}) {
+  if (x === undefined || y === undefined || width === undefined) return null;
+  return (
+    <text
+      x={x + width + 8}
+      y={y + (height ?? 0) / 2}
+      dy={4}
+      fontSize={11}
+      className="fill-clay-600 dark:fill-clay-400"
+    >
+      {formatWeight(Number(value ?? 0))}
+    </text>
   );
 }
 
@@ -75,7 +103,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
 
   if (data.length === 0) {
     return (
-      <SurfaceCard className="p-4 text-sm text-earth-500 dark:text-earth-400">
+      <SurfaceCard className="p-4 text-sm text-clay-600 dark:text-clay-400">
         Noch keine Gewichtsdaten für ein Diagramm.
       </SurfaceCard>
     );
@@ -87,14 +115,14 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
   return (
     <SurfaceCard as="section" className="p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-base font-semibold text-forest-900 dark:text-forest-50">
+        <h3 className="text-base font-bold text-clay-900 dark:text-clay-50">
           Gewicht pro Kategorie
         </h3>
 
         <div
           role="tablist"
           aria-label="Diagrammtyp"
-          className="inline-flex rounded-2xl bg-forest-50 p-1 dark:bg-forest-950"
+          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-950"
         >
           {(
             [
@@ -110,8 +138,8 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
               onClick={() => setMode(id)}
               className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
                 mode === id
-                  ? "bg-white text-forest-900 shadow-sm dark:bg-forest-700 dark:text-forest-50"
-                  : "text-earth-600 hover:text-forest-800 dark:text-earth-300 dark:hover:text-forest-100"
+                  ? "bg-clay-200 text-ember-600 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400"
+                  : "text-clay-600 dark:text-clay-400"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -133,7 +161,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
             <BarChart
               data={sorted}
               layout="vertical"
-              margin={{ top: 4, right: 56, bottom: 4, left: 8 }}
+              margin={{ top: 4, right: 60, bottom: 4, left: 8 }}
             >
               <XAxis type="number" hide />
               <YAxis
@@ -154,13 +182,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
                 {sorted.map((row) => (
                   <Cell key={row.category} fill={row.color} />
                 ))}
-                <LabelList
-                  dataKey="weightGrams"
-                  position="right"
-                  className="fill-earth-600 dark:fill-earth-300"
-                  fontSize={11}
-                  formatter={(value: number) => formatWeight(value)}
-                />
+                <LabelList dataKey="weightGrams" content={<BarValueLabel />} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -204,10 +226,10 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
                   className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: row.color }}
                 />
-                <span className="truncate text-earth-700 dark:text-earth-200">
+                <span className="truncate text-clay-700 dark:text-clay-300">
                   {row.label}
                 </span>
-                <span className="ml-auto font-semibold tabular-nums text-forest-800 dark:text-forest-100">
+                <span className="ml-auto font-bold tabular-nums text-clay-900 dark:text-clay-100">
                   {`${categoryShare(row.weightGrams, totalGrams).toFixed(
                     categoryShare(row.weightGrams, totalGrams) < 10 ? 1 : 0,
                   )} %`}

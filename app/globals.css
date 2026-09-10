@@ -46,3 +46,14 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@layer components {
+  /* Eingabefelder wirken eingelassen statt aufgesetzt */
+  .neu-field {
+    @apply w-full rounded-control bg-clay-200 px-3.5 py-2.5 text-clay-900 shadow-neu-in-sm outline-none transition-shadow placeholder:text-clay-500 focus:shadow-neu dark:bg-clay-950 dark:text-clay-50;
+  }
+
+  .neu-label {
+    @apply text-sm font-medium text-clay-700 dark:text-clay-300;
+  }
+}
