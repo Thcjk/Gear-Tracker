@@ -1,51 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type AnimationEvent } from "react";
 
-const VISIBLE_MS = 950;
-const FADE_MS = 320;
+/** Sichtbar plus Ausblenden – muss zur Keyframe "splash" passen. */
+const TOTAL_MS = 1270;
 
 /**
  * In-App-Splash statt nativem iOS-Splash: iOS unterstützt für Web-Apps nur
  * statische apple-touch-startup-image-Dateien pro Gerätegrösse, was eine
  * Bilderflut wäre und trotzdem nur beim Start vom Home-Bildschirm greift.
- * Diese Variante läuft überall gleich – auch im Browser-Tab.
  *
- * Rendert nur beim ersten Laden der App. Bei Navigationen innerhalb der
- * App bleibt die Komponente montiert und der Zustand "fertig" erhalten.
+ * Das Ein- und Ausblenden erledigt eine CSS-Keyframe, nicht JavaScript.
+ * Die Komponente steht im vorgerenderten HTML und deckt damit schon den
+ * ersten Frame ab; würde das Ausblenden an der Hydration hängen, bliebe
+ * der Splash bei langsamer Verbindung sekundenlang und ohne geladenes
+ * JavaScript dauerhaft stehen. Die Keyframe endet auf visibility:hidden,
+ * die Fläche fängt danach also auch keine Klicks mehr ab.
+ *
+ * React räumt den Knoten anschliessend nur noch weg.
  */
 export function SplashScreen() {
-  const [phase, setPhase] = useState<"visible" | "fading" | "done">("visible");
+  const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    const reduced = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) {
-      setPhase("done");
-      return;
-    }
-
-    const fade = window.setTimeout(() => setPhase("fading"), VISIBLE_MS);
-    const done = window.setTimeout(
-      () => setPhase("done"),
-      VISIBLE_MS + FADE_MS,
-    );
-    return () => {
-      window.clearTimeout(fade);
-      window.clearTimeout(done);
-    };
+    // Rückfalllinie: hydratisiert die Seite erst nach dem Ende der
+    // Animation, kommt kein animationend-Ereignis mehr an.
+    const timer = window.setTimeout(() => setRemoved(true), TOTAL_MS + 200);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  if (phase === "done") return null;
+  if (removed) return null;
+
+  function handleEnd(event: AnimationEvent<HTMLDivElement>) {
+    // Auch die Logo-Animation blubbert hier hoch
+    if (event.target === event.currentTarget) setRemoved(true);
+  }
 
   return (
     <div
       aria-hidden
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-forest-900 transition-opacity duration-300 ease-out ${
-        phase === "fading" ? "opacity-0" : "opacity-100"
-      }`}
-      style={{ transitionDuration: `${FADE_MS}ms` }}
+      onAnimationEnd={handleEnd}
+      className="animate-splash pointer-events-none fixed inset-0 z-50 flex flex-col items-center justify-center bg-forest-900"
     >
       <div className="animate-splash-in">
         <AppMark />
