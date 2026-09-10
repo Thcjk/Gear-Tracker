@@ -42,24 +42,43 @@ export const SPLASH_TOTAL_MS = SPLASH_MIN_VISIBLE_MS + SPLASH_FADE_MS;
 
 const EASE_OUT = "cubic-bezier(.22,1,.36,1)";
 
+/** Black Kite – identisch mit Manifest und Statusleiste. */
+const BASE = "#351E1C";
+
 export const splashCriticalCss = `
 .splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
-align-items:center;justify-content:center;background:#16392b;pointer-events:none;
+align-items:center;justify-content:center;background:${BASE};pointer-events:none;
 animation:splash-out ${SPLASH_FADE_MS}ms ease-out ${SPLASH_MIN_VISIBLE_MS}ms both}
 @keyframes splash-out{
 from{opacity:1;visibility:visible}
 to{opacity:0;visibility:hidden}}
 
-.splash__mark{width:6.5rem;height:6.5rem;
-filter:drop-shadow(0 12px 30px rgba(0,0,0,.45));
+/* Die Farbfeld-Ebene. Ihre Farben, Grössen und Positionen stehen als
+   inline style am Element – nur Lage, Rundung und Unschärfe kommen sonst
+   aus Tailwind, und das Stylesheet ist hier noch nicht da. */
+.splash__field{position:absolute;inset:0;overflow:hidden}
+.splash__field>.gradient-blob{position:absolute;border-radius:9999px;
+filter:blur(64px)}
+
+.splash__stage{position:relative;z-index:1;display:flex;
+flex-direction:column;align-items:center}
+
+.splash__mark{width:10rem;height:10rem;
+filter:drop-shadow(0 14px 34px rgba(0,0,0,.5));
 animation:splash-mark 720ms ${EASE_OUT} both}
 @keyframes splash-mark{
 from{opacity:0;transform:scale(.84)}
 to{opacity:1;transform:scale(1)}}
 
-.splash__label{margin:1.35rem 0 0;font-size:1.05rem;font-weight:700;
-letter-spacing:.22em;text-transform:uppercase;color:#e8f3ec;
+.splash__title{margin:1.5rem 0 0;font-size:1.875rem;line-height:1.15;
+font-weight:700;letter-spacing:-.02em;color:#F5F4ED;
 animation:splash-mark 720ms ${EASE_OUT} 180ms both}
+
+/* Unten links, oberhalb der Home-Anzeige des Geräts */
+.splash__tagline{position:absolute;z-index:1;left:1.5rem;
+bottom:calc(2rem + env(safe-area-inset-bottom));margin:0;
+font-size:.875rem;letter-spacing:.01em;color:#A0C9CB;
+animation:splash-mark 720ms ${EASE_OUT} 320ms both}
 
 /* Inhalt und Navigation kommen hinter dem Splash hervor. Der Schlusswert
    ist transform:none – ein bleibendes transform würde für fixierte
@@ -78,7 +97,8 @@ html[data-splash="hold"] .splash-fade{animation:none;opacity:0}
 
 html[data-splash="leaving"] .splash{animation:splash-out ${SPLASH_FADE_MS}ms ease-out forwards}
 html[data-splash="leaving"] .splash__mark,
-html[data-splash="leaving"] .splash__label{animation:splash-mark-out ${SPLASH_FADE_MS}ms ease-in forwards}
+html[data-splash="leaving"] .splash__title,
+html[data-splash="leaving"] .splash__tagline{animation:splash-mark-out ${SPLASH_FADE_MS}ms ease-in forwards}
 @keyframes splash-mark-out{to{opacity:0;transform:scale(1.05)}}
 html[data-splash="leaving"] .splash-reveal{animation:splash-reveal ${SPLASH_REVEAL_MS}ms ease-out both}
 html[data-splash="leaving"] .splash-fade{animation:splash-fade ${SPLASH_REVEAL_MS}ms ease-out both}
@@ -89,11 +109,13 @@ html[data-splash="done"] .splash-fade{animation:none;opacity:1}
 /* Reduzierte Bewegung: der Splash bleibt (er ist Teil des Starts), aber
    ohne Skalieren. Reine Deckkraft-Übergänge gelten als unkritisch. */
 @media (prefers-reduced-motion:reduce){
-.splash__mark,.splash__label{animation-name:splash-fade}
+.splash__mark,.splash__title,.splash__tagline{animation-name:splash-fade}
 html[data-splash="leaving"] .splash__mark,
-html[data-splash="leaving"] .splash__label{animation:splash-fade-out ${SPLASH_FADE_MS}ms ease-in forwards}
+html[data-splash="leaving"] .splash__title,
+html[data-splash="leaving"] .splash__tagline{animation:splash-fade-out ${SPLASH_FADE_MS}ms ease-in forwards}
 @keyframes splash-fade-out{to{opacity:0}}
-.splash-reveal,html[data-splash="leaving"] .splash-reveal{animation-name:splash-fade}}
+.splash-reveal,html[data-splash="leaving"] .splash-reveal{animation-name:splash-fade}
+.splash__field>.gradient-blob{filter:none}}
 `;
 
 /**

@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { PageTransition } from "@/components/nav/PageTransition";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
-import { SplashScreen } from "@/components/ui/SplashScreen";
+import { SplashScreen } from "@/components/splash/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
-import { splashBootScript, splashCriticalCss } from "@/components/ui/splashCss";
+import { splashBootScript, splashCriticalCss } from "@/components/splash/splashCss";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
