@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:pages": "node scripts/build-pages.mjs",
+    "publish:pages": "node scripts/publish-root.mjs",
     "start": "next start",
     "lint": "next lint"
   },

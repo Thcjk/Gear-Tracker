@@ -4,9 +4,11 @@ Web-App zum Verwalten und Analysieren von Ultralight-Trekking-Ausrüstung.
 
 ## Live
 
-**https://thcjk.github.io/Gear-Tracker/**
+**App:** https://thcjk.github.io/Gear-Tracker/
 
-> Deployment über GitHub Pages (statischer Export). Daten liegen in LocalStorage.
+> Statischer Export auf GitHub Pages. Daten liegen in LocalStorage im Browser.
+> Nach Code-Änderungen: `npm run publish:pages` und die generierten Root-Dateien committen
+> (oder Pages-Source auf **GitHub Actions** umstellen, dann reicht Push auf `main`).
 
 ## Features
 
