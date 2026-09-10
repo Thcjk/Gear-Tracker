@@ -30,7 +30,7 @@ export function AchievementBadges({
       label: "Unter 5 kg Base Weight!",
       Icon: Feather,
       className:
-        "text-ember-700 dark:text-ember-300",
+        "text-ember-800 dark:text-ember-300",
     });
   }
 

@@ -27,7 +27,7 @@ export default function ListsPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Listen…</p>;
+    return <p className="text-sm text-clay-700 dark:text-clay-400">Lade Listen…</p>;
   }
 
   return (

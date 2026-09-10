@@ -20,7 +20,7 @@ export function StorageWarning() {
       role="status"
     >
       <AlertTriangle
-        className="mt-0.5 h-5 w-5 shrink-0 text-ember-600 dark:text-ember-400"
+        className="mt-0.5 h-5 w-5 shrink-0 text-ember-800 dark:text-ember-400"
         aria-hidden
       />
       <p className="text-sm text-clay-700 dark:text-clay-300">
