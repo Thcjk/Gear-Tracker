@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-manrope: "Manrope", system-ui, sans-serif;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-forest-50 font-sans text-forest-950 antialiased dark:bg-forest-950 dark:text-forest-50;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(249, 115, 22, 0.12), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(37, 107, 76, 0.18), transparent 50%),
+    linear-gradient(180deg, rgba(242, 247, 244, 0.95), rgba(235, 227, 214, 0.55));
+}
+
+html.dark body {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(249, 115, 22, 0.16), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(37, 107, 76, 0.28), transparent 50%),
+    linear-gradient(180deg, #0c2118, #16392b);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
