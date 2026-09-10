@@ -4,7 +4,7 @@ Web-App zum Verwalten und Analysieren von Ultralight-Trekking-Ausrüstung.
 
 ## Live
 
-**https://thcjk.github.io/Kronenchronik/**
+**https://thcjk.github.io/Gear-Tracker/**
 
 > Deployment über GitHub Pages (statischer Export). Daten liegen in LocalStorage.
 

@@ -1,5 +1,5 @@
 const isGithubPages = process.env.GITHUB_PAGES === "true";
-const repoName = process.env.PAGES_REPO_NAME || "Kronenchronik";
+const repoName = process.env.PAGES_REPO_NAME || "Gear-Tracker";
 const basePath = isGithubPages ? `/${repoName}` : "";
 
 /** @type {import('next').NextConfig} */

@@ -45,7 +45,7 @@ const result = spawnSync("npx", ["next", "build"], {
   env: {
     ...process.env,
     GITHUB_PAGES: "true",
-    PAGES_REPO_NAME: process.env.PAGES_REPO_NAME || "Kronenchronik",
+    PAGES_REPO_NAME: process.env.PAGES_REPO_NAME || "Gear-Tracker",
   },
   shell: process.platform === "win32",
 });
