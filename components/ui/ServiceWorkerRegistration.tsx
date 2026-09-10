@@ -9,7 +9,31 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * laden. Danach ist die App in Benutzung und ein Reload würde mitten in
  * eine Eingabe platzen – dann greift die neue Version beim nächsten Start.
  */
-const SELF_RELOAD_WINDOW_MS = 10_000;
+const SELF_RELOAD_WINDOW_MS = 15_000;
+
+/**
+ * Wartet, bis der Start-Splash durch ist.
+ *
+ * Ein Reload mitten im Splash würde ihn abbrechen und von vorne beginnen
+ * lassen – der Nutzer sähe zehn Sekunden Logo statt fünf. Der Splash setzt
+ * data-splash am <html>, "done" heisst: Übergang vorbei. Fehlt das Attribut,
+ * lief nie ein Splash (JavaScript aus) und es gibt nichts abzuwarten.
+ */
+function afterSplash(run: () => void): () => void {
+  const root = document.documentElement;
+  const state = root.getAttribute("data-splash");
+  if (state === null || state === "done") {
+    run();
+    return () => {};
+  }
+  const observer = new MutationObserver(() => {
+    if (root.getAttribute("data-splash") !== "done") return;
+    observer.disconnect();
+    run();
+  });
+  observer.observe(root, { attributes: true, attributeFilter: ["data-splash"] });
+  return () => observer.disconnect();
+}
 
 /**
  * Meldet den Service Worker an, der die App-Hülle im Gerät vorhält.
@@ -32,6 +56,7 @@ export function ServiceWorkerRegistration() {
     // Erstinstallation (nichts tun, die Seite ist ja aktuell).
     const hadController = Boolean(navigator.serviceWorker.controller);
     let reloading = false;
+    let stopWaiting: (() => void) | null = null;
 
     function onMessage(event: MessageEvent) {
       if (event.data?.type !== "sw-activated") return;
@@ -46,7 +71,7 @@ export function ServiceWorkerRegistration() {
       reloading = true;
       // Neu laden, damit Markup und Chunks aus demselben Build stammen.
       // Der Zustand liegt im LocalStorage und übersteht das.
-      window.location.reload();
+      stopWaiting = afterSplash(() => window.location.reload());
     }
 
     navigator.serviceWorker.addEventListener("message", onMessage);
@@ -68,6 +93,7 @@ export function ServiceWorkerRegistration() {
     return () => {
       navigator.serviceWorker.removeEventListener("message", onMessage);
       window.removeEventListener("load", register);
+      stopWaiting?.();
     };
   }, []);
 

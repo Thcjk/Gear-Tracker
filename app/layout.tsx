@@ -5,7 +5,7 @@ import { PageTransition } from "@/components/nav/PageTransition";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/ui/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
-import { splashCriticalCss } from "@/components/ui/splashCss";
+import { splashBootScript, splashCriticalCss } from "@/components/ui/splashCss";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -64,6 +64,10 @@ export default function RootLayout({
         {/* Inline, damit der Splash schon beim ersten Paint aussieht wie
             gedacht – das Tailwind-Stylesheet ist ein eigener Request. */}
         <style dangerouslySetInnerHTML={{ __html: splashCriticalCss }} />
+        {/* Meldet dem CSS, dass JavaScript lebt: der Splash wartet dann auf
+            den geladenen Store statt auf eine feste Uhr. Inline, weil ein
+            eigener Request genau dann fehlschlagen kann, wenn es zählt. */}
+        <script dangerouslySetInnerHTML={{ __html: splashBootScript }} />
       </head>
       <body className={inter.className}>
         <script
@@ -75,18 +79,23 @@ export default function RootLayout({
             )})||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
           }}
         />
-        <SplashScreen />
         <AppStoreProvider>
+          {/* Innerhalb des Providers, weil der Splash weiss, wann die App
+              wirklich bereit ist. Als position:fixed-Ebene hängt seine
+              Darstellung nicht an dieser Stelle im Baum. */}
+          <SplashScreen />
           {/* Oben unter der Notch freihalten (status-bar-style ist
               black-translucent), unten Platz für die Bottom-Navigation */}
           <div
-            className="mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
+            className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
             style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
           >
             <StorageWarning />
             <PageTransition>{children}</PageTransition>
           </div>
-          <BottomNav />
+          <div className="splash-fade">
+            <BottomNav />
+          </div>
         </AppStoreProvider>
         <ServiceWorkerRegistration />
       </body>

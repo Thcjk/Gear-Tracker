@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState, type AnimationEvent } from "react";
-import { SPLASH_TOTAL_MS } from "./splashCss";
+import { useEffect, useState } from "react";
+import { useAppStore } from "@/lib/store";
+import {
+  SPLASH_FADE_MS,
+  SPLASH_MIN_VISIBLE_MS,
+  SPLASH_REVEAL_MS,
+} from "./splashCss";
 
 /**
  * In-App-Splash statt nativem iOS-Splash: iOS unterstützt für Web-Apps nur
@@ -11,32 +16,69 @@ import { SPLASH_TOTAL_MS } from "./splashCss";
  *
  * Markup und Gestaltung stecken im vorgerenderten HTML bzw. als <style> im
  * <head> (siehe splashCss.ts): das Logo erscheint mit dem ersten Paint,
- * statt auf das Tailwind-Stylesheet zu warten. Ein- und Ausblenden erledigt
- * dort eine CSS-Animation, die auf visibility:hidden endet – der Splash
- * löst sich also auch dann auf, wenn das JavaScript spät oder nie ankommt,
- * und fängt danach keine Klicks mehr ab.
+ * statt auf das Tailwind-Stylesheet zu warten.
  *
- * Diese Komponente räumt anschliessend nur noch den Knoten weg.
+ * Ablauf: der Splash steht SPLASH_MIN_VISIBLE_MS, auch wenn die App längst
+ * bereit ist. Braucht das Laden länger, wird nicht künstlich verlängert –
+ * er geht, sobald der Store gelesen ist. Formel also
+ * max(SPLASH_MIN_VISIBLE_MS, Zeit bis "ready").
+ *
+ * Nur beim Kaltstart: die Komponente hängt im Root-Layout, das beim
+ * Tab-Wechsel nicht neu montiert wird. Das Modul-Flag deckt zusätzlich den
+ * Fall ab, dass React den Baum doch einmal neu aufbaut (Fast Refresh,
+ * Fehlergrenze) – ein zweiter Splash mitten in der Bedienung wäre ein
+ * Rückschritt, kein Effekt.
  */
+let alreadyShown = false;
+
+/** Ohne Browser gibt es keine Uhr – im SSR-Pfad zählt nur das Markup. */
+function sinceLoad(): number {
+  if (typeof performance === "undefined") return 0;
+  return performance.now();
+}
+
+function setState(value: "leaving" | "done") {
+  document.documentElement.setAttribute("data-splash", value);
+}
+
 export function SplashScreen() {
-  const [removed, setRemoved] = useState(false);
+  const { ready } = useAppStore();
+  const [removed, setRemoved] = useState(alreadyShown);
 
   useEffect(() => {
-    // Rückfalllinie: hydratisiert die Seite erst nach dem Ende der
-    // Animation, kommt kein animationend-Ereignis mehr an.
-    const timer = window.setTimeout(() => setRemoved(true), SPLASH_TOTAL_MS + 200);
-    return () => window.clearTimeout(timer);
-  }, []);
+    if (alreadyShown) {
+      // Kein Kaltstart: sofort in den Ruhezustand, sonst hinge der Inhalt
+      // am opacity:0 des "hold"-Zustands fest.
+      setState("done");
+      return;
+    }
+    if (!ready) return;
+
+    alreadyShown = true;
+    const wait = Math.max(0, SPLASH_MIN_VISIBLE_MS - sinceLoad());
+    let cleanup: number | undefined;
+
+    const start = window.setTimeout(() => {
+      setState("leaving");
+      // Erst nach dem längeren der beiden Übergänge abräumen, sonst
+      // springt der Inhalt auf seinen Ruhezustand, während er noch
+      // einblendet.
+      cleanup = window.setTimeout(() => {
+        setState("done");
+        setRemoved(true);
+      }, Math.max(SPLASH_FADE_MS, SPLASH_REVEAL_MS) + 60);
+    }, wait);
+
+    return () => {
+      window.clearTimeout(start);
+      if (cleanup !== undefined) window.clearTimeout(cleanup);
+    };
+  }, [ready]);
 
   if (removed) return null;
 
-  function handleEnd(event: AnimationEvent<HTMLDivElement>) {
-    // Auch die Animationen von Logo und Schriftzug blubbern hier hoch
-    if (event.target === event.currentTarget) setRemoved(true);
-  }
-
   return (
-    <div aria-hidden className="splash" onAnimationEnd={handleEnd}>
+    <div aria-hidden className="splash">
       <AppMark />
       <p className="splash__label">Gear-Tracker</p>
     </div>
