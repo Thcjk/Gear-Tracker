@@ -48,6 +48,23 @@ export function readJson<T>(key: string, fallback: T): T {
   }
 }
 
+/**
+ * Prüft, ob überhaupt geschrieben werden kann. In privaten Modi und bei
+ * vollem Kontingent existiert localStorage, setItem wirft aber. Das fällt
+ * sonst erst auf, wenn die erste Änderung bereits verloren ist.
+ */
+export function isStorageWritable(): boolean {
+  if (!canUseStorage()) return false;
+  const probe = "__gear-tracker-probe__";
+  try {
+    localStorage.setItem(probe, "1");
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function writeJson(key: string, value: unknown): boolean {
   if (!canUseStorage()) return false;
   try {

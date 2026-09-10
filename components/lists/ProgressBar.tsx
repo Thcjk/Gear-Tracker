@@ -17,7 +17,7 @@ export function ProgressBar({
     <div>
       <div
         className={`mb-1 flex justify-between text-sm ${
-          onDark ? "text-white/85" : "text-clay-600 dark:text-clay-400"
+          onDark ? "text-white/85" : "text-clay-700 dark:text-clay-400"
         }`}
       >
         <span>
@@ -32,7 +32,7 @@ export function ProgressBar({
       >
         <div
           className={`h-full rounded-full transition-all ${
-            onDark ? "" : "bg-ember-500"
+            onDark ? "" : "bg-ember-700"
           }`}
           style={{
             width: `${pct}%`,

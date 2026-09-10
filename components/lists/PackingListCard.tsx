@@ -43,7 +43,7 @@ export function PackingListCard({
           >
             {list.name}
           </Link>
-          <p className="mt-1 text-sm text-clay-600 dark:text-clay-400">
+          <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
             {count} Items · {formatWeight(weight)}
           </p>
         </div>

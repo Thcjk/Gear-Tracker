@@ -101,16 +101,16 @@ function PackingListDetailInner() {
   }, [ready, list, currentWeight]);
 
   if (!ready) {
-    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Packliste…</p>;
+    return <p className="text-sm text-clay-700 dark:text-clay-400">Lade Packliste…</p>;
   }
 
   if (!list || !stats) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-clay-600 dark:text-clay-400">
+        <p className="text-sm text-clay-700 dark:text-clay-400">
           Packliste nicht gefunden.
         </p>
-        <Link href="/lists" className="text-ember-600 underline">
+        <Link href="/lists" className="text-ember-800 underline dark:text-ember-400">
           Zurück zu den Listen
         </Link>
       </div>
@@ -214,10 +214,10 @@ function PackingListDetailInner() {
         </Button>
 
         {availableGear.length === 0 ? (
-          <p className="text-sm text-clay-600 dark:text-clay-400">
+          <p className="text-sm text-clay-700 dark:text-clay-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
             leer.{" "}
-            <Link href="/library" className="text-ember-600 underline">
+            <Link href="/library" className="text-ember-800 underline dark:text-ember-400">
               Zur Library
             </Link>
           </p>
@@ -307,7 +307,7 @@ function PackingListDetailInner() {
 export default function PackingListDetailPage() {
   return (
     <Suspense
-      fallback={<p className="text-sm text-clay-600 dark:text-clay-400">Lade Packliste…</p>}
+      fallback={<p className="text-sm text-clay-700 dark:text-clay-400">Lade Packliste…</p>}
     >
       <PackingListDetailInner />
     </Suspense>

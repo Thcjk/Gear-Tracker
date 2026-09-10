@@ -73,7 +73,7 @@ export function PackingListItemCard({
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-500 checked:shadow-neu-in-sm dark:bg-clay-950 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-600 checked:shadow-neu-in-sm dark:bg-clay-950 ${
               celebrating ? "animate-pop" : ""
             }`}
           />
@@ -93,7 +93,7 @@ export function PackingListItemCard({
             <h3
               className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
-                  ? "text-clay-500 line-through"
+                  ? "text-clay-700 line-through dark:text-clay-500"
                   : "text-clay-900 dark:text-clay-50"
               }`}
             >
@@ -107,7 +107,7 @@ export function PackingListItemCard({
             <ComfortTempBadge celsius={gear.comfortTempC} className="mt-2" />
           )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <label className="inline-flex items-center gap-2 text-sm text-clay-600 dark:text-clay-400">
+            <label className="inline-flex items-center gap-2 text-sm text-clay-700 dark:text-clay-400">
               Menge
               <input
                 type="number"
@@ -122,7 +122,7 @@ export function PackingListItemCard({
             <button
               type="button"
               onClick={onRemove}
-              className="text-sm font-semibold text-red-600 transition-opacity active:opacity-60 dark:text-red-400"
+              className="text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-400"
             >
               Entfernen
             </button>

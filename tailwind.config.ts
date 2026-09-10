@@ -118,6 +118,13 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translate3d(-28px, 0, 0)" },
           "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" },
         },
+        // Splash: blendet sich selbst aus. Bewusst als CSS-Animation, damit
+        // die Auflösung nicht an der Hydration hängt – sonst bleibt der
+        // Splash bei langsamer Verbindung stehen und ohne JS für immer.
+        splash: {
+          "0%, 74%": { opacity: "1", visibility: "visible" },
+          "100%": { opacity: "0", visibility: "hidden" },
+        },
         // Splash: Logo blendet ein und wächst leicht
         "splash-in": {
           "0%": { opacity: "0", transform: "scale(0.86)" },
@@ -134,6 +141,7 @@ const config: Config = {
         pop: "pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
         flash: "flash 650ms ease-out forwards",
         "splash-in": "splash-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        splash: "splash 1270ms ease-out forwards",
         "slide-forward":
           "slide-forward 260ms cubic-bezier(0.32, 0.72, 0, 1) both",
         "slide-back": "slide-back 260ms cubic-bezier(0.32, 0.72, 0, 1) both",

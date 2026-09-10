@@ -30,7 +30,7 @@ export function AchievementBadges({
       label: "Unter 5 kg Base Weight!",
       Icon: Feather,
       className:
-        "text-ember-700 dark:text-ember-300",
+        "text-ember-800 dark:text-ember-300",
     });
   }
 
@@ -39,7 +39,7 @@ export function AchievementBadges({
       id: "lighter",
       label: `${formatWeight(
         reference.weightGrams - totalWeight,
-      )} leichter als „${reference.name}"`,
+      )} leichter als „${reference.name}“`,
       Icon: TrendingDown,
       className:
         "text-forest-700 dark:text-forest-300",

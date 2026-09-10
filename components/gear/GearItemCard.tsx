@@ -45,7 +45,7 @@ export function GearItemCard({
                 {item.name}
               </h3>
               {showCategory && (
-                <p className="mt-0.5 text-sm text-clay-600 dark:text-clay-400">
+                <p className="mt-0.5 text-sm text-clay-700 dark:text-clay-400">
                   {meta.label}
                 </p>
               )}
@@ -55,7 +55,7 @@ export function GearItemCard({
                 {formatWeight(item.weightGrams)}
               </p>
               {item.price != null && (
-                <p className="text-sm text-clay-600 dark:text-clay-400">
+                <p className="text-sm text-clay-700 dark:text-clay-400">
                   {formatPrice(item.price)}
                 </p>
               )}
@@ -65,7 +65,7 @@ export function GearItemCard({
             <ComfortTempBadge celsius={item.comfortTempC} className="mt-2" />
           )}
           {item.notes && (
-            <p className="mt-2 line-clamp-2 text-sm text-clay-600 dark:text-clay-400">
+            <p className="mt-2 line-clamp-2 text-sm text-clay-700 dark:text-clay-400">
               {item.notes}
             </p>
           )}

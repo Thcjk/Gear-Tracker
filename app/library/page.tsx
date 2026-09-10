@@ -71,7 +71,7 @@ export default function LibraryPage() {
 
   if (!ready) {
     return (
-      <p className="text-sm text-clay-600 dark:text-clay-400">Lade Library…</p>
+      <p className="text-sm text-clay-700 dark:text-clay-400">Lade Library…</p>
     );
   }
 
@@ -123,7 +123,7 @@ export default function LibraryPage() {
               onToggle={() => toggleCategory(meta.id)}
             >
               {items.length === 0 && creatingIn !== meta.id && (
-                <p className="px-3 text-sm text-clay-600 dark:text-clay-400">
+                <p className="px-3 text-sm text-clay-700 dark:text-clay-400">
                   Noch keine Items in dieser Kategorie.
                 </p>
               )}
