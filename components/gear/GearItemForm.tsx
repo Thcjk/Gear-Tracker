@@ -21,12 +21,15 @@ export function GearItemForm({
   initial,
   title,
   submitLabel,
+  hideCategory = false,
   onSubmit,
   onCancel,
 }: {
   initial?: Partial<GearFormValues>;
   title: string;
   submitLabel: string;
+  /** Kommt die Kategorie aus dem Kontext (Library-Sektion), entfällt die Auswahl. */
+  hideCategory?: boolean;
   onSubmit: (values: GearFormValues) => void;
   onCancel: () => void;
 }) {
@@ -73,7 +76,7 @@ export function GearItemForm({
             className="neu-field"
           />
         </label>
-        <label className="grid gap-1 text-sm">
+        <label className={`grid gap-1 text-sm ${hideCategory ? "hidden" : ""}`}>
           <span className="neu-label">
             Kategorie
           </span>

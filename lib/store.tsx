@@ -26,7 +26,7 @@ interface AppStoreValue {
   ready: boolean;
   data: AppData;
   setTheme: (theme: ThemeMode) => void;
-  addGearItem: (item: Omit<GearItem, "id" | "createdAt">) => void;
+  addGearItem: (item: Omit<GearItem, "id" | "createdAt">) => GearItem;
   updateGearItem: (item: GearItem) => void;
   removeGearItem: (id: string) => void;
   addPackingList: (name: string) => PackingList;
@@ -98,6 +98,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         ...prev,
         gearItems: upsertGearItem(prev.gearItems, next),
       }));
+      return next;
     },
     [commit],
   );

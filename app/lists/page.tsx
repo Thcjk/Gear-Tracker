@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { PackingListCard } from "@/components/lists/PackingListCard";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +10,7 @@ import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { useAppStore } from "@/lib/store";
 
 export default function ListsPage() {
+  const router = useRouter();
   const { ready, data, addPackingList, removePackingList } = useAppStore();
   const [name, setName] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -17,9 +19,11 @@ export default function ListsPage() {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    addPackingList(trimmed);
+    const list = addPackingList(trimmed);
     setName("");
     setShowForm(false);
+    // Direkt in den geführten Kategorie-Durchlauf statt in eine leere Liste
+    router.push(`/lists/wizard?id=${list.id}`);
   }
 
   if (!ready) {

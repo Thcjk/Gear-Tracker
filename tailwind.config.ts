@@ -100,6 +100,15 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "40%": { transform: "scale(1.3)" },
         },
+        // Wizard: Kategorie-Icon springt von unten herein
+        "icon-in": {
+          "0%": { opacity: "0", transform: "translate3d(0, 40px, 0) scale(0.9)" },
+          "100%": { opacity: "1", transform: "translate3d(0, 0, 0) scale(1)" },
+        },
+        "label-in": {
+          "0%": { opacity: "0", transform: "translate3d(0, 12px, 0)" },
+          "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" },
+        },
         // Seitenwechsel: neuer Screen schiebt sich herein
         "slide-forward": {
           "0%": { opacity: "0", transform: "translate3d(28px, 0, 0)" },
@@ -128,6 +137,9 @@ const config: Config = {
         "slide-forward":
           "slide-forward 260ms cubic-bezier(0.32, 0.72, 0, 1) both",
         "slide-back": "slide-back 260ms cubic-bezier(0.32, 0.72, 0, 1) both",
+        // Overshoot: das Icon schiesst leicht über und federt zurück
+        "icon-in": "icon-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        "label-in": "label-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },
