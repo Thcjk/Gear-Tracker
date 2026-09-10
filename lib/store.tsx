@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import type { AppData, GearItem, PackingList, ThemeMode } from "@/types";
+import { recordBackup } from "@/lib/backups";
 import {
   createId,
   deleteGearItem,
@@ -95,7 +96,10 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     dataRef.current = next;
     // Schlägt das Schreiben fehl, läuft die App weiter – der Hinweis sagt
     // aber, dass die Änderung nur bis zum Neuladen hält.
-    setStorageBlocked(!saveData(next));
+    const written = saveData(next);
+    setStorageBlocked(!written);
+    // Sicherung nur, wenn der Hauptstand auch wirklich liegt.
+    if (written) recordBackup(next);
     applyThemeClass(next.theme);
     setData(next);
   }, []);
