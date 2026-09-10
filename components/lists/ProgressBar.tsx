@@ -32,7 +32,10 @@ export function ProgressBar({
       >
         <div
           className={`h-full rounded-full transition-all ${
-            onDark ? "" : "bg-ember-700"
+            // Toxic Orange trägt auf hellem Grund nur 2.5:1 und wäre als
+            // Balken kaum vom Trog zu unterscheiden; vertieft sind es
+            // 4.9:1. Auf der dunklen Karte steht es dagegen selbst.
+            onDark ? "" : "bg-ember-700 dark:bg-ember-500"
           }`}
           style={{
             width: `${pct}%`,
@@ -40,7 +43,7 @@ export function ProgressBar({
             // als Tailwind-Arbitrary-Value, weil var()-Fallbacks mit Komma
             // beim Purge nicht zuverlässig erzeugt werden.
             ...(onDark
-              ? { backgroundColor: "var(--season-accent, #fb923c)" }
+              ? { backgroundColor: "var(--season-accent, #FFC0AC)" }
               : {}),
           }}
         />

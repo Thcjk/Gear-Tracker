@@ -122,7 +122,7 @@ export function PackingListItemCard({
             <button
               type="button"
               onClick={onRemove}
-              className="text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-400"
+              className="text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-300"
             >
               Entfernen
             </button>
