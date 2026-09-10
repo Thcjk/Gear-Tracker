@@ -1,21 +1,38 @@
 "use client";
 
+import { useCountUp } from "@/lib/useCountUp";
+
 export function StatCard({
   label,
   value,
   hint,
+  countTo,
+  format,
+  duration = 1000,
 }: {
   label: string;
-  value: string;
+  /** Statischer Anzeigewert – wird ignoriert, wenn countTo gesetzt ist. */
+  value?: string;
   hint?: string;
+  /** Zielwert für die Hochzähl-Animation beim ersten Rendern. */
+  countTo?: number;
+  /** Formatierung des animierten Zwischenwerts (z. B. formatWeight). */
+  format?: (value: number) => string;
+  duration?: number;
 }) {
+  const animated = useCountUp(countTo ?? 0, countTo === undefined ? 0 : duration);
+  const shown =
+    countTo === undefined
+      ? value ?? ""
+      : (format ?? ((n: number) => String(Math.round(n))))(animated);
+
   return (
     <div className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
       <p className="text-sm font-medium text-earth-500 dark:text-earth-400">
         {label}
       </p>
-      <p className="mt-2 text-2xl font-bold tracking-tight text-forest-900 dark:text-forest-50">
-        {value}
+      <p className="mt-2 text-2xl font-bold tracking-tight tabular-nums text-forest-900 dark:text-forest-50">
+        {shown}
       </p>
       {hint && (
         <p className="mt-1 text-xs text-earth-500 dark:text-earth-400">{hint}</p>

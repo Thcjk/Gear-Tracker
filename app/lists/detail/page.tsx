@@ -89,8 +89,18 @@ function PackingListDetailInner() {
       />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <StatCard label="Gesamtgewicht" value={formatWeight(totalWeight)} />
-        <StatCard label="Gesamtwert" value={formatPrice(totalPrice)} />
+        <StatCard
+          label="Gesamtgewicht"
+          countTo={totalWeight}
+          format={formatWeight}
+          duration={1100}
+        />
+        <StatCard
+          label="Gesamtwert"
+          countTo={totalPrice}
+          format={formatPrice}
+          duration={900}
+        />
         <StatCard label="Anzahl Items" value={String(itemCount)} />
       </div>
 
