@@ -28,11 +28,11 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 bg-clay-200 px-4 pt-2 dark:bg-clay-950"
+      className="fixed inset-x-0 bottom-0 z-40 bg-clay-200 px-4 pt-2 dark:bg-clay-800"
       // Home-Indicator freihalten, auf Geräten ohne Notch bleibt 0.75rem
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
-      <ul className="mx-auto flex max-w-3xl gap-1 rounded-card bg-clay-200 p-2 shadow-neu dark:bg-clay-950">
+      <ul className="mx-auto flex max-w-3xl gap-1 rounded-card bg-clay-200 p-2 shadow-neu dark:bg-clay-800">
         {TABS.map(({ href, label, icon: Icon }, index) => {
           const active = index === activeIndex;
           return (
@@ -42,7 +42,7 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={`flex flex-col items-center gap-1 rounded-control px-1 py-2.5 text-[0.6875rem] font-semibold transition-all duration-200 ${
                   active
-                    ? "bg-clay-200 text-ember-800 shadow-neu-in-sm dark:bg-clay-950 dark:text-ember-400"
+                    ? "bg-clay-200 text-ember-800 shadow-neu-in-sm dark:bg-clay-800 dark:text-ember-200"
                     : "text-clay-700 active:shadow-neu-in-sm dark:text-clay-400"
                 }`}
               >

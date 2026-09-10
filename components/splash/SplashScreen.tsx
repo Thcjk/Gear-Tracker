@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { GradientField } from "@/components/ui/GradientField";
+import { SplashEmblem } from "@/components/splash/SplashEmblem";
 import { useAppStore } from "@/lib/store";
 import {
   SPLASH_FADE_MS,
   SPLASH_MIN_VISIBLE_MS,
   SPLASH_REVEAL_MS,
-} from "./splashCss";
+} from "@/components/splash/splashCss";
 
 /**
  * In-App-Splash statt nativem iOS-Splash: iOS unterstützt für Web-Apps nur
@@ -15,8 +17,11 @@ import {
  * Diese Variante läuft überall gleich – auch im Browser-Tab.
  *
  * Markup und Gestaltung stecken im vorgerenderten HTML bzw. als <style> im
- * <head> (siehe splashCss.ts): das Logo erscheint mit dem ersten Paint,
- * statt auf das Tailwind-Stylesheet zu warten.
+ * <head> (siehe splashCss.ts): Emblem und Schriftzug erscheinen mit dem
+ * ersten Paint, statt auf das Tailwind-Stylesheet zu warten. Deshalb
+ * tragen die Elemente eigene splash__-Klassen und keine Tailwind-Klassen –
+ * und die Farbflecken der GradientField-Ebene bekommen ihre Lage,
+ * Rundung und Unschärfe ebenfalls aus dem kritischen CSS.
  *
  * Ablauf: der Splash steht SPLASH_MIN_VISIBLE_MS, auch wenn die App längst
  * bereit ist. Braucht das Laden länger, wird nicht künstlich verlängert –
@@ -79,23 +84,12 @@ export function SplashScreen() {
 
   return (
     <div aria-hidden className="splash">
-      <AppMark />
-      <p className="splash__label">Gear-Tracker</p>
+      <GradientField variant="warm" className="splash__field" />
+      <div className="splash__stage">
+        <SplashEmblem />
+        <p className="splash__title">Gear-Tracker</p>
+      </div>
+      <p className="splash__tagline">Pack leicht. Wandere weit.</p>
     </div>
-  );
-}
-
-/** Dieselbe Grafik wie das App-Icon, inline damit nichts nachgeladen wird. */
-function AppMark() {
-  return (
-    <svg viewBox="0 0 512 512" className="splash__mark" aria-hidden>
-      <rect width="512" height="512" rx="112" fill="#1e563e" />
-      <path d="M256 132 L444 392 L68 392 Z" fill="#357f5c" />
-      <path d="M256 132 L444 392 L256 392 Z" fill="#4b9a72" />
-      <path d="M256 132 L302 196 L276 186 L256 208 L236 186 L210 196 Z" fill="#c8e6d5" />
-      <path d="M256 258 L328 392 L184 392 Z" fill="#f97316" />
-      <path d="M256 300 L284 392 L228 392 Z" fill="#1e563e" />
-      <rect x="68" y="392" width="376" height="16" rx="8" fill="#c8e6d5" />
-    </svg>
   );
 }

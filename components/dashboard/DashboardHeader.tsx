@@ -39,7 +39,7 @@ export function DashboardHeader({
     <header
       data-season={theme.season}
       style={theme.vars as CSSProperties}
-      className="relative isolate overflow-hidden rounded-card bg-clay-200 p-5 shadow-neu dark:bg-clay-950"
+      className="relative isolate overflow-hidden rounded-card bg-clay-200 p-5 shadow-neu dark:bg-clay-800"
     >
       {/* Die Jahreszeit tönt die Fläche nur noch, statt sie auszufüllen:
           grosse Akzentflächen widersprechen der neuen Bildsprache. Season
@@ -64,7 +64,7 @@ export function DashboardHeader({
               <ArrowLeft className="h-4 w-4" />
               Listen
             </button>
-            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-950 dark:text-[color:var(--season-accent)]">
+            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-800 dark:text-[color:var(--season-accent)]">
               {theme.label}
             </span>
           </div>
@@ -106,7 +106,7 @@ export function DashboardHeader({
         <button
           type="button"
           onClick={onExportPdf}
-          className="relative inline-flex shrink-0 items-center gap-2 rounded-control bg-clay-200 px-4 py-2.5 text-sm font-semibold text-clay-800 shadow-neu-sm transition-all duration-150 active:translate-y-px active:shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-100"
+          className="relative inline-flex shrink-0 items-center gap-2 rounded-control bg-clay-200 px-4 py-2.5 text-sm font-semibold text-clay-800 shadow-neu-sm transition-all duration-150 active:translate-y-px active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-100"
         >
           <FileDown className="h-4 w-4" />
           PDF

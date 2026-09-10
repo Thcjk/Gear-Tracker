@@ -2,12 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------ *
+ * Semantische Farbvariablen
+ *
+ * Komponenten sollen "Grundfläche" oder "Überschriftenfarbe" sagen, nicht
+ * "Morning Snow" – sonst müsste jede Datei angefasst werden, wenn sich die
+ * Palette wieder ändert.
+ *
+ * Der Dark Mode hängt an der Klasse .dark am <html> (Tailwind darkMode:
+ * "class", gesetzt vom Anti-Flash-Skript im Layout). [data-theme="dark"]
+ * ist zusätzlich aufgeführt, damit die Variablen auch dann stimmen, wenn
+ * das Theme über das Attribut gesetzt wird.
+ * ------------------------------------------------------------------ */
+
 :root {
   color-scheme: light;
+
+  --bg-base: #f5f4ed; /* Morning Snow */
+  --bg-surface: #ececdc; /* Amazon Mist */
+  --accent: #ff6037; /* Toxic Orange */
+  --accent-cool: #a0c9cb; /* Aqua Mist */
+  --text-primary: #351e1c; /* Black Kite, als Text auf hellem Grund */
+  --text-headline: #733635; /* Garnet, für Überschriften/Labels */
+  /**
+   * Toxic Orange erreicht auf Morning Snow nur 2.7:1 und taugt dort nicht
+   * als Textfarbe. Diese abgedunkelte Variante schafft 5.3:1 und wird
+   * überall dort benutzt, wo der Akzent als Schrift auftritt.
+   */
+  --accent-on-light: #b33d1f;
+  /** Schrift, die auf einer Toxic-Orange-Fläche steht: 5.2:1. */
+  --on-accent: #351e1c;
+
+  /* Farben der beiden Schlagschatten. Die Geometrie steckt in den
+     Tailwind-Utilities shadow-neu*, hier wechselt nur die Färbung. */
+  --neu-light: rgba(255, 255, 255, 0.92);
+  --neu-dark: rgba(115, 54, 53, 0.22);
+
+  /* ---------------------------------------------------------------- *
+   * Kategorietöne für Diagramme und Icons
+   *
+   * Als Variablen und nicht als feste Werte, weil dieselbe Farbe auf
+   * Amazon Mist und auf Garnet nicht beide Male funktioniert: Aqua Mist
+   * hat auf heller Karte 1.5:1 und wäre dort unsichtbar, Garnet auf der
+   * Garnet-Karte ebenso. Jede Stufe erreicht auf ihrem Grund mindestens
+   * 3:1, die Schwelle für bedeutungstragende Grafik.
+   *
+   * Sieben Kategorien aus sechs Palettenfarben: unterschieden wird vor
+   * allem über die Helligkeit. Balken und Segmente tragen zusätzlich
+   * Beschriftung und Wert – die Zuordnung hängt nie allein an der Farbe.
+   * ---------------------------------------------------------------- */
+  --cat-shelter: #e24a22; /* Toxic Orange, für hellen Grund vertieft */
+  --cat-sleep-system: #733635; /* Garnet */
+  --cat-backpack: #55888b;
+  --cat-kitchen: #8f2e15;
+  --cat-clothing: #2f4749;
+  --cat-electronics: #351e1c; /* Black Kite */
+  --cat-hygiene-misc: #6f675a;
 }
 
-html.dark {
+html.dark,
+html[data-theme="dark"] {
   color-scheme: dark;
+
+  --bg-base: #351e1c; /* Black Kite */
+  --bg-surface: #733635; /* Garnet */
+  --accent: #ff6037; /* Toxic Orange bleibt gleich */
+  --accent-cool: #a0c9cb; /* Aqua Mist bleibt gleich */
+  --text-primary: #f5f4ed; /* Morning Snow, als Text auf dunklem Grund */
+  --text-headline: #ff6037; /* Toxic Orange als Headline im Dark Mode */
+  /* Auf dunklem Grund trägt der Akzent sich selbst (5.2:1 auf Black Kite). */
+  --accent-on-light: #ff6037;
+  --on-accent: #351e1c;
+
+  --neu-light: rgba(160, 201, 203, 0.1);
+  --neu-dark: rgba(20, 8, 7, 0.7);
+
+  /* Auf der Garnet-Karte kehrt sich alles um: die dunklen Töne von oben
+     wären dort unsichtbar, gebraucht werden die hellen. */
+  --cat-shelter: #ff6037; /* Toxic Orange, hier unverfälscht */
+  --cat-sleep-system: #e0a9a8;
+  --cat-backpack: #a0c9cb; /* Aqua Mist */
+  --cat-kitchen: #ffb093;
+  --cat-clothing: #7bafb2;
+  --cat-electronics: #f5f4ed; /* Morning Snow */
+  --cat-hygiene-misc: #a19985;
 }
 
 html,
@@ -17,20 +95,8 @@ body {
   overflow-x: hidden;
 }
 
-:root {
-  /* Farben der beiden Schlagschatten. Die Geometrie steckt in den
-     Tailwind-Utilities shadow-neu*, hier wechselt nur die Färbung. */
-  --neu-light: rgba(255, 255, 255, 0.95);
-  --neu-dark: rgba(160, 172, 154, 0.5);
-}
-
-html.dark {
-  --neu-light: rgba(52, 70, 58, 0.55);
-  --neu-dark: rgba(6, 12, 9, 0.75);
-}
-
 body {
-  @apply bg-clay-200 font-sans text-clay-900 antialiased dark:bg-clay-950 dark:text-clay-100;
+  @apply bg-clay-100 font-sans text-clay-900 antialiased dark:bg-clay-900 dark:text-clay-100;
 }
 
 * {
@@ -47,10 +113,30 @@ body {
   }
 }
 
+/**
+ * Die unscharfen Farbflecken der GradientField-Ebene.
+ *
+ * will-change schiebt die Unschärfe einmalig auf die GPU. Ohne das rechnet
+ * der Browser blur(64px) über drei grosse Flächen bei jedem Bildaufbau neu
+ * – auf älteren Telefonen sieht man das.
+ */
+.gradient-blob {
+  will-change: transform;
+}
+
+/* Wer reduzierte Bewegung eingestellt hat, will keine teure Optik: die
+   Unschärfe fällt weg, die Farbflächen bleiben als weiche Kreise. */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-blob {
+    filter: none;
+    will-change: auto;
+  }
+}
+
 @layer components {
   /* Eingabefelder wirken eingelassen statt aufgesetzt */
   .neu-field {
-    @apply w-full rounded-control bg-clay-200 px-3.5 py-2.5 text-clay-900 shadow-neu-in-sm outline-none transition-shadow placeholder:text-clay-500 focus:shadow-neu dark:bg-clay-950 dark:text-clay-50;
+    @apply w-full rounded-control bg-clay-200 px-3.5 py-2.5 text-clay-900 shadow-neu-in-sm outline-none transition-shadow placeholder:text-clay-600 focus:shadow-neu dark:bg-clay-800 dark:text-clay-50;
   }
 
   .neu-label {

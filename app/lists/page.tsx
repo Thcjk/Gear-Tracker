@@ -61,7 +61,7 @@ export default function ListsPage() {
             />
           </label>
           <div className="mt-3 flex gap-2">
-            <Button type="submit" variant="forest">
+            <Button type="submit" variant="cool">
               Erstellen
             </Button>
             <Button type="button" onClick={() => setShowForm(false)}>

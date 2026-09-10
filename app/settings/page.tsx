@@ -62,7 +62,7 @@ export default function SettingsPage() {
           Backend, kein Konto.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button variant="forest" onClick={handleExport}>
+          <Button variant="cool" onClick={handleExport}>
             <Download className="h-4 w-4" />
             JSON exportieren
           </Button>

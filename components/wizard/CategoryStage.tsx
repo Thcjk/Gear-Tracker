@@ -18,7 +18,7 @@ export function CategoryStage({ category }: { category: Category }) {
   return (
     <div key={category} className="flex flex-col items-center py-2 text-center">
       <span
-        className="animate-icon-in flex h-28 w-28 items-center justify-center rounded-full bg-clay-200 shadow-neu-lg dark:bg-clay-950"
+        className="animate-icon-in flex h-28 w-28 items-center justify-center rounded-full bg-clay-200 shadow-neu-lg dark:bg-clay-800"
         style={{ color: meta.chartColor }}
       >
         <SketchIcon type={CATEGORY_SKETCH[category]} className="h-14 w-14" />

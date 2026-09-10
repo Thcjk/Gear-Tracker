@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
+import { GradientField } from "@/components/ui/GradientField";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -122,7 +123,11 @@ function PackingListDetailInner() {
   }, [ready, list, currentWeight]);
 
   if (!ready) {
-    return <p className="text-sm text-clay-700 dark:text-clay-400">Lade Packliste…</p>;
+    return (
+      <p className="text-sm text-clay-700 dark:text-clay-400">
+        Lade Packliste…
+      </p>
+    );
   }
 
   if (!list || !stats) {
@@ -131,7 +136,10 @@ function PackingListDetailInner() {
         <p className="text-sm text-clay-700 dark:text-clay-400">
           Packliste nicht gefunden.
         </p>
-        <Link href="/lists" className="text-ember-800 underline dark:text-ember-400">
+        <Link
+          href="/lists"
+          className="text-ember-800 underline dark:text-ember-200"
+        >
           Zurück zu den Listen
         </Link>
       </div>
@@ -184,22 +192,32 @@ function PackingListDetailInner() {
         onExportPdf={handleExportPdf}
       />
 
-      <div className="grid grid-cols-3 gap-3">
-        <StatCard
-          label="Gesamtgewicht"
-          countTo={totalWeight}
-          format={formatWeight}
-          duration={1100}
-          index={0}
+      {/* Die Farbfeld-Ebene liegt hinter den Kennzahlen und ist bewusst
+          schwach: sie soll den Block vom Seitenhintergrund abheben, nicht
+          mit den Karten konkurrieren. */}
+      <div className="relative isolate">
+        <GradientField
+          variant="cool"
+          opacity={0.22}
+          className="absolute -inset-x-4 -inset-y-3 -z-10 rounded-card"
         />
-        <StatCard
-          label="Gesamtwert"
-          countTo={totalPrice}
-          format={formatPrice}
-          duration={900}
-          index={1}
-        />
-        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
+        <div className="grid grid-cols-3 gap-3">
+          <StatCard
+            label="Gesamtgewicht"
+            countTo={totalWeight}
+            format={formatWeight}
+            duration={1100}
+            index={0}
+          />
+          <StatCard
+            label="Gesamtwert"
+            countTo={totalPrice}
+            format={formatPrice}
+            duration={900}
+            index={1}
+          />
+          <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
+        </div>
       </div>
 
       <AchievementBadges
@@ -214,7 +232,7 @@ function PackingListDetailInner() {
           <Share2 className="h-4 w-4" />
           Für Vergleich exportieren
         </Button>
-        <Button variant="forest" onClick={() => setReviewing("new")}>
+        <Button variant="cool" onClick={() => setReviewing("new")}>
           <Flag className="h-4 w-4" />
           Tour beenden
         </Button>
@@ -251,7 +269,10 @@ function PackingListDetailInner() {
           <p className="text-sm text-clay-700 dark:text-clay-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
             leer.{" "}
-            <Link href="/library" className="text-ember-800 underline dark:text-ember-400">
+            <Link
+              href="/library"
+              className="text-ember-800 underline dark:text-ember-200"
+            >
               Zur Library
             </Link>
           </p>
@@ -308,9 +329,7 @@ function PackingListDetailInner() {
                   saveList({
                     ...list,
                     items: list.items.map((i) =>
-                      i.gearItemId === item.gearItemId
-                        ? { ...i, quantity }
-                        : i,
+                      i.gearItemId === item.gearItemId ? { ...i, quantity } : i,
                     ),
                   })
                 }
@@ -365,7 +384,11 @@ function PackingListDetailInner() {
 export default function PackingListDetailPage() {
   return (
     <Suspense
-      fallback={<p className="text-sm text-clay-700 dark:text-clay-400">Lade Packliste…</p>}
+      fallback={
+        <p className="text-sm text-clay-700 dark:text-clay-400">
+          Lade Packliste…
+        </p>
+      }
     >
       <PackingListDetailInner />
     </Suspense>

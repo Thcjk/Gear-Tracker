@@ -151,7 +151,7 @@ export function TourReviewDialog({
     >
       <SurfaceCard className="animate-rise flex max-h-[85vh] w-full max-w-md flex-col p-5">
         <div className="mb-4 flex items-start gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 text-ember-700 shadow-neu-sm dark:bg-clay-950">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 text-ember-700 shadow-neu-sm dark:bg-clay-800">
             <Flag className="h-5 w-5" aria-hidden />
           </span>
           <div className="min-w-0 flex-1">

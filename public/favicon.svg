@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="16" fill="#1a4533"/>
-  <path d="M18 42c6-14 10-20 14-24 4 4 8 10 14 24" stroke="#fb923c" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="32" cy="22" r="4" fill="#f97316"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Auf 16 px würden die Höhenlinien zu Matsch – hier nur der Gipfel -->
+  <rect width="64" height="64" rx="14" fill="#351E1C"/>
+  <path d="M10 48 L24 24 L32 38 L41 20 L54 48 Z" fill="#FF6037"/>
+  <path d="M41 20 L54 48 L46 48 Z" fill="#FF8A66"/>
+  <path d="M41 20 L45 29 L43 27 L40 31 L37 26 Z" fill="#F5F4ED"/>
 </svg>

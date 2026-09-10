@@ -11,7 +11,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
   return (
     <div className="min-w-0">
       {entry.imported && entry.owner && (
-        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ember-800 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400">
+        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ember-800 shadow-neu-sm dark:bg-clay-800 dark:text-ember-200">
           <Download className="h-3 w-3" aria-hidden />
           importiert
         </span>
@@ -41,7 +41,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
     <div className="space-y-4">
       <SurfaceCard className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-clay-300 dark:border-clay-800">
+          <thead className="border-b border-clay-300 dark:border-clay-600">
             <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
               <th className="px-4 py-3 font-medium">Liste</th>
               <th className="px-4 py-3 font-medium">Items</th>
@@ -55,7 +55,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
             {rows.map((row) => (
               <tr
                 key={row.entry.key}
-                className="border-b border-clay-300/60 last:border-0 dark:border-clay-800"
+                className="border-b border-clay-300/60 last:border-0 dark:border-clay-600"
               >
                 <td className="px-4 py-3.5">
                   <EntryTitle entry={row.entry} />
@@ -63,7 +63,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-300">
                   {row.itemCount}
                 </td>
-                <td className="px-4 py-3.5 font-semibold text-forest-700 dark:text-forest-300">
+                <td className="px-4 py-3.5 font-semibold text-aqua-700 dark:text-aqua-300">
                   {formatWeight(row.weightGrams)}
                 </td>
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
@@ -71,7 +71,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                     ? "leichteste"
                     : `+${formatWeight(row.weightDiff)}`}
                 </td>
-                <td className="px-4 py-3.5 text-forest-700 dark:text-forest-300">
+                <td className="px-4 py-3.5 text-aqua-700 dark:text-aqua-300">
                   {formatPrice(row.price)}
                 </td>
                 <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
@@ -86,7 +86,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
       {categoryRows.length > 0 && (
         <SurfaceCard className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-clay-300 dark:border-clay-800">
+            <thead className="border-b border-clay-300 dark:border-clay-600">
               <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
                 <th className="px-4 py-3 font-medium">Kategorie</th>
                 {rows.map((row) => (
@@ -107,7 +107,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 return (
                   <tr
                     key={row.category}
-                    className="border-b border-clay-300/60 last:border-0 dark:border-clay-800"
+                    className="border-b border-clay-300/60 last:border-0 dark:border-clay-600"
                   >
                     <td className="px-4 py-3 font-semibold text-clay-900 dark:text-clay-50">
                       <span className="inline-flex items-center gap-2">
@@ -123,7 +123,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                         key={rows[index].entry.key}
                         className={`whitespace-nowrap px-4 py-3 tabular-nums ${
                           weight > 0 && weight === min
-                            ? "font-bold text-forest-700 dark:text-forest-300"
+                            ? "font-bold text-aqua-700 dark:text-aqua-300"
                             : "text-clay-700 dark:text-clay-300"
                         }`}
                       >

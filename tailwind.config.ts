@@ -9,59 +9,70 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        forest: {
-          50: "#f2f7f4",
-          100: "#ddeee3",
-          200: "#b8dcc6",
-          300: "#86c2a2",
-          400: "#54a37d",
-          500: "#358660",
-          600: "#256b4c",
-          700: "#1e563e",
-          800: "#1a4533",
-          900: "#16392b",
-          950: "#0c2118",
-        },
-        earth: {
-          50: "#f7f4ef",
-          100: "#ebe3d6",
-          200: "#d8c7ae",
-          300: "#c2a680",
-          400: "#b0895c",
-          500: "#a1744b",
-          600: "#8a5d3f",
-          700: "#6f4936",
-          800: "#5d3e31",
-          900: "#51362c",
-          950: "#2d1b16",
-        },
-        // Neumorphism-Grundfläche: leicht grünstichiges Beige-Grau.
-        // Karten haben dieselbe Farbe wie der Hintergrund – die Plastik
-        // entsteht ausschliesslich über die Doppelschatten.
+        /* ------------------------------------------------------------ *
+         * Die sechs Farben der Palette, unter ihren Namen.
+         * ------------------------------------------------------------ */
+        "morning-snow": "#F5F4ED",
+        "amazon-mist": "#ECECDC",
+        "aqua-mist": "#A0C9CB",
+        "toxic-orange": "#FF6037",
+        "black-kite": "#351E1C",
+        garnet: "#733635",
+
+        /**
+         * Flächen und Text. Die Eckpunkte sind die Palettenfarben, die
+         * Zwischenstufen dazwischen interpoliert – ohne sie gäbe es keinen
+         * lesbaren Sekundärtext und keinen Platzhalter, der die 4.5:1
+         * erreicht.
+         *
+         * 100/200 = Morning Snow / Amazon Mist (Grundfläche und Karte hell)
+         * 800/900 = Garnet / Black Kite (Karte und Grundfläche dunkel)
+         */
         clay: {
-          50: "#f4f6f1",
-          100: "#eceee7",
-          200: "#e8ebe4",
-          300: "#dadfd3",
-          400: "#c2c9bd",
-          500: "#a4ad9d",
-          600: "#7f8a78",
-          700: "#5d665a",
-          800: "#3a4139",
-          900: "#232a22",
-          950: "#1b2820",
+          50: "#FBFAF5",
+          100: "#F5F4ED",
+          200: "#ECECDC",
+          300: "#DCDBC5",
+          400: "#C2BEA9",
+          500: "#8E8878",
+          600: "#6F675A",
+          700: "#574A45",
+          800: "#733635",
+          900: "#351E1C",
+          950: "#241110",
         },
+
+        /**
+         * Der Hauptakzent. 500 ist Toxic Orange selbst; es trägt schwarze
+         * Schrift (5.2:1), auf hellem Grund als Textfarbe reicht es dagegen
+         * nicht – dafür sind 700 und 800 da.
+         */
         ember: {
-          50: "#fff7ed",
-          100: "#ffedd5",
-          200: "#fed7aa",
-          300: "#fdba74",
-          400: "#fb923c",
-          500: "#f97316",
-          600: "#ea580c",
-          700: "#c2410c",
-          800: "#9a3412",
-          900: "#7c2d12",
+          50: "#FFF1EC",
+          100: "#FFDFD4",
+          200: "#FFC0AC",
+          300: "#FF9B7C",
+          400: "#FF7C55",
+          500: "#FF6037",
+          600: "#E24A22",
+          700: "#B33D1F",
+          800: "#8F2E15",
+          900: "#6B2311",
+          950: "#3F140A",
+        },
+
+        /** Der kühle Sekundärakzent. 300 ist Aqua Mist selbst. */
+        aqua: {
+          50: "#F0F7F7",
+          100: "#DCEBEC",
+          200: "#BFDBDC",
+          300: "#A0C9CB",
+          400: "#7BAFB2",
+          500: "#5E9295",
+          600: "#4A7578",
+          700: "#3C5D60",
+          800: "#2F4749",
+          900: "#233436",
         },
       },
       fontFamily: {
@@ -82,8 +93,8 @@ const config: Config = {
           "inset 3px 3px 7px var(--neu-dark), inset -3px -3px 7px var(--neu-light)",
         // Für farbige Flächen (Akzent-Buttons), die keinen hellen Schein tragen
         "neu-accent": "5px 5px 12px var(--neu-dark)",
-        soft: "0 8px 30px rgba(22, 57, 43, 0.08)",
-        "soft-dark": "0 8px 30px rgba(0, 0, 0, 0.35)",
+        soft: "0 8px 30px rgba(53, 30, 28, 0.10)",
+        "soft-dark": "0 8px 30px rgba(0, 0, 0, 0.45)",
       },
       borderRadius: {
         card: "1.5rem",
@@ -123,7 +134,7 @@ const config: Config = {
           "0%": { opacity: "0", transform: "scale(0.86)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
-        // Karte: kurzes Grün-Aufblitzen
+        // Karte: kurzes Aufblitzen beim Abhaken
         flash: {
           "0%": { opacity: "0.45" },
           "100%": { opacity: "0" },
