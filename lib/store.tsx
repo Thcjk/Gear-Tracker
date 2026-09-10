@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -52,23 +53,39 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [data, setData] = useState<AppData>(emptyData);
 
+  /**
+   * Spiegelt den aktuellen Stand synchron, damit commit() ohne
+   * setState-Callback rechnen kann.
+   */
+  const dataRef = useRef<AppData>(emptyData);
+
   useEffect(() => {
     const loaded = loadData();
     applyThemeClass(loaded.theme);
+    dataRef.current = loaded;
     setData(loaded);
     setReady(true);
   }, []);
 
-  useEffect(() => {
-    if (!ready) return;
-    saveData(data);
-    applyThemeClass(data.theme);
-  }, [data, ready]);
-
-  const setTheme = useCallback((theme: ThemeMode) => {
-    applyThemeClass(theme);
-    setData((prev) => ({ ...prev, theme }));
+  /**
+   * Einziger Schreibpfad: neuen Stand berechnen, sofort persistieren, dann
+   * rendern. Vorher lief der Schreibvorgang in einem Effekt nach dem
+   * Commit – zwischen Klick und Persistenz lag ein Frame, in dem ein
+   * Reload die Änderung verschluckt hat. dataRef wird synchron
+   * mitgeführt, damit mehrere Aufrufe im selben Tick aufeinander aufbauen.
+   */
+  const commit = useCallback((mutate: (prev: AppData) => AppData) => {
+    const next = mutate(dataRef.current);
+    dataRef.current = next;
+    saveData(next);
+    applyThemeClass(next.theme);
+    setData(next);
   }, []);
+
+  const setTheme = useCallback(
+    (theme: ThemeMode) => commit((prev) => ({ ...prev, theme })),
+    [commit],
+  );
 
   const addGearItem = useCallback(
     (item: Omit<GearItem, "id" | "createdAt">) => {
@@ -77,32 +94,41 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         id: createId(),
         createdAt: new Date().toISOString(),
       };
-      setData((prev) => ({
+      commit((prev) => ({
         ...prev,
         gearItems: upsertGearItem(prev.gearItems, next),
       }));
     },
-    [],
+    [commit],
   );
 
-  const updateGearItem = useCallback((item: GearItem) => {
-    setData((prev) => ({
-      ...prev,
-      gearItems: upsertGearItem(prev.gearItems, item),
-    }));
-  }, []);
-
-  const removeGearItem = useCallback((id: string) => {
-    setData((prev) => ({
-      ...prev,
-      gearItems: deleteGearItem(prev.gearItems, id),
-      packingLists: prev.packingLists.map((list) => ({
-        ...list,
-        items: list.items.filter((i) => i.gearItemId !== id),
-        updatedAt: new Date().toISOString(),
+  const updateGearItem = useCallback(
+    (item: GearItem) =>
+      commit((prev) => ({
+        ...prev,
+        gearItems: upsertGearItem(prev.gearItems, item),
       })),
-    }));
-  }, []);
+    [commit],
+  );
+
+  const removeGearItem = useCallback(
+    (id: string) =>
+      commit((prev) => ({
+        ...prev,
+        gearItems: deleteGearItem(prev.gearItems, id),
+        packingLists: prev.packingLists.map((list) =>
+          // Nur betroffene Listen anfassen, sonst bleibt die Referenz stehen
+          list.items.some((i) => i.gearItemId === id)
+            ? {
+                ...list,
+                items: list.items.filter((i) => i.gearItemId !== id),
+                updatedAt: new Date().toISOString(),
+              }
+            : list,
+        ),
+      })),
+    [commit],
+  );
 
   const addPackingList = useCallback((name: string) => {
     const now = new Date().toISOString();
@@ -113,40 +139,40 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       createdAt: now,
       updatedAt: now,
     };
-    setData((prev) => ({
+    commit((prev) => ({
       ...prev,
       packingLists: upsertPackingList(prev.packingLists, list),
     }));
     return list;
-  }, []);
+  }, [commit]);
 
-  const updatePackingList = useCallback((list: PackingList) => {
-    setData((prev) => ({
-      ...prev,
-      packingLists: upsertPackingList(prev.packingLists, {
-        ...list,
-        updatedAt: new Date().toISOString(),
-      }),
-    }));
-  }, []);
+  const updatePackingList = useCallback(
+    (list: PackingList) =>
+      commit((prev) => ({
+        ...prev,
+        packingLists: upsertPackingList(prev.packingLists, {
+          ...list,
+          updatedAt: new Date().toISOString(),
+        }),
+      })),
+    [commit],
+  );
 
-  const removePackingList = useCallback((id: string) => {
-    setData((prev) => ({
-      ...prev,
-      packingLists: deletePackingList(prev.packingLists, id),
-    }));
-  }, []);
+  const removePackingList = useCallback(
+    (id: string) =>
+      commit((prev) => ({
+        ...prev,
+        packingLists: deletePackingList(prev.packingLists, id),
+      })),
+    [commit],
+  );
 
-  const replaceData = useCallback((next: AppData) => {
-    applyThemeClass(next.theme);
-    setData(next);
-  }, []);
+  const replaceData = useCallback(
+    (next: AppData) => commit(() => next),
+    [commit],
+  );
 
-  const clearAll = useCallback(() => {
-    const next = resetData();
-    applyThemeClass(next.theme);
-    setData(next);
-  }, []);
+  const clearAll = useCallback(() => commit(() => resetData()), [commit]);
 
   const value = useMemo(
     () => ({

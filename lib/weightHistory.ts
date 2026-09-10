@@ -32,7 +32,16 @@ export function recordListWeight(
   name: string,
   weightGrams: number,
 ): void {
-  const history = loadWeightHistory().filter((e) => e.listId !== listId);
+  const all = loadWeightHistory();
+
+  // Unveränderter Stand: nicht neu schreiben. Sonst würde jeder Aufruf des
+  // Dashboards die komplette Historie neu serialisieren.
+  const existing = all.find((e) => e.listId === listId);
+  if (existing && existing.weightGrams === weightGrams && existing.name === name) {
+    return;
+  }
+
+  const history = all.filter((e) => e.listId !== listId);
   history.push({ listId, name, weightGrams, at: new Date().toISOString() });
   history.sort((a, b) => b.at.localeCompare(a.at));
   // Badges sind optional: schlägt das Schreiben fehl, ist das kein Fehlerfall

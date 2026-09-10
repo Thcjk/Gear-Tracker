@@ -8,12 +8,25 @@ import type {
 } from "@/types";
 import { CATEGORIES } from "./categories";
 
+/**
+ * Nachschlagetabelle für Gear-Items.
+ *
+ * Vorher lief in jeder Auswertung ein gearItems.find() pro Listeneintrag,
+ * also O(Items x Library). Über die Map wird daraus O(Items + Library) –
+ * spürbar, sobald Dashboard und Vergleich mehrere Auswertungen
+ * hintereinander über dieselben Daten laufen lassen.
+ */
+export function indexGearItems(gearItems: GearItem[]): Map<string, GearItem> {
+  return new Map(gearItems.map((item) => [item.id, item]));
+}
+
 export function listTotalWeight(
   list: PackingList,
   gearItems: GearItem[],
 ): number {
+  const index = indexGearItems(gearItems);
   return list.items.reduce((sum, item) => {
-    const gear = gearItems.find((g) => g.id === item.gearItemId);
+    const gear = index.get(item.gearItemId);
     if (!gear) return sum;
     return sum + gear.weightGrams * item.quantity;
   }, 0);
@@ -23,8 +36,9 @@ export function listTotalPrice(
   list: PackingList,
   gearItems: GearItem[],
 ): number {
+  const index = indexGearItems(gearItems);
   return list.items.reduce((sum, item) => {
-    const gear = gearItems.find((g) => g.id === item.gearItemId);
+    const gear = index.get(item.gearItemId);
     if (!gear?.price) return sum;
     return sum + gear.price * item.quantity;
   }, 0);
@@ -47,10 +61,11 @@ export function weightByCategory(
   list: PackingList,
   gearItems: GearItem[],
 ): CategoryWeightRow[] {
+  const index = indexGearItems(gearItems);
   const map = new Map<Category, number>();
 
   for (const item of list.items) {
-    const gear = gearItems.find((g) => g.id === item.gearItemId);
+    const gear = index.get(item.gearItemId);
     if (!gear) continue;
     map.set(
       gear.category,
@@ -71,9 +86,10 @@ export function topHeaviestItems(
   gearItems: GearItem[],
   limit = 5,
 ): { name: string; weightGrams: number; quantity: number; totalGrams: number }[] {
+  const index = indexGearItems(gearItems);
   return list.items
     .map((item) => {
-      const gear = gearItems.find((g) => g.id === item.gearItemId);
+      const gear = index.get(item.gearItemId);
       if (!gear) return null;
       return {
         name: gear.name,
@@ -132,6 +148,7 @@ export function buildComparison(
     price: listTotalPrice(list, gearItems),
     itemCount: listItemCount(list),
   }));
+
 
   if (base.length === 0) return [];
 
