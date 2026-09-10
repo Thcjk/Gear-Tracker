@@ -1,8 +1,20 @@
 "use client";
 
-import { CheckCheck, Feather, TrendingDown } from "lucide-react";
+import { useState } from "react";
+import { CheckCheck, Dumbbell, Feather, TrendingDown } from "lucide-react";
 import { formatWeight } from "@/lib/categories";
 import type { WeightSnapshot } from "@/lib/weightHistory";
+
+/** Bis hierhin gilt die Liste als leicht. */
+const LIGHT_LIMIT = 5000;
+/** Ab hier wird es sportlich. */
+const HEAVY_LIMIT = 15000;
+
+const HEAVY_QUIPS = [
+  "Herzlichen Glückwunsch, dein Rücken hasst dich!",
+  "15 kg+? Das nennt man jetzt Expedition, nicht Ultralight.",
+  "Dein Rucksack wiegt mehr als so mancher Trainingsplan.",
+];
 
 type Badge = {
   id: string;
@@ -22,15 +34,38 @@ export function AchievementBadges({
   total: number;
   reference: WeightSnapshot | null;
 }) {
+  /**
+   * Einmal pro Aufruf des Dashboards gezogen, nicht bei jedem Render –
+   * sonst wechselt der Spruch beim Abhaken jedes Häkchens. Die Badges
+   * erscheinen erst nach dem Laden aus dem LocalStorage, also rein
+   * client-seitig; der Zufall kann hier keine Hydration-Differenz
+   * auslösen.
+   */
+  const [heavyQuip] = useState(
+    () => HEAVY_QUIPS[Math.floor(Math.random() * HEAVY_QUIPS.length)],
+  );
+
   const badges: Badge[] = [];
 
-  if (totalWeight > 0 && totalWeight < 5000) {
+  // Bewusst als eine Verzweigung: leicht und schwer schliessen sich aus,
+  // und das soll man dem Code ansehen statt es aus zwei Schwellwerten
+  // ableiten zu müssen.
+  if (totalWeight > 0 && totalWeight < LIGHT_LIMIT) {
     badges.push({
       id: "sub-5kg",
       label: "Unter 5 kg Base Weight!",
       Icon: Feather,
       className:
         "text-ember-800 dark:text-ember-300",
+    });
+  } else if (totalWeight >= HEAVY_LIMIT) {
+    badges.push({
+      id: "over-15kg",
+      label: heavyQuip,
+      Icon: Dumbbell,
+      // Warnender Ton statt Grün oder Orange – der Spruch ist ironisch,
+      // die Farbe soll das mittragen.
+      className: "text-red-700 dark:text-red-300",
     });
   }
 

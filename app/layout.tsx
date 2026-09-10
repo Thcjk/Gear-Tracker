@@ -22,7 +22,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Ultralight Gear-Tracker",
+  title: "Gear-Tracker",
   description:
     "Packlisten und Gewichte für Ultralight-Trekking – lokal im Browser.",
   applicationName: "Gear-Tracker",
