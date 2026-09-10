@@ -1,0 +1,11 @@
+name = "gear-tracker-import"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Nur diese Herkunft darf den Worker im Browser aufrufen. Bewusst kein "*":
+# der Worker holt fremde Seiten ab, das soll nicht jede beliebige Website
+# über den Browser des Nutzers tun können.
+# Mehrere Werte mit Komma trennen, z. B. für die lokale Entwicklung:
+# ALLOWED_ORIGINS = "https://thcjk.github.io,http://localhost:3000"
+ALLOWED_ORIGINS = "https://thcjk.github.io"
