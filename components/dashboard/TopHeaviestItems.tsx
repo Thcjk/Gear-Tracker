@@ -19,7 +19,7 @@ export function TopHeaviestItems({
         Top 5 schwerste Items
       </h3>
       {items.length === 0 ? (
-        <p className="text-sm text-clay-600 dark:text-clay-400">
+        <p className="text-sm text-clay-700 dark:text-clay-400">
           Noch keine Items in dieser Liste.
         </p>
       ) : (
@@ -30,14 +30,14 @@ export function TopHeaviestItems({
               className="flex items-center justify-between gap-3"
             >
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-clay-200 text-xs font-bold text-ember-600 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-clay-200 text-xs font-bold text-ember-800 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400">
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                  <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
                     {item.name}
                   </p>
-                  <p className="text-xs text-clay-600 dark:text-clay-400">
+                  <p className="text-xs text-clay-700 dark:text-clay-400">
                     {formatWeight(item.weightGrams)} × {item.quantity}
                   </p>
                 </div>

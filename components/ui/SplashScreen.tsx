@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { SPLASH_FADE_MS, SPLASH_MIN_VISIBLE_MS } from "./splashCss";
+import { useEffect, useState, type AnimationEvent } from "react";
+import { SPLASH_TOTAL_MS } from "./splashCss";
 
 /**
  * In-App-Splash statt nativem iOS-Splash: iOS unterstützt für Web-Apps nur
@@ -9,46 +9,34 @@ import { SPLASH_FADE_MS, SPLASH_MIN_VISIBLE_MS } from "./splashCss";
  * Bilderflut wäre und trotzdem nur beim Start vom Home-Bildschirm greift.
  * Diese Variante läuft überall gleich – auch im Browser-Tab.
  *
- * Das Markup steckt im vorgerenderten HTML, seine Gestaltung als <style> im
- * <head> (siehe splashCss.ts). Dadurch erscheint das Logo mit dem ersten
- * Paint, statt auf das Tailwind-Stylesheet zu warten.
+ * Markup und Gestaltung stecken im vorgerenderten HTML bzw. als <style> im
+ * <head> (siehe splashCss.ts): das Logo erscheint mit dem ersten Paint,
+ * statt auf das Tailwind-Stylesheet zu warten. Ein- und Ausblenden erledigt
+ * dort eine CSS-Animation, die auf visibility:hidden endet – der Splash
+ * löst sich also auch dann auf, wenn das JavaScript spät oder nie ankommt,
+ * und fängt danach keine Klicks mehr ab.
  *
- * Die Anzeigedauer zählt ab Navigationsstart. Früher lief der Timer erst
- * nach der Hydration los und hängte sich damit hinten an die Ladezeit an –
- * erst sekundenlang nichts, dann kurz das Logo, dann die App.
+ * Diese Komponente räumt anschliessend nur noch den Knoten weg.
  */
 export function SplashScreen() {
-  const [phase, setPhase] = useState<"visible" | "fading" | "done">("visible");
+  const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
-    const reduced = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) {
-      setPhase("done");
-      return;
-    }
-
-    // performance.now() zählt ab Navigationsstart – genau die Zeit, die der
-    // Nutzer den Splash (oder davor das leere Fenster) schon gesehen hat.
-    const remaining = Math.max(0, SPLASH_MIN_VISIBLE_MS - performance.now());
-
-    let done: number | undefined;
-    const fade = window.setTimeout(() => {
-      setPhase("fading");
-      done = window.setTimeout(() => setPhase("done"), SPLASH_FADE_MS);
-    }, remaining);
-
-    return () => {
-      window.clearTimeout(fade);
-      if (done !== undefined) window.clearTimeout(done);
-    };
+    // Rückfalllinie: hydratisiert die Seite erst nach dem Ende der
+    // Animation, kommt kein animationend-Ereignis mehr an.
+    const timer = window.setTimeout(() => setRemoved(true), SPLASH_TOTAL_MS + 200);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  if (phase === "done") return null;
+  if (removed) return null;
+
+  function handleEnd(event: AnimationEvent<HTMLDivElement>) {
+    // Auch die Animationen von Logo und Schriftzug blubbern hier hoch
+    if (event.target === event.currentTarget) setRemoved(true);
+  }
 
   return (
-    <div aria-hidden className="splash" data-state={phase}>
+    <div aria-hidden className="splash" onAnimationEnd={handleEnd}>
       <AppMark />
       <p className="splash__label">Gear-Tracker</p>
     </div>

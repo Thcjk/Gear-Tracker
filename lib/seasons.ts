@@ -24,7 +24,7 @@ const THEMES: Record<Season, SeasonalTheme> = {
     season: "spring",
     label: "Frühling",
     vars: {
-      "--season-from": "#2f7d55",
+      "--season-from": "#2b7150",
       "--season-via": "#54a37d",
       "--season-to": "#1e563e",
       "--season-topo": "#ddeee3",

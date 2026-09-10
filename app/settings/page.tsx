@@ -35,7 +35,7 @@ export default function SettingsPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Einstellungen…</p>;
+    return <p className="text-sm text-clay-700 dark:text-clay-400">Lade Einstellungen…</p>;
   }
 
   return (
@@ -56,7 +56,7 @@ export default function SettingsPage() {
         <h3 className="mb-4 font-bold text-clay-900 dark:text-clay-50">
           Daten
         </h3>
-        <p className="mb-4 text-sm text-clay-600 dark:text-clay-400">
+        <p className="mb-4 text-sm text-clay-700 dark:text-clay-400">
           Alles wird nur lokal im Browser gespeichert (LocalStorage). Kein
           Backend, kein Konto.
         </p>
@@ -98,7 +98,7 @@ export default function SettingsPage() {
         />
       </SurfaceCard>
 
-      <SurfaceCard as="section" className="p-4 text-sm text-clay-600 dark:text-clay-400">
+      <SurfaceCard as="section" className="p-4 text-sm text-clay-700 dark:text-clay-400">
         <p>
           <strong className="text-clay-900 dark:text-clay-50">
             Ultralight Gear-Tracker

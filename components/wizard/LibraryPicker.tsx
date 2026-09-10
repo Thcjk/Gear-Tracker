@@ -2,7 +2,7 @@
 
 import { Check, Minus, Plus } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
-import { formatWeight } from "@/lib/categories";
+import { formatComfortTemp, formatWeight } from "@/lib/categories";
 
 /**
  * Mehrfachauswahl aus der Gear-Library für genau eine Kategorie,
@@ -21,9 +21,9 @@ export function LibraryPicker({
 }) {
   if (items.length === 0) {
     return (
-      <p className="px-1 py-3 text-sm text-clay-600 dark:text-clay-400">
+      <p className="px-1 py-3 text-sm text-clay-700 dark:text-clay-400">
         In dieser Kategorie liegt noch nichts in der Library. Leg unter „Neu
-        anlegen" direkt etwas an.
+        anlegen“ direkt etwas an.
       </p>
     );
   }
@@ -41,7 +41,7 @@ export function LibraryPicker({
                 aria-pressed={Boolean(chosen)}
                 className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150 ${
                   chosen
-                    ? "bg-ember-500 shadow-neu-in-sm"
+                    ? "bg-ember-600 shadow-neu-in-sm"
                     : "bg-clay-200 shadow-neu-sm dark:bg-clay-950"
                 }`}
               >
@@ -59,11 +59,13 @@ export function LibraryPicker({
                 onClick={() => onToggle(item.id)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
                   {item.name}
                 </p>
-                <p className="text-xs text-clay-600 dark:text-clay-400">
+                <p className="text-xs text-clay-700 dark:text-clay-400">
                   {formatWeight(item.weightGrams)}
+                  {item.comfortTempC != null &&
+                    ` · ${formatComfortTemp(item.comfortTempC)}`}
                 </p>
               </button>
 

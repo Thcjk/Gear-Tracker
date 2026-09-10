@@ -59,12 +59,12 @@ export function DashboardHeader({
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-clay-600 transition-colors hover:text-clay-900 dark:text-clay-400 dark:hover:text-clay-100"
+              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-clay-700 transition-colors hover:text-clay-900 dark:text-clay-400 dark:hover:text-clay-100"
             >
               <ArrowLeft className="h-4 w-4" />
               Listen
             </button>
-            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-950">
+            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-950 dark:text-[color:var(--season-accent)]">
               {theme.label}
             </span>
           </div>
@@ -80,7 +80,7 @@ export function DashboardHeader({
               />
               <button
                 type="submit"
-                className="rounded-control bg-ember-500 px-4 py-2 text-sm font-semibold text-white shadow-neu-accent transition-all duration-150 active:translate-y-px active:bg-ember-600"
+                className="rounded-control bg-ember-700 px-4 py-2 text-sm font-semibold text-white shadow-neu-accent transition-all duration-150 active:translate-y-px active:bg-ember-800"
               >
                 OK
               </button>
@@ -98,7 +98,7 @@ export function DashboardHeader({
               <h2 className="truncate text-2xl font-extrabold tracking-tight text-clay-900 dark:text-clay-50">
                 {name}
               </h2>
-              <Pencil className="h-4 w-4 shrink-0 text-clay-500 opacity-0 transition group-hover:opacity-100" />
+              <Pencil className="h-4 w-4 shrink-0 text-clay-700 opacity-0 transition group-hover:opacity-100" />
             </button>
           )}
         </div>

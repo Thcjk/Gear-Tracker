@@ -86,7 +86,7 @@ function BarValueLabel({
       y={y + (height ?? 0) / 2}
       dy={4}
       fontSize={11}
-      className="fill-clay-600 dark:fill-clay-400"
+      className="fill-clay-700 dark:fill-clay-400"
     >
       {formatWeight(Number(value ?? 0))}
     </text>
@@ -103,7 +103,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
 
   if (data.length === 0) {
     return (
-      <SurfaceCard className="p-4 text-sm text-clay-600 dark:text-clay-400">
+      <SurfaceCard className="p-4 text-sm text-clay-700 dark:text-clay-400">
         Noch keine Gewichtsdaten für ein Diagramm.
       </SurfaceCard>
     );
@@ -138,8 +138,8 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
               onClick={() => setMode(id)}
               className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
                 mode === id
-                  ? "bg-clay-200 text-ember-600 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400"
-                  : "text-clay-600 dark:text-clay-400"
+                  ? "bg-clay-200 text-ember-800 shadow-neu-sm dark:bg-clay-950 dark:text-ember-400"
+                  : "text-clay-700 dark:text-clay-400"
               }`}
             >
               <Icon className="h-4 w-4" />

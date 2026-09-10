@@ -16,7 +16,7 @@ const VARIANTS: Record<Variant, string> = {
   raised:
     "bg-clay-200 text-clay-800 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-100",
   accent:
-    "bg-ember-500 text-white shadow-neu-accent active:shadow-neu-in-sm active:bg-ember-600",
+    "bg-ember-700 text-white shadow-neu-accent active:shadow-neu-in-sm active:bg-ember-800",
   forest:
     "bg-forest-600 text-white shadow-neu-accent active:shadow-neu-in-sm active:bg-forest-700",
   quiet:

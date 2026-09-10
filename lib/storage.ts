@@ -6,7 +6,12 @@ import type {
   PackingListItem,
   ThemeMode,
 } from "@/types";
-import { CATEGORIES } from "@/lib/categories";
+import {
+  CATEGORIES,
+  COMFORT_TEMP_MAX,
+  COMFORT_TEMP_MIN,
+  hasComfortTemp,
+} from "@/lib/categories";
 
 /** Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-Skript genutzt). */
 export const STORAGE_KEY = "ultralight-gear-tracker-v1";
@@ -40,6 +45,23 @@ export function readJson<T>(key: string, fallback: T): T {
     return JSON.parse(raw) as T;
   } catch {
     return fallback;
+  }
+}
+
+/**
+ * Prüft, ob überhaupt geschrieben werden kann. In privaten Modi und bei
+ * vollem Kontingent existiert localStorage, setItem wirft aber. Das fällt
+ * sonst erst auf, wenn die erste Änderung bereits verloren ist.
+ */
+export function isStorageWritable(): boolean {
+  if (!canUseStorage()) return false;
+  const probe = "__gear-tracker-probe__";
+  try {
+    localStorage.setItem(probe, "1");
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -90,19 +112,30 @@ function normalizeGearItem(raw: unknown): GearItem | null {
   const weight = toNumber(raw.weightGrams);
   if (!id || !name || weight === null || weight < 0) return null;
 
-  const category = toText(raw.category);
+  const rawCategory = toText(raw.category);
+  const category =
+    rawCategory && CATEGORY_IDS.has(rawCategory)
+      ? (rawCategory as Category)
+      : FALLBACK_CATEGORY;
+
   const price = toNumber(raw.price);
   const notes = toText(raw.notes);
+  const comfortTempC = toNumber(raw.comfortTempC);
 
   return {
     id,
     name,
-    category:
-      category && CATEGORY_IDS.has(category)
-        ? (category as Category)
-        : FALLBACK_CATEGORY,
+    category,
     weightGrams: weight,
     ...(price !== null && price >= 0 ? { price } : {}),
+    // An eine andere Kategorie gehängt wäre der Wert nirgends sichtbar und
+    // würde beim Umkategorisieren still weiterleben.
+    ...(hasComfortTemp(category) &&
+    comfortTempC !== null &&
+    comfortTempC >= COMFORT_TEMP_MIN &&
+    comfortTempC <= COMFORT_TEMP_MAX
+      ? { comfortTempC }
+      : {}),
     ...(notes ? { notes } : {}),
     createdAt: toIsoDate(raw.createdAt),
   };

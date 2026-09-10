@@ -12,15 +12,17 @@ export function SurfaceCard({
   as: Tag = "div",
   className = "",
   style,
+  role,
   children,
 }: {
   as?: "div" | "article" | "section";
   className?: string;
   style?: CSSProperties;
+  role?: string;
   children: ReactNode;
 }) {
   return (
-    <Tag className={`${SURFACE_CLASSES} ${className}`} style={style}>
+    <Tag className={`${SURFACE_CLASSES} ${className}`} style={style} role={role}>
       {children}
     </Tag>
   );

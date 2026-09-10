@@ -42,8 +42,8 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={`flex flex-col items-center gap-1 rounded-control px-1 py-2.5 text-[0.6875rem] font-semibold transition-all duration-200 ${
                   active
-                    ? "bg-clay-200 text-ember-600 shadow-neu-in-sm dark:bg-clay-950 dark:text-ember-400"
-                    : "text-clay-600 active:shadow-neu-in-sm dark:text-clay-400"
+                    ? "bg-clay-200 text-ember-800 shadow-neu-in-sm dark:bg-clay-950 dark:text-ember-400"
+                    : "text-clay-700 active:shadow-neu-in-sm dark:text-clay-400"
                 }`}
               >
                 <Icon className="h-[1.375rem] w-[1.375rem]" strokeWidth={active ? 2.4 : 1.9} />
