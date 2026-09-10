@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
-import { CategoryWeightChart } from "@/components/dashboard/CategoryWeightChart";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
+import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
+  indexGearItems,
   listItemCount,
   listPackedProgress,
   listTotalPrice,
@@ -20,13 +22,28 @@ import {
   weightByCategory,
 } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
-import { exportPackingListPdf } from "@/lib/pdfExport";
 import { useAppStore } from "@/lib/store";
 import {
   getPreviousReference,
   recordListWeight,
   type WeightSnapshot,
 } from "@/lib/weightHistory";
+
+/**
+ * Recharts ist die mit Abstand grösste Abhängigkeit der Seite. Als
+ * dynamischer Import mit ssr:false landet die Bibliothek in einem eigenen
+ * Chunk, der erst nach dem Seitengerüst geladen wird, statt den initialen
+ * Download der Detailseite aufzublähen. Bewusst ohne loading-Platzhalter:
+ * die Diagrammhöhe hängt von der Anzahl Kategorien ab, ein geratener
+ * Platzhalter würde eher springen als der kurz leere Bereich.
+ */
+const CategoryWeightChart = dynamic(
+  () =>
+    import("@/components/dashboard/CategoryWeightChart").then(
+      (mod) => mod.CategoryWeightChart,
+    ),
+  { ssr: false },
+);
 
 function PackingListDetailInner() {
   const searchParams = useSearchParams();
@@ -41,7 +58,32 @@ function PackingListDetailInner() {
     [data.packingLists, id],
   );
 
-  const currentWeight = list ? listTotalWeight(list, data.gearItems) : 0;
+  const gearIndex = useMemo(
+    () => indexGearItems(data.gearItems),
+    [data.gearItems],
+  );
+
+  // Sechs Auswertungen über dieselben Daten – einmal pro Datenstand statt
+  // bei jedem Render (Auswahl im Dropdown, Umbenennen, Badge-Update).
+  const stats = useMemo(() => {
+    if (!list) return null;
+    return {
+      progress: listPackedProgress(list),
+      totalWeight: listTotalWeight(list, data.gearItems),
+      totalPrice: listTotalPrice(list, data.gearItems),
+      itemCount: listItemCount(list),
+      chartData: weightByCategory(list, data.gearItems),
+      heaviest: topHeaviestItems(list, data.gearItems),
+    };
+  }, [list, data.gearItems]);
+
+  const availableGear = useMemo(() => {
+    if (!list) return [];
+    const inList = new Set(list.items.map((i) => i.gearItemId));
+    return data.gearItems.filter((g) => !inList.has(g.id));
+  }, [list, data.gearItems]);
+
+  const currentWeight = stats?.totalWeight ?? 0;
 
   useEffect(() => {
     if (!ready || !list) return;
@@ -53,7 +95,7 @@ function PackingListDetailInner() {
     return <p className="text-sm text-earth-500">Lade Packliste…</p>;
   }
 
-  if (!list) {
+  if (!list || !stats) {
     return (
       <div className="space-y-3">
         <p className="text-sm text-earth-600 dark:text-earth-300">
@@ -66,18 +108,18 @@ function PackingListDetailInner() {
     );
   }
 
-  const progress = listPackedProgress(list);
-  const totalWeight = currentWeight;
-  const totalPrice = listTotalPrice(list, data.gearItems);
-  const itemCount = listItemCount(list);
-  const chartData = weightByCategory(list, data.gearItems);
-  const heaviest = topHeaviestItems(list, data.gearItems);
-  const availableGear = data.gearItems.filter(
-    (g) => !list.items.some((i) => i.gearItemId === g.id),
-  );
+  const { progress, totalWeight, totalPrice, itemCount, chartData, heaviest } =
+    stats;
 
   function saveList(next = list!) {
     updatePackingList(next);
+  }
+
+  // jsPDF wird nur beim Klick gebraucht und deshalb erst dann geladen.
+  async function handleExportPdf() {
+    if (!list) return;
+    const { exportPackingListPdf } = await import("@/lib/pdfExport");
+    exportPackingListPdf(list, data.gearItems);
   }
 
   function addItem() {
@@ -100,7 +142,7 @@ function PackingListDetailInner() {
         total={progress.total}
         onBack={() => router.push("/lists")}
         onRename={(name) => saveList({ ...list, name })}
-        onExportPdf={() => exportPackingListPdf(list, data.gearItems)}
+        onExportPdf={handleExportPdf}
       />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -131,7 +173,7 @@ function PackingListDetailInner() {
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
 
-      <div className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+      <SurfaceCard className="p-4">
         <h3 className="mb-3 text-base font-semibold text-forest-900 dark:text-forest-50">
           Item hinzufügen
         </h3>
@@ -168,16 +210,14 @@ function PackingListDetailInner() {
             </button>
           </div>
         )}
-      </div>
+      </SurfaceCard>
 
       <div className="space-y-3">
         {list.items.length === 0 ? (
-          <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
-            Diese Liste ist noch leer.
-          </div>
+          <EmptyState>Diese Liste ist noch leer.</EmptyState>
         ) : (
           list.items.map((item, index) => {
-            const gear = data.gearItems.find((g) => g.id === item.gearItemId);
+            const gear = gearIndex.get(item.gearItemId);
             return (
               <PackingListItemCard
                 key={item.gearItemId}

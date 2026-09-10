@@ -31,6 +31,29 @@ export interface PackingList {
   updatedAt: string;
 }
 
+/** Gear-Item ohne die vom Store vergebenen Felder – Basis für Formulare. */
+export type GearDraft = Omit<GearItem, "id" | "createdAt">;
+
+/** Eine Zeile der Kategorie-Auswertung, gemeinsam genutzt von Berechnung und Chart. */
+export interface CategoryWeightRow {
+  category: Category;
+  label: string;
+  weightGrams: number;
+  color: string;
+}
+
+/** Eine Zeile des Packlisten-Vergleichs. */
+export interface ComparisonRow {
+  list: PackingList;
+  weightGrams: number;
+  price: number;
+  itemCount: number;
+  weightDiff: number;
+  priceDiff: number;
+  isLightest: boolean;
+  isCheapest: boolean;
+}
+
 export type SortKey = "name" | "weightGrams" | "price";
 export type ThemeMode = "light" | "dark";
 

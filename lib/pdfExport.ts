@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { GearItem, PackingList } from "@/types";
-import { listTotalWeight } from "./calculations";
+import { indexGearItems, listTotalWeight } from "./calculations";
 import { formatWeight, getCategoryMeta } from "./categories";
 
 export function exportPackingListPdf(
@@ -17,8 +17,9 @@ export function exportPackingListPdf(
   doc.text(`Gesamtgewicht: ${formatWeight(totalWeight)}`, 14, 30);
   doc.text(`Items: ${list.items.length}`, 14, 37);
 
+  const index = indexGearItems(gearItems);
   const rows = list.items.map((item) => {
-    const gear = gearItems.find((g) => g.id === item.gearItemId);
+    const gear = index.get(item.gearItemId);
     return [
       gear?.name ?? "Unbekannt",
       gear ? getCategoryMeta(gear.category).label : "—",

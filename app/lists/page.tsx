@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { PackingListCard } from "@/components/lists/PackingListCard";
+import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { useAppStore } from "@/lib/store";
 
 export default function ListsPage() {
@@ -47,7 +48,7 @@ export default function ListsPage() {
       {showForm && (
         <form
           onSubmit={handleCreate}
-          className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark"
+          className={`${SURFACE_CLASSES} p-4`}
         >
           <label className="grid gap-2 text-sm">
             <span className="font-medium text-earth-700 dark:text-earth-200">
@@ -81,9 +82,9 @@ export default function ListsPage() {
 
       <div className="space-y-3">
         {data.packingLists.length === 0 ? (
-          <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
+          <EmptyState>
             Noch keine Packlisten. Erstelle eine für deine nächste Tour.
-          </div>
+          </EmptyState>
         ) : (
           data.packingLists.map((list, index) => (
             <PackingListCard

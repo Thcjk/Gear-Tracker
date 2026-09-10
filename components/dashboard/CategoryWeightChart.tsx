@@ -14,16 +14,11 @@ import {
   YAxis,
 } from "recharts";
 import { ChartColumnBig, ChartPie } from "lucide-react";
-import type { Category } from "@/types";
+import type { CategoryWeightRow } from "@/types";
 import { CategoryGlyph } from "@/components/ui/CategoryIcon";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
-
-type ChartRow = {
-  category: Category;
-  label: string;
-  weightGrams: number;
-  color: string;
-};
+import { categoryShare, sortedCategoryWeights } from "@/lib/calculations";
 
 type ChartMode = "bar" | "pie";
 
@@ -43,7 +38,7 @@ function CategoryTick({
   x?: number;
   y?: number;
   payload?: { value?: string };
-  rows: ChartRow[];
+  rows: CategoryWeightRow[];
 }) {
   const row = rows.find((r) => r.label === payload?.value);
   if (!row || x === undefined || y === undefined) return null;
@@ -70,23 +65,19 @@ function CategoryTick({
   );
 }
 
-export function CategoryWeightChart({ data }: { data: ChartRow[] }) {
+export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
   const [mode, setMode] = useState<ChartMode>("bar");
 
-  const sorted = useMemo(
-    () => [...data].sort((a, b) => b.weightGrams - a.weightGrams),
+  const { rows: sorted, totalGrams } = useMemo(
+    () => sortedCategoryWeights(data),
     [data],
-  );
-  const total = useMemo(
-    () => sorted.reduce((sum, row) => sum + row.weightGrams, 0),
-    [sorted],
   );
 
   if (data.length === 0) {
     return (
-      <div className="rounded-card bg-white p-4 text-sm text-earth-500 shadow-soft dark:bg-forest-900 dark:text-earth-400 dark:shadow-soft-dark">
+      <SurfaceCard className="p-4 text-sm text-earth-500 dark:text-earth-400">
         Noch keine Gewichtsdaten für ein Diagramm.
-      </div>
+      </SurfaceCard>
     );
   }
 
@@ -94,7 +85,7 @@ export function CategoryWeightChart({ data }: { data: ChartRow[] }) {
   const height = Math.max(240, sorted.length * 46);
 
   return (
-    <section className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+    <SurfaceCard as="section" className="p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-base font-semibold text-forest-900 dark:text-forest-50">
           Gewicht pro Kategorie
@@ -217,17 +208,15 @@ export function CategoryWeightChart({ data }: { data: ChartRow[] }) {
                   {row.label}
                 </span>
                 <span className="ml-auto font-semibold tabular-nums text-forest-800 dark:text-forest-100">
-                  {total === 0
-                    ? "0 %"
-                    : `${((row.weightGrams / total) * 100).toFixed(
-                        row.weightGrams / total < 0.1 ? 1 : 0,
-                      )} %`}
+                  {`${categoryShare(row.weightGrams, totalGrams).toFixed(
+                    categoryShare(row.weightGrams, totalGrams) < 10 ? 1 : 0,
+                  )} %`}
                 </span>
               </li>
             ))}
           </ul>
         </div>
       </div>
-    </section>
+    </SurfaceCard>
   );
 }

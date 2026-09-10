@@ -1,5 +1,6 @@
 "use client";
 
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useCountUp } from "@/lib/useCountUp";
 import { staggerDelay } from "@/lib/stagger";
 
@@ -30,8 +31,8 @@ export function StatCard({
       : (format ?? ((n: number) => String(Math.round(n))))(animated);
 
   return (
-    <div
-      className="animate-rise rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark"
+    <SurfaceCard
+      className="animate-rise p-4"
       style={{ animationDelay: staggerDelay(index, 80) }}
     >
       <p className="text-sm font-medium text-earth-500 dark:text-earth-400">
@@ -43,6 +44,6 @@ export function StatCard({
       {hint && (
         <p className="mt-1 text-xs text-earth-500 dark:text-earth-400">{hint}</p>
       )}
-    </div>
+    </SurfaceCard>
   );
 }

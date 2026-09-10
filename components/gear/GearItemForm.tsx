@@ -1,16 +1,11 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import type { Category, GearItem } from "@/types";
+import type { Category, GearDraft, GearItem } from "@/types";
 import { CATEGORIES } from "@/lib/categories";
 
-export type GearFormValues = {
-  name: string;
-  category: Category;
-  weightGrams: number;
-  price?: number;
-  notes?: string;
-};
+/** Formularwerte entsprechen exakt einem Gear-Item ohne id/createdAt. */
+export type GearFormValues = GearDraft;
 
 const emptyValues: GearFormValues = {
   name: "",

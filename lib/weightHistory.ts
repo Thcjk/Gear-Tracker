@@ -1,5 +1,7 @@
 "use client";
 
+import { readJson, writeJson } from "@/lib/storage";
+
 const HISTORY_KEY = "ultralight-gear-tracker-weight-history-v1";
 const MAX_ENTRIES = 20;
 
@@ -11,27 +13,17 @@ export interface WeightSnapshot {
   at: string;
 }
 
-function canUseStorage(): boolean {
-  return typeof window !== "undefined" && typeof localStorage !== "undefined";
-}
-
 export function loadWeightHistory(): WeightSnapshot[] {
-  if (!canUseStorage()) return [];
-  try {
-    const raw = localStorage.getItem(HISTORY_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (entry): entry is WeightSnapshot =>
-        !!entry &&
-        typeof entry === "object" &&
-        typeof (entry as WeightSnapshot).listId === "string" &&
-        typeof (entry as WeightSnapshot).weightGrams === "number",
-    );
-  } catch {
-    return [];
-  }
+  const parsed = readJson<unknown>(HISTORY_KEY, null);
+  if (!Array.isArray(parsed)) return [];
+  return parsed.filter(
+    (entry): entry is WeightSnapshot =>
+      !!entry &&
+      typeof entry === "object" &&
+      typeof (entry as WeightSnapshot).listId === "string" &&
+      typeof (entry as WeightSnapshot).weightGrams === "number" &&
+      Number.isFinite((entry as WeightSnapshot).weightGrams),
+  );
 }
 
 /** Schreibt den aktuellen Stand einer Liste in die Historie (pro Liste ein Eintrag). */
@@ -40,18 +32,20 @@ export function recordListWeight(
   name: string,
   weightGrams: number,
 ): void {
-  if (!canUseStorage()) return;
-  const history = loadWeightHistory().filter((e) => e.listId !== listId);
+  const all = loadWeightHistory();
+
+  // Unveränderter Stand: nicht neu schreiben. Sonst würde jeder Aufruf des
+  // Dashboards die komplette Historie neu serialisieren.
+  const existing = all.find((e) => e.listId === listId);
+  if (existing && existing.weightGrams === weightGrams && existing.name === name) {
+    return;
+  }
+
+  const history = all.filter((e) => e.listId !== listId);
   history.push({ listId, name, weightGrams, at: new Date().toISOString() });
   history.sort((a, b) => b.at.localeCompare(a.at));
-  try {
-    localStorage.setItem(
-      HISTORY_KEY,
-      JSON.stringify(history.slice(0, MAX_ENTRIES)),
-    );
-  } catch {
-    // Speicher voll oder gesperrt – Badges sind optional, kein harter Fehler
-  }
+  // Badges sind optional: schlägt das Schreiben fehl, ist das kein Fehlerfall
+  writeJson(HISTORY_KEY, history.slice(0, MAX_ENTRIES));
 }
 
 /** Zuletzt aufgezeichnete *andere* Packliste als Vergleichsbasis. */

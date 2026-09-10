@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { AppStoreProvider } from "@/lib/store";
+import { STORAGE_KEY } from "@/lib/storage";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,7 +34,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var d=JSON.parse(localStorage.getItem("ultralight-gear-tracker-v1")||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
+            // Läuft vor der Hydration, damit Dark Mode nicht aufblitzt.
+            // Der Schlüssel kommt aus der Konstante, damit er nicht driftet.
+            __html: `(function(){try{var d=JSON.parse(localStorage.getItem(${JSON.stringify(
+              STORAGE_KEY,
+            )})||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
           }}
         />
         <AppStoreProvider>

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { exportJson, importJson } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
@@ -46,14 +47,14 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <section className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+      <SurfaceCard as="section" className="p-4">
         <h3 className="mb-3 font-semibold text-forest-900 dark:text-forest-50">
           Design-Modus
         </h3>
         <ThemeToggle />
-      </section>
+      </SurfaceCard>
 
-      <section className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+      <SurfaceCard as="section" className="p-4">
         <h3 className="mb-3 font-semibold text-forest-900 dark:text-forest-50">
           Daten
         </h3>
@@ -106,16 +107,16 @@ export default function SettingsPage() {
             e.target.value = "";
           }}
         />
-      </section>
+      </SurfaceCard>
 
-      <section className="rounded-card bg-white p-4 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
+      <SurfaceCard as="section" className="p-4 text-sm text-earth-600 dark:text-earth-300">
         <p>
           <strong className="text-forest-900 dark:text-forest-50">
             Ultralight Gear-Tracker
           </strong>{" "}
           · {data.gearItems.length} Items · {data.packingLists.length} Listen
         </p>
-      </section>
+      </SurfaceCard>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ComparisonTable } from "@/components/compare/ComparisonTable";
+import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAppStore } from "@/lib/store";
 
 export default function ComparePage() {
@@ -35,11 +36,9 @@ export default function ComparePage() {
       </div>
 
       {data.packingLists.length === 0 ? (
-        <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
-          Noch keine Packlisten zum Vergleichen.
-        </div>
+        <EmptyState>Noch keine Packlisten zum Vergleichen.</EmptyState>
       ) : (
-        <div className="space-y-2 rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+        <SurfaceCard className="space-y-2 p-4">
           {data.packingLists.map((list) => (
             <label
               key={list.id}
@@ -56,7 +55,7 @@ export default function ComparePage() {
               </span>
             </label>
           ))}
-        </div>
+        </SurfaceCard>
       )}
 
       <ComparisonTable lists={selectedLists} gearItems={data.gearItems} />

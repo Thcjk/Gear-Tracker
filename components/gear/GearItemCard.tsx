@@ -3,6 +3,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { GearItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatPrice, formatWeight, getCategoryMeta } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
 
@@ -20,8 +21,9 @@ export function GearItemCard({
   const meta = getCategoryMeta(item.category);
 
   return (
-    <article
-      className="animate-rise rounded-card bg-white p-4 shadow-soft transition-shadow hover:shadow-lg dark:bg-forest-900 dark:shadow-soft-dark"
+    <SurfaceCard
+      as="article"
+      className="animate-rise p-4 transition-shadow hover:shadow-lg"
       style={{ animationDelay: staggerDelay(index) }}
     >
       <div className="flex items-start gap-3">
@@ -72,6 +74,6 @@ export function GearItemCard({
           </div>
         </div>
       </div>
-    </article>
+    </SurfaceCard>
   );
 }
