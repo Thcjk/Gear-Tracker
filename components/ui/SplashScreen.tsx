@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const VISIBLE_MS = 950;
-const FADE_MS = 320;
+import { SPLASH_FADE_MS, SPLASH_MIN_VISIBLE_MS } from "./splashCss";
 
 /**
  * In-App-Splash statt nativem iOS-Splash: iOS unterstützt für Web-Apps nur
@@ -11,8 +9,13 @@ const FADE_MS = 320;
  * Bilderflut wäre und trotzdem nur beim Start vom Home-Bildschirm greift.
  * Diese Variante läuft überall gleich – auch im Browser-Tab.
  *
- * Rendert nur beim ersten Laden der App. Bei Navigationen innerhalb der
- * App bleibt die Komponente montiert und der Zustand "fertig" erhalten.
+ * Das Markup steckt im vorgerenderten HTML, seine Gestaltung als <style> im
+ * <head> (siehe splashCss.ts). Dadurch erscheint das Logo mit dem ersten
+ * Paint, statt auf das Tailwind-Stylesheet zu warten.
+ *
+ * Die Anzeigedauer zählt ab Navigationsstart. Früher lief der Timer erst
+ * nach der Hydration los und hängte sich damit hinten an die Ladezeit an –
+ * erst sekundenlang nichts, dann kurz das Logo, dann die App.
  */
 export function SplashScreen() {
   const [phase, setPhase] = useState<"visible" | "fading" | "done">("visible");
@@ -26,33 +29,28 @@ export function SplashScreen() {
       return;
     }
 
-    const fade = window.setTimeout(() => setPhase("fading"), VISIBLE_MS);
-    const done = window.setTimeout(
-      () => setPhase("done"),
-      VISIBLE_MS + FADE_MS,
-    );
+    // performance.now() zählt ab Navigationsstart – genau die Zeit, die der
+    // Nutzer den Splash (oder davor das leere Fenster) schon gesehen hat.
+    const remaining = Math.max(0, SPLASH_MIN_VISIBLE_MS - performance.now());
+
+    let done: number | undefined;
+    const fade = window.setTimeout(() => {
+      setPhase("fading");
+      done = window.setTimeout(() => setPhase("done"), SPLASH_FADE_MS);
+    }, remaining);
+
     return () => {
       window.clearTimeout(fade);
-      window.clearTimeout(done);
+      if (done !== undefined) window.clearTimeout(done);
     };
   }, []);
 
   if (phase === "done") return null;
 
   return (
-    <div
-      aria-hidden
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-forest-900 transition-opacity duration-300 ease-out ${
-        phase === "fading" ? "opacity-0" : "opacity-100"
-      }`}
-      style={{ transitionDuration: `${FADE_MS}ms` }}
-    >
-      <div className="animate-splash-in">
-        <AppMark />
-      </div>
-      <p className="animate-splash-in mt-5 text-sm font-semibold uppercase tracking-[0.25em] text-forest-200 [animation-delay:120ms]">
-        Gear-Tracker
-      </p>
+    <div aria-hidden className="splash" data-state={phase}>
+      <AppMark />
+      <p className="splash__label">Gear-Tracker</p>
     </div>
   );
 }
@@ -60,11 +58,7 @@ export function SplashScreen() {
 /** Dieselbe Grafik wie das App-Icon, inline damit nichts nachgeladen wird. */
 function AppMark() {
   return (
-    <svg
-      viewBox="0 0 512 512"
-      className="h-24 w-24 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)]"
-      aria-hidden
-    >
+    <svg viewBox="0 0 512 512" className="splash__mark" aria-hidden>
       <rect width="512" height="512" rx="112" fill="#1e563e" />
       <path d="M256 132 L444 392 L68 392 Z" fill="#357f5c" />
       <path d="M256 132 L444 392 L256 392 Z" fill="#4b9a72" />
