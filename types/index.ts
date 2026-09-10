@@ -42,9 +42,30 @@ export interface CategoryWeightRow {
   color: string;
 }
 
+/**
+ * Ein Vergleichsteilnehmer, losgelöst von der Herkunft: eine eigene
+ * Packliste oder eine importierte Datei. Die Berechnung interessiert nur
+ * noch Kategorie, Gewicht, Menge und Preis je Eintrag.
+ */
+export interface ComparisonSourceItem {
+  category: Category;
+  weightGrams: number;
+  quantity: number;
+  price?: number;
+}
+
+export interface ComparisonEntry {
+  key: string;
+  title: string;
+  /** Nur bei importierten Listen gesetzt. */
+  owner?: string;
+  imported: boolean;
+  items: ComparisonSourceItem[];
+}
+
 /** Eine Zeile des Packlisten-Vergleichs. */
 export interface ComparisonRow {
-  list: PackingList;
+  entry: ComparisonEntry;
   weightGrams: number;
   price: number;
   itemCount: number;
@@ -52,6 +73,14 @@ export interface ComparisonRow {
   priceDiff: number;
   isLightest: boolean;
   isCheapest: boolean;
+}
+
+/** Eine Kategoriezeile der Gegenüberstellung: ein Gewicht je Teilnehmer. */
+export interface CategoryComparisonRow {
+  category: Category;
+  label: string;
+  color: string;
+  weights: number[];
 }
 
 /* ---------------------------------------------------------------- *

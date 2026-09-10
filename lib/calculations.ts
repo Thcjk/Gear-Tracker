@@ -1,9 +1,12 @@
 import type {
   Category,
+  CategoryComparisonRow,
   CategoryWeightRow,
+  ComparisonEntry,
   ComparisonRow,
   GearItem,
   PackingList,
+  SharedPackingList,
   SortKey,
 } from "@/types";
 import { CATEGORIES } from "./categories";
@@ -137,18 +140,68 @@ export function sortGearItems(items: GearItem[], sortKey: SortKey): GearItem[] {
   });
 }
 
-/** Vergleichszeilen inklusive Differenz zur leichtesten bzw. günstigsten Liste. */
-export function buildComparison(
-  lists: PackingList[],
-  gearItems: GearItem[],
-): ComparisonRow[] {
-  const base = lists.map((list) => ({
-    list,
-    weightGrams: listTotalWeight(list, gearItems),
-    price: listTotalPrice(list, gearItems),
-    itemCount: listItemCount(list),
-  }));
+/* ------------------------- Vergleich ------------------------- *
+ * Der Vergleich kennt zwei Quellen: eigene Packlisten und importierte
+ * Dateien von anderen. Beide werden vorher auf dieselbe schlanke Form
+ * gebracht, danach ist die Rechnung identisch.
+ * ------------------------------------------------------------- */
 
+export function entryFromPackingList(
+  list: PackingList,
+  gearItems: GearItem[],
+): ComparisonEntry {
+  const index = indexGearItems(gearItems);
+  return {
+    key: list.id,
+    title: list.name,
+    imported: false,
+    items: list.items.flatMap((item) => {
+      const gear = index.get(item.gearItemId);
+      if (!gear) return [];
+      return [
+        {
+          category: gear.category,
+          weightGrams: gear.weightGrams,
+          quantity: item.quantity,
+          ...(gear.price !== undefined ? { price: gear.price } : {}),
+        },
+      ];
+    }),
+  };
+}
+
+export function entryFromShared(
+  shared: SharedPackingList,
+  key: string,
+): ComparisonEntry {
+  return {
+    key,
+    title: shared.listName,
+    owner: shared.ownerName,
+    imported: true,
+    items: shared.items.map((item) => ({
+      category: item.category,
+      weightGrams: item.weightGrams,
+      quantity: item.quantity,
+      ...(item.price !== undefined ? { price: item.price } : {}),
+    })),
+  };
+}
+
+/** Vergleichszeilen inklusive Differenz zur leichtesten bzw. günstigsten Liste. */
+export function buildComparison(entries: ComparisonEntry[]): ComparisonRow[] {
+  const base = entries.map((entry) => ({
+    entry,
+    weightGrams: entry.items.reduce(
+      (sum, item) => sum + item.weightGrams * item.quantity,
+      0,
+    ),
+    price: entry.items.reduce(
+      (sum, item) => sum + (item.price ?? 0) * item.quantity,
+      0,
+    ),
+    itemCount: entry.items.reduce((sum, item) => sum + item.quantity, 0),
+  }));
 
   if (base.length === 0) return [];
 
@@ -162,4 +215,20 @@ export function buildComparison(
     isLightest: row.weightGrams === minWeight,
     isCheapest: row.price === minPrice,
   }));
+}
+
+/** Gewicht pro Kategorie, eine Spalte je Teilnehmer. */
+export function comparisonCategoryMatrix(
+  entries: ComparisonEntry[],
+): CategoryComparisonRow[] {
+  return CATEGORIES.map((meta) => ({
+    category: meta.id,
+    label: meta.label,
+    color: meta.chartColor,
+    weights: entries.map((entry) =>
+      entry.items
+        .filter((item) => item.category === meta.id)
+        .reduce((sum, item) => sum + item.weightGrams * item.quantity, 0),
+    ),
+  })).filter((row) => row.weights.some((weight) => weight > 0));
 }
