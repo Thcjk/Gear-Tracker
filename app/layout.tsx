@@ -68,15 +68,12 @@ export default function RootLayout({
         />
         <SplashScreen />
         <AppStoreProvider>
-          <div className="mx-auto min-h-screen max-w-3xl px-4 pb-28 pt-6">
-            <header className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember-600 dark:text-ember-400">
-                Outdoor Pack Lab
-              </p>
-              <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-forest-900 dark:text-forest-50">
-                Ultralight Gear-Tracker
-              </h1>
-            </header>
+          {/* Oben unter der Notch freihalten (status-bar-style ist
+              black-translucent), unten Platz für die Bottom-Navigation */}
+          <div
+            className="mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
+            style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
+          >
             {children}
           </div>
           <BottomNav />

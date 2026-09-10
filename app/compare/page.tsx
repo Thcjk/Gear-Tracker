@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ComparisonTable } from "@/components/compare/ComparisonTable";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import { useAppStore } from "@/lib/store";
 
@@ -26,14 +27,7 @@ export default function ComparePage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-xl font-bold text-forest-900 dark:text-forest-50">
-          Vergleich
-        </h2>
-        <p className="text-sm text-earth-600 dark:text-earth-300">
-          Wähle zwei oder mehr Packlisten.
-        </p>
-      </div>
+      <ScreenHeader title="Vergleich" subtitle="Wähle zwei oder mehr Packlisten." />
 
       {data.packingLists.length === 0 ? (
         <EmptyState>Noch keine Packlisten zum Vergleichen.</EmptyState>

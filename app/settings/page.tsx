@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { exportJson, importJson } from "@/lib/storage";
@@ -38,14 +39,10 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-xl font-bold text-forest-900 dark:text-forest-50">
-          Einstellungen
-        </h2>
-        <p className="text-sm text-earth-600 dark:text-earth-300">
-          Design und lokale Datenverwaltung
-        </p>
-      </div>
+      <ScreenHeader
+        title="Einstellungen"
+        subtitle="Design und lokale Datenverwaltung"
+      />
 
       <SurfaceCard as="section" className="p-4">
         <h3 className="mb-3 font-semibold text-forest-900 dark:text-forest-50">

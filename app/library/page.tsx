@@ -8,6 +8,8 @@ import {
   gearItemToFormValues,
   type GearFormValues,
 } from "@/components/gear/GearItemForm";
+import { Button } from "@/components/ui/Button";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState } from "@/components/ui/SurfaceCard";
 import { CATEGORIES } from "@/lib/categories";
 import { filterGearItems, sortGearItems } from "@/lib/calculations";
@@ -44,27 +46,22 @@ export default function LibraryPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-bold text-forest-900 dark:text-forest-50">
-            Gear-Library
-          </h2>
-          <p className="text-sm text-earth-600 dark:text-earth-300">
-            {data.gearItems.length} Items gespeichert
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            setCreating(true);
-            setEditing(null);
-          }}
-          className="inline-flex items-center gap-2 rounded-2xl bg-ember-500 px-4 py-2 text-sm font-semibold text-white hover:bg-ember-600"
-        >
-          <Plus className="h-4 w-4" />
-          Neu
-        </button>
-      </div>
+      <ScreenHeader
+        title="Gear-Library"
+        subtitle={`${data.gearItems.length} Items gespeichert`}
+        action={
+          <Button
+            variant="accent"
+            onClick={() => {
+              setCreating(true);
+              setEditing(null);
+            }}
+          >
+            <Plus className="h-4 w-4" />
+            Neu
+          </Button>
+        }
+      />
 
       {(creating || editing) && (
         <GearItemForm
