@@ -69,6 +69,11 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "40%": { transform: "scale(1.3)" },
         },
+        // Splash: Logo blendet ein und wächst leicht
+        "splash-in": {
+          "0%": { opacity: "0", transform: "scale(0.86)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
         // Karte: kurzes Grün-Aufblitzen
         flash: {
           "0%": { opacity: "0.45" },
@@ -79,6 +84,7 @@ const config: Config = {
         rise: "rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both",
         pop: "pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
         flash: "flash 650ms ease-out forwards",
+        "splash-in": "splash-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },

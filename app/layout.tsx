@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
+import { SplashScreen } from "@/components/ui/SplashScreen";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
             )})||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
           }}
         />
+        <SplashScreen />
         <AppStoreProvider>
           <div className="mx-auto min-h-screen max-w-3xl px-4 pb-28 pt-6">
             <header className="mb-6">
