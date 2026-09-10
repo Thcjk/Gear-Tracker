@@ -1,4 +1,11 @@
-import type { Category, GearItem, PackingList } from "@/types";
+import type {
+  Category,
+  CategoryWeightRow,
+  ComparisonRow,
+  GearItem,
+  PackingList,
+  SortKey,
+} from "@/types";
 import { CATEGORIES } from "./categories";
 
 export function listTotalWeight(
@@ -39,7 +46,7 @@ export function listPackedProgress(list: PackingList): {
 export function weightByCategory(
   list: PackingList,
   gearItems: GearItem[],
-): { category: Category; label: string; weightGrams: number; color: string }[] {
+): CategoryWeightRow[] {
   const map = new Map<Category, number>();
 
   for (const item of list.items) {
@@ -78,4 +85,64 @@ export function topHeaviestItems(
     .filter((row): row is NonNullable<typeof row> => row !== null)
     .sort((a, b) => b.totalGrams - a.totalGrams)
     .slice(0, limit);
+}
+
+/** Kategorie-Zeilen absteigend nach Gewicht, plus Gesamtsumme für Prozentwerte. */
+export function sortedCategoryWeights(rows: CategoryWeightRow[]): {
+  rows: CategoryWeightRow[];
+  totalGrams: number;
+} {
+  const sorted = [...rows].sort((a, b) => b.weightGrams - a.weightGrams);
+  return {
+    rows: sorted,
+    totalGrams: sorted.reduce((sum, row) => sum + row.weightGrams, 0),
+  };
+}
+
+/** Anteil einer Zeile am Gesamtgewicht in Prozent. */
+export function categoryShare(weightGrams: number, totalGrams: number): number {
+  return totalGrams === 0 ? 0 : (weightGrams / totalGrams) * 100;
+}
+
+export function filterGearItems(
+  items: GearItem[],
+  category: Category | "all",
+): GearItem[] {
+  return category === "all"
+    ? items
+    : items.filter((item) => item.category === category);
+}
+
+export function sortGearItems(items: GearItem[], sortKey: SortKey): GearItem[] {
+  return [...items].sort((a, b) => {
+    if (sortKey === "name") return a.name.localeCompare(b.name, "de");
+    if (sortKey === "weightGrams") return a.weightGrams - b.weightGrams;
+    return (a.price ?? 0) - (b.price ?? 0);
+  });
+}
+
+/** Vergleichszeilen inklusive Differenz zur leichtesten bzw. günstigsten Liste. */
+export function buildComparison(
+  lists: PackingList[],
+  gearItems: GearItem[],
+): ComparisonRow[] {
+  const base = lists.map((list) => ({
+    list,
+    weightGrams: listTotalWeight(list, gearItems),
+    price: listTotalPrice(list, gearItems),
+    itemCount: listItemCount(list),
+  }));
+
+  if (base.length === 0) return [];
+
+  const minWeight = Math.min(...base.map((row) => row.weightGrams));
+  const minPrice = Math.min(...base.map((row) => row.price));
+
+  return base.map((row) => ({
+    ...row,
+    weightDiff: row.weightGrams - minWeight,
+    priceDiff: row.price - minPrice,
+    isLightest: row.weightGrams === minWeight,
+    isCheapest: row.price === minPrice,
+  }));
 }

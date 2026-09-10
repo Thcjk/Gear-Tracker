@@ -1,5 +1,6 @@
 "use client";
 
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 
 export function TopHeaviestItems({
@@ -13,7 +14,7 @@ export function TopHeaviestItems({
   }[];
 }) {
   return (
-    <div className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+    <SurfaceCard className="p-4">
       <h3 className="mb-3 text-base font-semibold text-forest-900 dark:text-forest-50">
         Top 5 schwerste Items
       </h3>
@@ -48,6 +49,6 @@ export function TopHeaviestItems({
           ))}
         </ol>
       )}
-    </div>
+    </SurfaceCard>
   );
 }

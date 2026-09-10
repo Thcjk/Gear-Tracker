@@ -8,7 +8,8 @@ import type {
 } from "@/types";
 import { CATEGORIES } from "@/lib/categories";
 
-const STORAGE_KEY = "ultralight-gear-tracker-v1";
+/** Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-Skript genutzt). */
+export const STORAGE_KEY = "ultralight-gear-tracker-v1";
 
 const defaultData: AppData = {
   gearItems: [],
@@ -21,6 +22,35 @@ const FALLBACK_CATEGORY: Category = "hygiene-misc";
 
 function canUseStorage(): boolean {
   return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
+/* ------------------------------------------------------------------ *
+ * Rohzugriff
+ *
+ * Der einzige Ort im Projekt, an dem localStorage direkt angefasst wird.
+ * Lesen und Schreiben können beide werfen (gesperrter Storage, volles
+ * Kontingent, kaputtes JSON) und werden hier abgefangen.
+ * ------------------------------------------------------------------ */
+
+export function readJson<T>(key: string, fallback: T): T {
+  if (!canUseStorage()) return fallback;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function writeJson(key: string, value: unknown): boolean {
+  if (!canUseStorage()) return false;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -147,29 +177,12 @@ export function normalizeAppData(raw: unknown): AppData {
 }
 
 export function loadData(): AppData {
-  if (!canUseStorage()) return { ...defaultData };
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { ...defaultData };
-    return normalizeAppData(JSON.parse(raw));
-  } catch {
-    return { ...defaultData };
-  }
+  return normalizeAppData(readJson<unknown>(STORAGE_KEY, null));
 }
 
-/**
- * Schreibt den Stand zurück. setItem kann werfen – Speicher voll, private
- * Modi mit gesperrtem Storage – und ein ungefangener Fehler aus dem
- * Save-Effekt würde die App abschiessen. Gibt zurück, ob es geklappt hat.
- */
+/** Gibt zurück, ob geschrieben werden konnte. */
 export function saveData(data: AppData): boolean {
-  if (!canUseStorage()) return false;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    return true;
-  } catch {
-    return false;
-  }
+  return writeJson(STORAGE_KEY, data);
 }
 
 export function createId(): string {

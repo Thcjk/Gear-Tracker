@@ -11,6 +11,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
+import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   listItemCount,
   listPackedProgress,
@@ -131,7 +132,7 @@ function PackingListDetailInner() {
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
 
-      <div className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+      <SurfaceCard className="p-4">
         <h3 className="mb-3 text-base font-semibold text-forest-900 dark:text-forest-50">
           Item hinzufügen
         </h3>
@@ -168,13 +169,11 @@ function PackingListDetailInner() {
             </button>
           </div>
         )}
-      </div>
+      </SurfaceCard>
 
       <div className="space-y-3">
         {list.items.length === 0 ? (
-          <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
-            Diese Liste ist noch leer.
-          </div>
+          <EmptyState>Diese Liste ist noch leer.</EmptyState>
         ) : (
           list.items.map((item, index) => {
             const gear = data.gearItems.find((g) => g.id === item.gearItemId);

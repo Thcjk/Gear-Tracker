@@ -10,6 +10,7 @@ import {
 } from "@/lib/calculations";
 import { formatWeight } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ProgressBar } from "./ProgressBar";
 
 export function PackingListCard({
@@ -28,8 +29,9 @@ export function PackingListCard({
   const count = listItemCount(list);
 
   return (
-    <article
-      className="animate-rise rounded-card bg-white p-4 shadow-soft transition-shadow hover:shadow-lg dark:bg-forest-900 dark:shadow-soft-dark"
+    <SurfaceCard
+      as="article"
+      className="animate-rise p-4 transition-shadow hover:shadow-lg"
       style={{ animationDelay: staggerDelay(index) }}
     >
       <div className="flex items-start justify-between gap-3">
@@ -56,6 +58,6 @@ export function PackingListCard({
       <div className="mt-4">
         <ProgressBar packed={progress.packed} total={progress.total} />
       </div>
-    </article>
+    </SurfaceCard>
   );
 }

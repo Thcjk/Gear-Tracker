@@ -8,7 +8,9 @@ import {
   gearItemToFormValues,
   type GearFormValues,
 } from "@/components/gear/GearItemForm";
+import { EmptyState } from "@/components/ui/SurfaceCard";
 import { CATEGORIES } from "@/lib/categories";
+import { filterGearItems, sortGearItems } from "@/lib/calculations";
 import { useAppStore } from "@/lib/store";
 import type { Category, GearItem, SortKey } from "@/types";
 
@@ -20,18 +22,10 @@ export default function LibraryPage() {
   const [editing, setEditing] = useState<GearItem | null>(null);
   const [creating, setCreating] = useState(false);
 
-  const items = useMemo(() => {
-    let list = [...data.gearItems];
-    if (category !== "all") {
-      list = list.filter((i) => i.category === category);
-    }
-    list.sort((a, b) => {
-      if (sortKey === "name") return a.name.localeCompare(b.name, "de");
-      if (sortKey === "weightGrams") return a.weightGrams - b.weightGrams;
-      return (a.price ?? 0) - (b.price ?? 0);
-    });
-    return list;
-  }, [data.gearItems, category, sortKey]);
+  const items = useMemo(
+    () => sortGearItems(filterGearItems(data.gearItems, category), sortKey),
+    [data.gearItems, category, sortKey],
+  );
 
   function handleCreate(values: GearFormValues) {
     addGearItem(values);
@@ -113,9 +107,9 @@ export default function LibraryPage() {
 
       <div className="space-y-3">
         {items.length === 0 ? (
-          <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
+          <EmptyState>
             Noch keine Items. Lege dein erstes Gear mit Gewicht und Preis an.
-          </div>
+          </EmptyState>
         ) : (
           items.map((item, index) => (
             <GearItemCard

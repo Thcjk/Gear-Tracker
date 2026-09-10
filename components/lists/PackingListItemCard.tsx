@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { GearItem, PackingListItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
 
@@ -53,8 +54,9 @@ export function PackingListItemCard({
   }
 
   return (
-    <article
-      className="relative animate-rise overflow-hidden rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark"
+    <SurfaceCard
+      as="article"
+      className="relative animate-rise overflow-hidden p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       {celebrating && (
@@ -113,6 +115,6 @@ export function PackingListItemCard({
           </div>
         </div>
       </div>
-    </article>
+    </SurfaceCard>
   );
 }

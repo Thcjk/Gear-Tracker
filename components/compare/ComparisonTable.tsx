@@ -1,11 +1,8 @@
 "use client";
 
 import type { GearItem, PackingList } from "@/types";
-import {
-  listItemCount,
-  listTotalPrice,
-  listTotalWeight,
-} from "@/lib/calculations";
+import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { buildComparison } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
 
 export function ComparisonTable({
@@ -17,24 +14,14 @@ export function ComparisonTable({
 }) {
   if (lists.length < 2) {
     return (
-      <div className="rounded-card bg-white p-6 text-sm text-earth-600 shadow-soft dark:bg-forest-900 dark:text-earth-300 dark:shadow-soft-dark">
-        Wähle mindestens zwei Packlisten zum Vergleichen.
-      </div>
+      <EmptyState>Wähle mindestens zwei Packlisten zum Vergleichen.</EmptyState>
     );
   }
 
-  const rows = lists.map((list) => {
-    const weight = listTotalWeight(list, gearItems);
-    const price = listTotalPrice(list, gearItems);
-    const count = listItemCount(list);
-    return { list, weight, price, count };
-  });
-
-  const minWeight = Math.min(...rows.map((r) => r.weight));
-  const minPrice = Math.min(...rows.map((r) => r.price));
+  const rows = buildComparison(lists, gearItems);
 
   return (
-    <div className="overflow-x-auto rounded-card bg-white shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+    <SurfaceCard className="overflow-x-auto">
       <table className="min-w-full text-left text-sm">
         <thead className="border-b border-forest-100 dark:border-forest-800">
           <tr className="text-earth-500 dark:text-earth-400">
@@ -47,37 +34,37 @@ export function ComparisonTable({
           </tr>
         </thead>
         <tbody>
-          {rows.map(({ list, weight, price, count }) => (
+          {rows.map((row) => (
             <tr
-              key={list.id}
+              key={row.list.id}
               className="border-b border-forest-50 last:border-0 dark:border-forest-800"
             >
               <td className="px-4 py-3 font-semibold text-forest-900 dark:text-forest-50">
-                {list.name}
+                {row.list.name}
               </td>
               <td className="px-4 py-3 text-earth-700 dark:text-earth-300">
-                {count}
+                {row.itemCount}
               </td>
               <td className="px-4 py-3 font-medium text-forest-800 dark:text-forest-200">
-                {formatWeight(weight)}
+                {formatWeight(row.weightGrams)}
               </td>
               <td className="px-4 py-3 text-earth-600 dark:text-earth-300">
-                {weight === minWeight
+                {row.isLightest
                   ? "leichteste"
-                  : `+${formatWeight(weight - minWeight)}`}
+                  : `+${formatWeight(row.weightDiff)}`}
               </td>
               <td className="px-4 py-3 text-forest-800 dark:text-forest-200">
-                {formatPrice(price)}
+                {formatPrice(row.price)}
               </td>
               <td className="px-4 py-3 text-earth-600 dark:text-earth-300">
-                {price === minPrice
+                {row.isCheapest
                   ? "günstigste"
-                  : `+${formatPrice(price - minPrice)}`}
+                  : `+${formatPrice(row.priceDiff)}`}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </SurfaceCard>
   );
 }
