@@ -4,20 +4,26 @@ import { Pencil, Trash2 } from "lucide-react";
 import type { GearItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { formatPrice, formatWeight, getCategoryMeta } from "@/lib/categories";
+import { staggerDelay } from "@/lib/stagger";
 
 export function GearItemCard({
   item,
+  index = 0,
   onEdit,
   onDelete,
 }: {
   item: GearItem;
+  index?: number;
   onEdit: (item: GearItem) => void;
   onDelete: (id: string) => void;
 }) {
   const meta = getCategoryMeta(item.category);
 
   return (
-    <article className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+    <article
+      className="animate-rise rounded-card bg-white p-4 shadow-soft transition-shadow hover:shadow-lg dark:bg-forest-900 dark:shadow-soft-dark"
+      style={{ animationDelay: staggerDelay(index) }}
+    >
       <div className="flex items-start gap-3">
         <CategoryIcon category={item.category} />
         <div className="min-w-0 flex-1">

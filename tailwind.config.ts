@@ -58,6 +58,28 @@ const config: Config = {
       borderRadius: {
         card: "1.25rem",
       },
+      keyframes: {
+        // Karten: sanft einblenden und leicht nach oben gleiten
+        rise: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        // Checkbox: kurzer Bounce beim Abhaken
+        pop: {
+          "0%, 100%": { transform: "scale(1)" },
+          "40%": { transform: "scale(1.3)" },
+        },
+        // Karte: kurzes Grün-Aufblitzen
+        flash: {
+          "0%": { opacity: "0.45" },
+          "100%": { opacity: "0" },
+        },
+      },
+      animation: {
+        rise: "rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        pop: "pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+        flash: "flash 650ms ease-out forwards",
+      },
     },
   },
   plugins: [],

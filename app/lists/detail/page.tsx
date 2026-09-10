@@ -109,14 +109,16 @@ function PackingListDetailInner() {
           countTo={totalWeight}
           format={formatWeight}
           duration={1100}
+          index={0}
         />
         <StatCard
           label="Gesamtwert"
           countTo={totalPrice}
           format={formatPrice}
           duration={900}
+          index={1}
         />
-        <StatCard label="Anzahl Items" value={String(itemCount)} />
+        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
       </div>
 
       <AchievementBadges
@@ -174,13 +176,14 @@ function PackingListDetailInner() {
             Diese Liste ist noch leer.
           </div>
         ) : (
-          list.items.map((item) => {
+          list.items.map((item, index) => {
             const gear = data.gearItems.find((g) => g.id === item.gearItemId);
             return (
               <PackingListItemCard
                 key={item.gearItemId}
                 item={item}
                 gear={gear}
+                index={index}
                 onTogglePacked={() =>
                   saveList({
                     ...list,

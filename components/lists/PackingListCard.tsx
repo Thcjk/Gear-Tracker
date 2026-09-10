@@ -9,15 +9,18 @@ import {
   listTotalWeight,
 } from "@/lib/calculations";
 import { formatWeight } from "@/lib/categories";
+import { staggerDelay } from "@/lib/stagger";
 import { ProgressBar } from "./ProgressBar";
 
 export function PackingListCard({
   list,
   gearItems,
+  index = 0,
   onDelete,
 }: {
   list: PackingList;
   gearItems: GearItem[];
+  index?: number;
   onDelete: (id: string) => void;
 }) {
   const progress = listPackedProgress(list);
@@ -25,7 +28,10 @@ export function PackingListCard({
   const count = listItemCount(list);
 
   return (
-    <article className="rounded-card bg-white p-4 shadow-soft dark:bg-forest-900 dark:shadow-soft-dark">
+    <article
+      className="animate-rise rounded-card bg-white p-4 shadow-soft transition-shadow hover:shadow-lg dark:bg-forest-900 dark:shadow-soft-dark"
+      style={{ animationDelay: staggerDelay(index) }}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <Link
