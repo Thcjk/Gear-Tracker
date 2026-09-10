@@ -18,74 +18,69 @@
 :root {
   color-scheme: light;
 
-  --bg-base: #f5f4ed; /* Morning Snow */
-  --bg-surface: #ececdc; /* Amazon Mist */
-  --accent: #ff6037; /* Toxic Orange */
-  --accent-cool: #a0c9cb; /* Aqua Mist */
-  --text-primary: #351e1c; /* Black Kite, als Text auf hellem Grund */
-  --text-headline: #733635; /* Garnet, für Überschriften/Labels */
-  /**
-   * Toxic Orange erreicht auf Morning Snow nur 2.7:1 und taugt dort nicht
-   * als Textfarbe. Diese abgedunkelte Variante schafft 5.3:1 und wird
-   * überall dort benutzt, wo der Akzent als Schrift auftritt.
-   */
-  --accent-on-light: #b33d1f;
-  /** Schrift, die auf einer Toxic-Orange-Fläche steht: 5.2:1. */
-  --on-accent: #351e1c;
+  --bg-base: #fff6e9; /* Wheat */
+  --bg-surface: #ffffff; /* leicht abgesetztes Weiss für Karten auf Wheat */
+  --accent: #003f47; /* Oceanic */
+  --accent-warm: #ffbd76; /* Nectarine */
+  --text-primary: #0a171d; /* Onyx, als Text auf hellem Grund */
+  --text-headline: #003f47; /* Oceanic, für Überschriften */
+  /** Schrift auf einer Akzentfläche: Wheat auf Oceanic sind 11.2:1. */
+  --on-accent: #fff6e9;
 
   /* Farben der beiden Schlagschatten. Die Geometrie steckt in den
      Tailwind-Utilities shadow-neu*, hier wechselt nur die Färbung. */
-  --neu-light: rgba(255, 255, 255, 0.92);
-  --neu-dark: rgba(115, 54, 53, 0.22);
+  --neu-light: rgba(255, 255, 255, 0.95);
+  --neu-dark: rgba(10, 23, 29, 0.14);
 
   /* ---------------------------------------------------------------- *
-   * Kategorietöne für Diagramme und Icons
+   * Kategorietöne für Diagramme und Illustrationen
    *
-   * Als Variablen und nicht als feste Werte, weil dieselbe Farbe auf
-   * Amazon Mist und auf Garnet nicht beide Male funktioniert: Aqua Mist
-   * hat auf heller Karte 1.5:1 und wäre dort unsichtbar, Garnet auf der
-   * Garnet-Karte ebenso. Jede Stufe erreicht auf ihrem Grund mindestens
-   * 3:1, die Schwelle für bedeutungstragende Grafik.
+   * Als Variablen und nicht als feste Werte, weil keine der beiden
+   * Akzentfarben in beiden Themes trägt: Nectarine hat auf Weiss 1.6:1,
+   * Oceanic auf Onyx 1.6:1. Jede Stufe erreicht auf ihrem Grund
+   * mindestens 3:1, die Schwelle für bedeutungstragende Grafik.
    *
-   * Sieben Kategorien aus sechs Palettenfarben: unterschieden wird vor
-   * allem über die Helligkeit. Balken und Segmente tragen zusätzlich
-   * Beschriftung und Wert – die Zuordnung hängt nie allein an der Farbe.
+   * Sieben Kategorien aus vier Palettenfarben: gespreizt wird über die
+   * Rampen zwischen Oceanic und Nectarine. Balken und Segmente tragen
+   * zusätzlich Beschriftung und Wert – die Zuordnung hängt nie allein
+   * an der Farbe.
    * ---------------------------------------------------------------- */
-  --cat-shelter: #e24a22; /* Toxic Orange, für hellen Grund vertieft */
-  --cat-sleep-system: #733635; /* Garnet */
-  --cat-backpack: #55888b;
-  --cat-kitchen: #8f2e15;
-  --cat-clothing: #2f4749;
-  --cat-electronics: #351e1c; /* Black Kite */
-  --cat-hygiene-misc: #6f675a;
+  --cat-shelter: #003f47; /* Oceanic */
+  --cat-sleep-system: #b5711a;
+  --cat-backpack: #10707d;
+  --cat-kitchen: #8a3b12;
+  --cat-clothing: #3e8e92;
+  --cat-electronics: #0a171d; /* Onyx */
+  --cat-hygiene-misc: #6b655d;
 }
 
 html.dark,
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg-base: #351e1c; /* Black Kite */
-  --bg-surface: #733635; /* Garnet */
-  --accent: #ff6037; /* Toxic Orange bleibt gleich */
-  --accent-cool: #a0c9cb; /* Aqua Mist bleibt gleich */
-  --text-primary: #f5f4ed; /* Morning Snow, als Text auf dunklem Grund */
-  --text-headline: #ff6037; /* Toxic Orange als Headline im Dark Mode */
-  /* Auf dunklem Grund trägt der Akzent sich selbst (5.2:1 auf Black Kite). */
-  --accent-on-light: #ff6037;
-  --on-accent: #351e1c;
+  --bg-base: #0a171d; /* Onyx */
+  --bg-surface: #142229; /* etwas hellerer Onyx-Ton für Karten */
+  /* Nectarine wird im Dark Mode zum Hauptakzent, da Oceanic auf dunklem
+     Grund zu wenig Kontrast hätte (1.6:1). */
+  --accent: #ffbd76; /* Nectarine */
+  --accent-warm: #ffbd76;
+  --text-primary: #fff6e9; /* Wheat, als Text auf dunklem Grund */
+  --text-headline: #ffbd76; /* Nectarine für Überschriften im Dark Mode */
+  /** Auf der Nectarine-Fläche steht Onyx: 11.1:1. */
+  --on-accent: #0a171d;
 
-  --neu-light: rgba(160, 201, 203, 0.1);
-  --neu-dark: rgba(20, 8, 7, 0.7);
+  --neu-light: rgba(255, 189, 118, 0.06);
+  --neu-dark: rgba(0, 0, 0, 0.6);
 
-  /* Auf der Garnet-Karte kehrt sich alles um: die dunklen Töne von oben
+  /* Auf der dunklen Karte kehrt sich alles um: die tiefen Töne von oben
      wären dort unsichtbar, gebraucht werden die hellen. */
-  --cat-shelter: #ff6037; /* Toxic Orange, hier unverfälscht */
-  --cat-sleep-system: #e0a9a8;
-  --cat-backpack: #a0c9cb; /* Aqua Mist */
-  --cat-kitchen: #ffb093;
-  --cat-clothing: #7bafb2;
-  --cat-electronics: #f5f4ed; /* Morning Snow */
-  --cat-hygiene-misc: #a19985;
+  --cat-shelter: #ffbd76; /* Nectarine */
+  --cat-sleep-system: #c98a4e;
+  --cat-backpack: #7fcbd3;
+  --cat-kitchen: #f08a4b;
+  --cat-clothing: #4e9aa2;
+  --cat-electronics: #fff6e9; /* Wheat */
+  --cat-hygiene-misc: #a79c8c;
 }
 
 html,

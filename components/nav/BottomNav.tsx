@@ -42,7 +42,7 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={`flex flex-col items-center gap-1 rounded-control px-1 py-2.5 text-[0.6875rem] font-semibold transition-all duration-200 ${
                   active
-                    ? "bg-clay-200 text-ember-800 shadow-neu-in-sm dark:bg-clay-800 dark:text-ember-200"
+                    ? "bg-clay-200 text-accent shadow-neu-in-sm dark:bg-clay-800"
                     : "text-clay-700 active:shadow-neu-in-sm dark:text-clay-400"
                 }`}
               >

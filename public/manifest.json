@@ -9,8 +9,8 @@
   "start_url": "/Gear-Tracker/library/",
   "scope": "/Gear-Tracker/",
   "id": "/Gear-Tracker/",
-  "theme_color": "#351E1C",
-  "background_color": "#351E1C",
+  "theme_color": "#0A171D",
+  "background_color": "#0A171D",
   "icons": [
     {
       "src": "/Gear-Tracker/icon-192.png",

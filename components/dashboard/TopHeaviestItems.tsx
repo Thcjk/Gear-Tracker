@@ -30,7 +30,7 @@ export function TopHeaviestItems({
               className="flex items-center justify-between gap-3"
             >
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-clay-200 text-xs font-bold text-ember-800 shadow-neu-sm dark:bg-clay-800 dark:text-ember-200">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-clay-200 text-xs font-bold text-accent shadow-neu-sm dark:bg-clay-800">
                   {index + 1}
                 </span>
                 <div className="min-w-0">
@@ -42,7 +42,7 @@ export function TopHeaviestItems({
                   </p>
                 </div>
               </div>
-              <p className="shrink-0 font-bold text-aqua-700 dark:text-aqua-300">
+              <p className="shrink-0 font-bold text-ocean-800 dark:text-ocean-300">
                 {formatWeight(item.totalGrams)}
               </p>
             </li>

@@ -43,7 +43,7 @@ export const SPLASH_TOTAL_MS = SPLASH_MIN_VISIBLE_MS + SPLASH_FADE_MS;
 const EASE_OUT = "cubic-bezier(.22,1,.36,1)";
 
 /** Black Kite – identisch mit Manifest und Statusleiste. */
-const BASE = "#351E1C";
+const BASE = "#0A171D";
 
 export const splashCriticalCss = `
 .splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
@@ -71,13 +71,13 @@ from{opacity:0;transform:scale(.84)}
 to{opacity:1;transform:scale(1)}}
 
 .splash__title{margin:1.5rem 0 0;font-size:1.875rem;line-height:1.15;
-font-weight:700;letter-spacing:-.02em;color:#F5F4ED;
+font-weight:700;letter-spacing:-.02em;color:#FFF6E9;
 animation:splash-mark 720ms ${EASE_OUT} 180ms both}
 
 /* Unten links, oberhalb der Home-Anzeige des Geräts */
 .splash__tagline{position:absolute;z-index:1;left:1.5rem;
 bottom:calc(2rem + env(safe-area-inset-bottom));margin:0;
-font-size:.875rem;letter-spacing:.01em;color:#A0C9CB;
+font-size:.875rem;letter-spacing:.01em;color:#FFBD76;
 animation:splash-mark 720ms ${EASE_OUT} 320ms both}
 
 /* Inhalt und Navigation kommen hinter dem Splash hervor. Der Schlusswert

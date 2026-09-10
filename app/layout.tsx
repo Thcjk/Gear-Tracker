@@ -11,8 +11,15 @@ import { STORAGE_KEY } from "@/lib/storage";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** Black Kite – identisch in Manifest, Splash und Statusleiste. */
-const THEME_COLOR = "#351E1C";
+/**
+ * Die Browser-Leiste folgt dem Systemtheme: eine feste Farbe wäre in einem
+ * der beiden Modi ein Fremdkörper über der Seite. Das Manifest trägt
+ * daneben Onyx als festen Wert – dort ist nur einer vorgesehen.
+ */
+const THEME_COLORS = [
+  { media: "(prefers-color-scheme: light)", color: "#FFF6E9" },
+  { media: "(prefers-color-scheme: dark)", color: "#0A171D" },
+];
 import "./globals.css";
 
 const inter = Inter({
@@ -45,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: THEME_COLOR,
+  themeColor: THEME_COLORS,
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

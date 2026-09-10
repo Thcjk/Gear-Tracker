@@ -41,12 +41,12 @@ export function LibraryPicker({
                 aria-pressed={Boolean(chosen)}
                 className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150 ${
                   chosen
-                    ? "bg-ember-600 shadow-neu-in-sm"
+                    ? "bg-accent shadow-neu-in-sm"
                     : "bg-clay-200 shadow-neu-sm dark:bg-clay-800"
                 }`}
               >
                 <Check
-                  className={`h-4 w-4 text-white transition-opacity ${
+                  className={`h-4 w-4 text-on-accent transition-opacity ${
                     chosen ? "opacity-100" : "opacity-0"
                   }`}
                   strokeWidth={3}

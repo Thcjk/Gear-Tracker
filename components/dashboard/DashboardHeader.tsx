@@ -80,7 +80,7 @@ export function DashboardHeader({
               />
               <button
                 type="submit"
-                className="rounded-control bg-ember-700 px-4 py-2 text-sm font-semibold text-white shadow-neu-accent transition-all duration-150 active:translate-y-px active:bg-ember-800"
+                className="rounded-control bg-accent px-4 py-2 text-sm font-semibold text-on-accent shadow-neu-accent transition-all duration-150 active:translate-y-px active:opacity-90"
               >
                 OK
               </button>

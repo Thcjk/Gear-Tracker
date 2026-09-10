@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <!-- Auf 16 px würden die Höhenlinien zu Matsch – hier nur der Gipfel -->
-  <rect width="64" height="64" rx="14" fill="#351E1C"/>
-  <path d="M10 48 L24 24 L32 38 L41 20 L54 48 Z" fill="#FF6037"/>
-  <path d="M41 20 L54 48 L46 48 Z" fill="#FF8A66"/>
-  <path d="M41 20 L45 29 L43 27 L40 31 L37 26 Z" fill="#F5F4ED"/>
+  <rect width="64" height="64" rx="14" fill="#0A171D"/>
+  <path d="M10 48 L24 24 L32 38 L41 20 L54 48 Z" fill="#FFBD76"/>
+  <path d="M41 20 L54 48 L46 48 Z" fill="#FFD5A4"/>
+  <path d="M41 20 L45 29 L43 27 L40 31 L37 26 Z" fill="#FFF6E9"/>
 </svg>

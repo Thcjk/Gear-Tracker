@@ -168,7 +168,7 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
     return (
       <div className={HINT_BOX}>
         <AlertTriangle
-          className="mt-0.5 h-4 w-4 shrink-0 text-ember-700 dark:text-ember-200"
+          className="mt-0.5 h-4 w-4 shrink-0 text-accent"
           aria-hidden
         />
         <p className="min-w-0 text-clay-700 dark:text-clay-300">
@@ -204,7 +204,7 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
       {hit.confidence === "low" && (
         <div className={HINT_BOX}>
           <AlertTriangle
-            className="mt-0.5 h-4 w-4 shrink-0 text-ember-700 dark:text-ember-200"
+            className="mt-0.5 h-4 w-4 shrink-0 text-accent"
             aria-hidden
           />
           <p className="min-w-0 text-clay-700 dark:text-clay-300">

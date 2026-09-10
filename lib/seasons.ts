@@ -19,8 +19,9 @@ export interface SeasonalTheme {
  * Tailwind-Klassen: Tailwind purged Klassennamen, die erst zur Laufzeit
  * entstehen, weg – CSS-Variablen überleben das zuverlässig.
  *
- * Alle Töne stammen aus der Palette; die Jahreszeiten unterscheiden sich
- * über Temperatur und Tiefe, nicht über neue Farben. --season-from steht
+ * Alle Töne stammen aus den Rampen zwischen Oceanic und Nectarine; die
+ * Jahreszeiten unterscheiden sich über Temperatur und Tiefe, nicht über
+ * neue Farben. --season-from steht
  * als Schrift auf Amazon Mist und erreicht dort mindestens 6:1,
  * --season-accent auf der Garnet-Karte mindestens 4.5:1.
  */
@@ -29,44 +30,44 @@ const THEMES: Record<Season, SeasonalTheme> = {
     season: "spring",
     label: "Frühling",
     vars: {
-      "--season-from": "#2F4749",
-      "--season-via": "#55888B",
-      "--season-to": "#233436",
-      "--season-topo": "#DCEBEC",
-      "--season-accent": "#BFDBDC",
+      "--season-from": "#0A5A64",
+      "--season-via": "#2C7F89",
+      "--season-to": "#002B31",
+      "--season-topo": "#D2E7E9",
+      "--season-accent": "#A6CFD3",
     },
   },
   summer: {
     season: "summer",
     label: "Sommer",
     vars: {
-      "--season-from": "#8F2E15",
-      "--season-via": "#E24A22",
-      "--season-to": "#6B2311",
-      "--season-topo": "#FFDFD4",
-      "--season-accent": "#FFC0AC",
+      "--season-from": "#94590F",
+      "--season-via": "#DA8B36",
+      "--season-to": "#5A3509",
+      "--season-topo": "#FFE9CF",
+      "--season-accent": "#FFD5A4",
     },
   },
   autumn: {
     season: "autumn",
     label: "Herbst",
     vars: {
-      "--season-from": "#733635",
-      "--season-via": "#B33D1F",
-      "--season-to": "#351E1C",
-      "--season-topo": "#FFDFD4",
-      "--season-accent": "#E0A9A8",
+      "--season-from": "#8A3B12",
+      "--season-via": "#B5711A",
+      "--season-to": "#3A2206",
+      "--season-topo": "#FFE9CF",
+      "--season-accent": "#FFBD76",
     },
   },
   winter: {
     season: "winter",
     label: "Winter",
     vars: {
-      "--season-from": "#3C5D60",
-      "--season-via": "#4A7578",
-      "--season-to": "#233436",
-      "--season-topo": "#DCEBEC",
-      "--season-accent": "#A0C9CB",
+      "--season-from": "#003F47",
+      "--season-via": "#10707D",
+      "--season-to": "#001A1E",
+      "--season-topo": "#D2E7E9",
+      "--season-accent": "#6FB4BC",
     },
   },
 };

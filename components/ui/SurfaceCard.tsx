@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
  * Padding und Zusätze kommen über className.
  */
 export const SURFACE_CLASSES =
-  "rounded-card bg-clay-200 shadow-neu dark:bg-clay-800";
+  "rounded-card bg-clay-50 shadow-neu dark:bg-clay-800";
 
 export function SurfaceCard({
   as: Tag = "div",

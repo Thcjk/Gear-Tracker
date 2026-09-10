@@ -138,7 +138,7 @@ function PackingListDetailInner() {
         </p>
         <Link
           href="/lists"
-          className="text-ember-800 underline dark:text-ember-200"
+          className="text-accent underline"
         >
           Zurück zu den Listen
         </Link>
@@ -271,7 +271,7 @@ function PackingListDetailInner() {
             leer.{" "}
             <Link
               href="/library"
-              className="text-ember-800 underline dark:text-ember-200"
+              className="text-accent underline"
             >
               Zur Library
             </Link>

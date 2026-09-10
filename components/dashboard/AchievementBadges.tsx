@@ -56,7 +56,7 @@ export function AchievementBadges({
       label: "Unter 5 kg Base Weight!",
       Icon: Feather,
       className:
-        "text-ember-800 dark:text-ember-200",
+        "text-accent",
     });
   } else if (totalWeight >= HEAVY_LIMIT) {
     badges.push({
@@ -77,7 +77,7 @@ export function AchievementBadges({
       )} leichter als „${reference.name}“`,
       Icon: TrendingDown,
       className:
-        "text-aqua-700 dark:text-aqua-300",
+        "text-ocean-800 dark:text-ocean-300",
     });
   }
 
