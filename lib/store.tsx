@@ -10,18 +10,27 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { AppData, GearItem, PackingList, ThemeMode } from "@/types";
+import type {
+  AppData,
+  GearItem,
+  PackingList,
+  ThemeMode,
+  TourReview,
+} from "@/types";
 import { recordBackup } from "@/lib/backups";
 import {
   createId,
   deleteGearItem,
   deletePackingList,
+  deleteReviewsOfList,
+  deleteTourReview,
   isStorageWritable,
   loadData,
   resetData,
   saveData,
   upsertGearItem,
   upsertPackingList,
+  upsertTourReview,
 } from "@/lib/storage";
 
 interface AppStoreValue {
@@ -43,6 +52,12 @@ interface AppStoreValue {
   addPackingList: (name: string) => PackingList;
   updatePackingList: (list: PackingList) => void;
   removePackingList: (id: string) => void;
+  /** Legt eine Tour-Auswertung an; id und Zeitpunkt kommen vom Store. */
+  addTourReview: (
+    review: Omit<TourReview, "id" | "completedAt">,
+  ) => TourReview;
+  updateTourReview: (review: TourReview) => void;
+  removeTourReview: (id: string) => void;
   replaceData: (data: AppData) => void;
   clearAll: () => void;
 }
@@ -50,6 +65,7 @@ interface AppStoreValue {
 const emptyData: AppData = {
   gearItems: [],
   packingLists: [],
+  tourReviews: [],
   theme: "light",
 };
 
@@ -186,6 +202,43 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       commit((prev) => ({
         ...prev,
         packingLists: deletePackingList(prev.packingLists, id),
+        // Auswertungen sind nur über ihre Liste erreichbar – bleiben sie
+        // liegen, wachsen sie unsichtbar mit.
+        tourReviews: deleteReviewsOfList(prev.tourReviews, id),
+      })),
+    [commit],
+  );
+
+  const addTourReview = useCallback(
+    (review: Omit<TourReview, "id" | "completedAt">) => {
+      const next: TourReview = {
+        ...review,
+        id: createId(),
+        completedAt: new Date().toISOString(),
+      };
+      commit((prev) => ({
+        ...prev,
+        tourReviews: upsertTourReview(prev.tourReviews, next),
+      }));
+      return next;
+    },
+    [commit],
+  );
+
+  const updateTourReview = useCallback(
+    (review: TourReview) =>
+      commit((prev) => ({
+        ...prev,
+        tourReviews: upsertTourReview(prev.tourReviews, review),
+      })),
+    [commit],
+  );
+
+  const removeTourReview = useCallback(
+    (id: string) =>
+      commit((prev) => ({
+        ...prev,
+        tourReviews: deleteTourReview(prev.tourReviews, id),
       })),
     [commit],
   );
@@ -213,6 +266,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       addPackingList,
       updatePackingList,
       removePackingList,
+      addTourReview,
+      updateTourReview,
+      removeTourReview,
       replaceData,
       clearAll,
     }),
@@ -229,6 +285,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       addPackingList,
       updatePackingList,
       removePackingList,
+      addTourReview,
+      updateTourReview,
+      removeTourReview,
       replaceData,
       clearAll,
     ],
