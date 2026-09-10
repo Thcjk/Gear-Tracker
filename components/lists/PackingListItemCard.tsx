@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Check } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -44,12 +45,12 @@ export function PackingListItemCard({
 
   if (!gear) {
     return (
-      <article className="rounded-card bg-red-50 p-4 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+      <SurfaceCard as="article" className="p-4 text-sm text-red-700 dark:text-red-300">
         Item fehlt in der Library.
         <button type="button" onClick={onRemove} className="ml-2 underline">
           Entfernen
         </button>
-      </article>
+      </SurfaceCard>
     );
   }
 
@@ -66,34 +67,41 @@ export function PackingListItemCard({
         />
       )}
       <div className="relative flex items-start gap-3">
-        <label className="mt-1 flex items-center">
+        <label className="relative mt-1 flex items-center">
           <input
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-5 w-5 rounded border-forest-300 text-ember-500 transition focus:ring-ember-400 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-ember-500 checked:shadow-neu-in-sm dark:bg-clay-950 ${
               celebrating ? "animate-pop" : ""
             }`}
+          />
+          <Check
+            className={`pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 text-white transition-opacity ${
+              item.packed ? "opacity-100" : "opacity-0"
+            }`}
+            strokeWidth={3}
+            aria-hidden
           />
         </label>
         <CategoryIcon category={gear.category} />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <h3
-              className={`truncate font-semibold ${
+              className={`truncate font-bold transition-colors ${
                 item.packed
-                  ? "text-earth-400 line-through"
-                  : "text-forest-950 dark:text-forest-50"
+                  ? "text-clay-500 line-through"
+                  : "text-clay-900 dark:text-clay-50"
               }`}
             >
               {gear.name}
             </h3>
-            <p className="whitespace-nowrap font-bold text-forest-700 dark:text-forest-200">
+            <p className="whitespace-nowrap font-extrabold text-forest-700 dark:text-forest-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <label className="inline-flex items-center gap-2 text-sm text-earth-600 dark:text-earth-300">
+            <label className="inline-flex items-center gap-2 text-sm text-clay-600 dark:text-clay-400">
               Menge
               <input
                 type="number"
@@ -102,13 +110,13 @@ export function PackingListItemCard({
                 onChange={(e) =>
                   onQuantityChange(Math.max(1, Number(e.target.value) || 1))
                 }
-                className="w-16 rounded-lg border border-forest-200 bg-forest-50 px-2 py-1 dark:border-forest-700 dark:bg-forest-950"
+                className="neu-field w-16 px-2 py-1 text-center"
               />
             </label>
             <button
               type="button"
               onClick={onRemove}
-              className="text-sm font-medium text-red-600 dark:text-red-400"
+              className="text-sm font-semibold text-red-600 transition-opacity active:opacity-60 dark:text-red-400"
             >
               Entfernen
             </button>

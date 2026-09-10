@@ -8,6 +8,8 @@ import {
   gearItemToFormValues,
   type GearFormValues,
 } from "@/components/gear/GearItemForm";
+import { Button } from "@/components/ui/Button";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState } from "@/components/ui/SurfaceCard";
 import { CATEGORIES } from "@/lib/categories";
 import { filterGearItems, sortGearItems } from "@/lib/calculations";
@@ -39,32 +41,27 @@ export default function LibraryPage() {
   }
 
   if (!ready) {
-    return <p className="text-sm text-earth-500">Lade Library…</p>;
+    return <p className="text-sm text-clay-600 dark:text-clay-400">Lade Library…</p>;
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-bold text-forest-900 dark:text-forest-50">
-            Gear-Library
-          </h2>
-          <p className="text-sm text-earth-600 dark:text-earth-300">
-            {data.gearItems.length} Items gespeichert
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            setCreating(true);
-            setEditing(null);
-          }}
-          className="inline-flex items-center gap-2 rounded-2xl bg-ember-500 px-4 py-2 text-sm font-semibold text-white hover:bg-ember-600"
-        >
-          <Plus className="h-4 w-4" />
-          Neu
-        </button>
-      </div>
+      <ScreenHeader
+        title="Gear-Library"
+        subtitle={`${data.gearItems.length} Items gespeichert`}
+        action={
+          <Button
+            variant="accent"
+            onClick={() => {
+              setCreating(true);
+              setEditing(null);
+            }}
+          >
+            <Plus className="h-4 w-4" />
+            Neu
+          </Button>
+        }
+      />
 
       {(creating || editing) && (
         <GearItemForm
@@ -85,7 +82,7 @@ export default function LibraryPage() {
           onChange={(e) =>
             setCategory(e.target.value as Category | "all")
           }
-          className="rounded-xl border border-forest-200 bg-white px-3 py-2 text-sm dark:border-forest-700 dark:bg-forest-900"
+          className="neu-field w-auto flex-1 py-2 text-sm"
         >
           <option value="all">Alle Kategorien</option>
           {CATEGORIES.map((c) => (
@@ -97,7 +94,7 @@ export default function LibraryPage() {
         <select
           value={sortKey}
           onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="rounded-xl border border-forest-200 bg-white px-3 py-2 text-sm dark:border-forest-700 dark:bg-forest-900"
+          className="neu-field w-auto flex-1 py-2 text-sm"
         >
           <option value="name">Sortierung: Name</option>
           <option value="weightGrams">Sortierung: Gewicht</option>

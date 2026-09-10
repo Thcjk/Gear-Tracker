@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Ultralight Gear-Tracker">
+  <!-- Waldgrün-Fläche (forest-900), Ecken rundet die Plattform selbst -->
+  <rect width="512" height="512" fill="#16392b"/>
+  <g>
+    <!-- Berg -->
+    <path d="M256 132 L444 392 L68 392 Z" fill="#357f5c"/>
+    <!-- beleuchtete Flanke -->
+    <path d="M256 132 L444 392 L256 392 Z" fill="#4b9a72"/>
+    <!-- Gipfelkappe -->
+    <path d="M256 132 L302 196 L276 186 L256 208 L236 186 L210 196 Z" fill="#c8e6d5"/>
+    <!-- Zelt als Orange-Akzent -->
+    <path d="M256 258 L328 392 L184 392 Z" fill="#f97316"/>
+    <!-- Zelteingang -->
+    <path d="M256 300 L284 392 L228 392 Z" fill="#16392b"/>
+    <!-- Standlinie -->
+    <rect x="68" y="392" width="376" height="16" rx="8" fill="#c8e6d5"/>
+  </g>
+</svg>

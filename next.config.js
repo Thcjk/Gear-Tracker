@@ -15,6 +15,11 @@ const nextConfig = {
   assetPrefix: `/${repoName}/`,
   trailingSlash: true,
   images: { unoptimized: true },
+  // Damit Manifest-, Icon- und Splash-Pfade im App-Code denselben Präfix
+  // benutzen wie der Router, statt ihn ein zweites Mal zu verdrahten.
+  env: {
+    NEXT_PUBLIC_BASE_PATH: `/${repoName}`,
+  },
 };
 
 module.exports = nextConfig;

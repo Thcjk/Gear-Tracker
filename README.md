@@ -21,13 +21,29 @@ Konto** – alle Daten liegen ausschliesslich im LocalStorage des Browsers.
 - **PDF-Export** – Packliste als PDF, vollständig im Browser erzeugt (jsPDF)
 - **Light/Dark Mode** – Umschalter in den Einstellungen, Zustand im LocalStorage
 - **Backup** – Daten als JSON exportieren und wieder importieren
+- **Als App installierbar** – Web-App-Manifest mit `display: standalone`
 
 Kategorien (fest): `shelter`, `sleep-system`, `backpack`, `kitchen`, `clothing`,
 `electronics`, `hygiene-misc`.
 
+## Auf dem Home-Bildschirm installieren
+
+**iOS/Safari:** Seite öffnen → Teilen-Symbol → „Zum Home-Bildschirm". Die App
+startet danach ohne Adressleiste, mit eigenem Icon und dunkelgrüner
+Statusleiste. **Android/Chrome:** Menü → „App installieren".
+
+Das Icon liegt als `public/icon.svg`; die PNG-Grössen sind eingecheckt und
+werden nur bei einer Änderung neu erzeugt:
+
+```bash
+npm i -D sharp && node scripts/generate-icons.mjs && npm un sharp
+```
+
 ## Tech-Stack
 
 - Next.js 14 (App Router) mit `output: 'export'` – statischer Export, keine Server-Routes
+- Neumorphism-Oberfläche: Doppelschatten als Tailwind-Utilities (`shadow-neu*`),
+  Schattenfarben als CSS-Variablen, die mit dem Theme wechseln
 - TypeScript
 - Tailwind CSS (Dark Mode über `class`)
 - Recharts (Diagramme)

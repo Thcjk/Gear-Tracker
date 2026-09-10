@@ -3,6 +3,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { GearItem } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { Button } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatPrice, formatWeight, getCategoryMeta } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
@@ -23,7 +24,7 @@ export function GearItemCard({
   return (
     <SurfaceCard
       as="article"
-      className="animate-rise p-4 transition-shadow hover:shadow-lg"
+      className="animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       <div className="flex items-start gap-3">
@@ -31,46 +32,46 @@ export function GearItemCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="truncate text-base font-semibold text-forest-950 dark:text-forest-50">
+              <h3 className="truncate text-base font-bold text-clay-900 dark:text-clay-50">
                 {item.name}
               </h3>
-              <p className="mt-0.5 text-sm text-earth-600 dark:text-earth-300">
+              <p className="mt-0.5 text-sm text-clay-600 dark:text-clay-400">
                 {meta.label}
               </p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold text-forest-700 dark:text-forest-200">
+              <p className="text-lg font-extrabold text-forest-700 dark:text-forest-300">
                 {formatWeight(item.weightGrams)}
               </p>
               {item.price != null && (
-                <p className="text-sm text-earth-500 dark:text-earth-400">
+                <p className="text-sm text-clay-600 dark:text-clay-400">
                   {formatPrice(item.price)}
                 </p>
               )}
             </div>
           </div>
           {item.notes && (
-            <p className="mt-2 line-clamp-2 text-sm text-earth-500 dark:text-earth-400">
+            <p className="mt-2 line-clamp-2 text-sm text-clay-600 dark:text-clay-400">
               {item.notes}
             </p>
           )}
           <div className="mt-3 flex gap-2">
-            <button
-              type="button"
+            <Button
+              variant="raised"
               onClick={() => onEdit(item)}
-              className="inline-flex items-center gap-1 rounded-xl bg-forest-100 px-3 py-1.5 text-sm font-medium text-forest-800 dark:bg-forest-800 dark:text-forest-100"
+              className="px-3 py-2 text-[0.8125rem]"
             >
               <Pencil className="h-3.5 w-3.5" />
               Bearbeiten
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="danger"
               onClick={() => onDelete(item.id)}
-              className="inline-flex items-center gap-1 rounded-xl bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 dark:bg-red-950 dark:text-red-300"
+              className="px-3 py-2 text-[0.8125rem]"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Löschen
-            </button>
+            </Button>
           </div>
         </div>
       </div>

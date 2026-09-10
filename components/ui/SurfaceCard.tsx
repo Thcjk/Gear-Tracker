@@ -1,13 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
 
 /**
- * Die weisse Kartenfläche der App: abgerundet, weicher Schatten, im Dark
- * Mode dunkelgrün. Stand vorher wortgleich in einem guten Dutzend
- * Komponenten. Padding und Zusätze kommen über className, damit die
- * Aufrufer optisch exakt das behalten, was sie vorher hatten.
+ * Die Kartenfläche der App im Neumorphism-Stil: dieselbe Farbe wie der
+ * Seitenhintergrund, die Plastik kommt allein aus dem Doppelschatten.
+ * Padding und Zusätze kommen über className.
  */
 export const SURFACE_CLASSES =
-  "rounded-card bg-white shadow-soft dark:bg-forest-900 dark:shadow-soft-dark";
+  "rounded-card bg-clay-200 shadow-neu dark:bg-clay-950";
 
 export function SurfaceCard({
   as: Tag = "div",
@@ -30,7 +29,7 @@ export function SurfaceCard({
 /** Hinweisfläche für leere Listen – identisches Aussehen an allen vier Stellen. */
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <SurfaceCard className="p-6 text-sm text-earth-600 dark:text-earth-300">
+    <SurfaceCard className="p-6 text-sm text-clay-700 dark:text-clay-300">
       {children}
     </SurfaceCard>
   );

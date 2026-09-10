@@ -30,7 +30,7 @@ export function AchievementBadges({
       label: "Unter 5 kg Base Weight!",
       Icon: Feather,
       className:
-        "bg-ember-100 text-ember-800 ring-ember-200 dark:bg-ember-950 dark:text-ember-200 dark:ring-ember-900",
+        "text-ember-700 dark:text-ember-300",
     });
   }
 
@@ -42,7 +42,7 @@ export function AchievementBadges({
       )} leichter als „${reference.name}"`,
       Icon: TrendingDown,
       className:
-        "bg-forest-100 text-forest-800 ring-forest-200 dark:bg-forest-800 dark:text-forest-100 dark:ring-forest-700",
+        "text-forest-700 dark:text-forest-300",
     });
   }
 
@@ -52,7 +52,7 @@ export function AchievementBadges({
       label: "Alles gepackt – los geht's!",
       Icon: CheckCheck,
       className:
-        "bg-earth-100 text-earth-800 ring-earth-200 dark:bg-earth-900 dark:text-earth-100 dark:ring-earth-800",
+        "text-clay-700 dark:text-clay-200",
     });
   }
 
@@ -63,7 +63,7 @@ export function AchievementBadges({
       {badges.map(({ id, label, Icon, className }) => (
         <li key={id}>
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset ${className}`}
+            className={`inline-flex items-center gap-1.5 rounded-full bg-clay-200 px-3.5 py-2 text-xs font-semibold shadow-neu-sm dark:bg-clay-950 ${className}`}
           >
             <Icon className="h-3.5 w-3.5 shrink-0" />
             {label}

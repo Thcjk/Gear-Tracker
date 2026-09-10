@@ -1,8 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
+import { PageTransition } from "@/components/nav/PageTransition";
+import { SplashScreen } from "@/components/ui/SplashScreen";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** forest-900 – identisch in Manifest, Splash und Statusleiste. */
+const THEME_COLOR = "#16392b";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,13 +22,32 @@ export const metadata: Metadata = {
   title: "Ultralight Gear-Tracker",
   description:
     "Packlisten und Gewichte für Ultralight-Trekking – lokal im Browser.",
+  applicationName: "Gear-Tracker",
+  manifest: `${BASE_PATH}/manifest.json`,
+  icons: {
+    icon: [
+      { url: `${BASE_PATH}/favicon.svg`, type: "image/svg+xml" },
+      { url: `${BASE_PATH}/icon-192.png`, sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: `${BASE_PATH}/apple-touch-icon.png`, sizes: "180x180" }],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Gear-Tracker",
+    // Die Statusleiste liegt dadurch über der App-Fläche; oben wird per
+    // safe-area-inset-top freigehalten, damit nichts darunter rutscht.
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a4533",
+  themeColor: THEME_COLOR,
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  // Ohne das bleibt bei black-translucent unter der Notch ein weisser Balken
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -41,17 +67,15 @@ export default function RootLayout({
             )})||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
           }}
         />
+        <SplashScreen />
         <AppStoreProvider>
-          <div className="mx-auto min-h-screen max-w-3xl px-4 pb-28 pt-6">
-            <header className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember-600 dark:text-ember-400">
-                Outdoor Pack Lab
-              </p>
-              <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-forest-900 dark:text-forest-50">
-                Ultralight Gear-Tracker
-              </h1>
-            </header>
-            {children}
+          {/* Oben unter der Notch freihalten (status-bar-style ist
+              black-translucent), unten Platz für die Bottom-Navigation */}
+          <div
+            className="mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
+            style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
+          >
+            <PageTransition>{children}</PageTransition>
           </div>
           <BottomNav />
         </AppStoreProvider>

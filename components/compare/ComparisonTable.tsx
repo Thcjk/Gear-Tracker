@@ -23,8 +23,8 @@ export function ComparisonTable({
   return (
     <SurfaceCard className="overflow-x-auto">
       <table className="min-w-full text-left text-sm">
-        <thead className="border-b border-forest-100 dark:border-forest-800">
-          <tr className="text-earth-500 dark:text-earth-400">
+        <thead className="border-b border-clay-300 dark:border-clay-800">
+          <tr className="text-xs uppercase tracking-wider text-clay-600 dark:text-clay-400">
             <th className="px-4 py-3 font-medium">Liste</th>
             <th className="px-4 py-3 font-medium">Items</th>
             <th className="px-4 py-3 font-medium">Gewicht</th>
@@ -37,26 +37,26 @@ export function ComparisonTable({
           {rows.map((row) => (
             <tr
               key={row.list.id}
-              className="border-b border-forest-50 last:border-0 dark:border-forest-800"
+              className="border-b border-clay-300/60 last:border-0 dark:border-clay-800"
             >
-              <td className="px-4 py-3 font-semibold text-forest-900 dark:text-forest-50">
+              <td className="px-4 py-3.5 font-bold text-clay-900 dark:text-clay-50">
                 {row.list.name}
               </td>
-              <td className="px-4 py-3 text-earth-700 dark:text-earth-300">
+              <td className="px-4 py-3.5 text-clay-700 dark:text-clay-300">
                 {row.itemCount}
               </td>
-              <td className="px-4 py-3 font-medium text-forest-800 dark:text-forest-200">
+              <td className="px-4 py-3.5 font-semibold text-forest-700 dark:text-forest-300">
                 {formatWeight(row.weightGrams)}
               </td>
-              <td className="px-4 py-3 text-earth-600 dark:text-earth-300">
+              <td className="px-4 py-3.5 text-clay-600 dark:text-clay-400">
                 {row.isLightest
                   ? "leichteste"
                   : `+${formatWeight(row.weightDiff)}`}
               </td>
-              <td className="px-4 py-3 text-forest-800 dark:text-forest-200">
+              <td className="px-4 py-3.5 text-forest-700 dark:text-forest-300">
                 {formatPrice(row.price)}
               </td>
-              <td className="px-4 py-3 text-earth-600 dark:text-earth-300">
+              <td className="px-4 py-3.5 text-clay-600 dark:text-clay-400">
                 {row.isCheapest
                   ? "günstigste"
                   : `+${formatPrice(row.priceDiff)}`}

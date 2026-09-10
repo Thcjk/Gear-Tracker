@@ -39,12 +39,18 @@ export function DashboardHeader({
     <header
       data-season={theme.season}
       style={theme.vars as CSSProperties}
-      className="relative isolate overflow-hidden rounded-card bg-[linear-gradient(135deg,var(--season-from),var(--season-via)_55%,var(--season-to))] p-5 text-white shadow-soft transition-colors duration-500"
+      className="relative isolate overflow-hidden rounded-card bg-clay-200 p-5 shadow-neu dark:bg-clay-950"
     >
-      {/* Höhenlinien im Saison-Aufhellton – Kontrast ohne Ablenkung vom Text */}
+      {/* Die Jahreszeit tönt die Fläche nur noch, statt sie auszufüllen:
+          grosse Akzentflächen widersprechen der neuen Bildsprache. Season
+          und Höhenlinien bleiben erkennbar. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--season-from),var(--season-via)_55%,var(--season-to))] opacity-[0.14] transition-opacity duration-500"
+      />
       <TopoPattern
-        className="text-[color:var(--season-topo)]"
-        opacity={0.13}
+        className="text-[color:var(--season-via)]"
+        opacity={0.16}
       />
 
       <div className="relative flex items-start justify-between gap-3">
@@ -53,12 +59,12 @@ export function DashboardHeader({
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center gap-1 rounded-lg text-sm text-white/75 transition hover:text-white"
+              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-clay-600 transition-colors hover:text-clay-900 dark:text-clay-400 dark:hover:text-clay-100"
             >
               <ArrowLeft className="h-4 w-4" />
               Listen
             </button>
-            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-[color:var(--season-topo)]">
+            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-950">
               {theme.label}
             </span>
           </div>
@@ -70,11 +76,11 @@ export function DashboardHeader({
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 onBlur={() => setRenaming(false)}
-                className="min-w-0 flex-1 rounded-xl border border-white/30 bg-black/25 px-3 py-1.5 text-lg font-bold text-white focus:outline-none focus:ring-2 focus:ring-[color:var(--season-accent)]"
+                className="neu-field min-w-0 flex-1 text-lg font-bold"
               />
               <button
                 type="submit"
-                className="rounded-xl bg-ember-500 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-ember-600"
+                className="rounded-control bg-ember-500 px-4 py-2 text-sm font-semibold text-white shadow-neu-accent transition-all duration-150 active:translate-y-px active:bg-ember-600"
               >
                 OK
               </button>
@@ -89,10 +95,10 @@ export function DashboardHeader({
               className="group mt-1 flex items-center gap-2 text-left"
               title="Name bearbeiten"
             >
-              <h2 className="truncate text-2xl font-extrabold tracking-tight text-white">
+              <h2 className="truncate text-2xl font-extrabold tracking-tight text-clay-900 dark:text-clay-50">
                 {name}
               </h2>
-              <Pencil className="h-4 w-4 shrink-0 text-white/70 opacity-0 transition group-hover:opacity-100" />
+              <Pencil className="h-4 w-4 shrink-0 text-clay-500 opacity-0 transition group-hover:opacity-100" />
             </button>
           )}
         </div>
@@ -100,7 +106,7 @@ export function DashboardHeader({
         <button
           type="button"
           onClick={onExportPdf}
-          className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-white/10 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/20 backdrop-blur-sm transition hover:bg-white/20"
+          className="relative inline-flex shrink-0 items-center gap-2 rounded-control bg-clay-200 px-4 py-2.5 text-sm font-semibold text-clay-800 shadow-neu-sm transition-all duration-150 active:translate-y-px active:shadow-neu-in-sm dark:bg-clay-950 dark:text-clay-100"
         >
           <FileDown className="h-4 w-4" />
           PDF
@@ -108,7 +114,7 @@ export function DashboardHeader({
       </div>
 
       <div className="relative mt-5">
-        <ProgressBar packed={packed} total={total} tone="onDark" />
+        <ProgressBar packed={packed} total={total} />
       </div>
     </header>
   );
