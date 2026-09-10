@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus, Wand2 } from "lucide-react";
+import { Plus, Share2, Wand2 } from "lucide-react";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
+import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
@@ -23,6 +24,12 @@ import {
   weightByCategory,
 } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
+import {
+  buildSharedList,
+  downloadSharedList,
+  loadOwnerName,
+  saveOwnerName,
+} from "@/lib/shareFormat";
 import { useAppStore } from "@/lib/store";
 import {
   getPreviousReference,
@@ -53,6 +60,7 @@ function PackingListDetailInner() {
   const { ready, data, updatePackingList } = useAppStore();
   const [selectedGearId, setSelectedGearId] = useState("");
   const [reference, setReference] = useState<WeightSnapshot | null>(null);
+  const [sharing, setSharing] = useState(false);
 
   const list = useMemo(
     () => data.packingLists.find((l) => l.id === id),
@@ -116,6 +124,15 @@ function PackingListDetailInner() {
     updatePackingList(next);
   }
 
+  /** Liste als eigenständige Datei sichern, damit sie jemand anders
+   *  in seiner Vergleichsansicht öffnen kann. */
+  function handleShareExport(ownerName: string) {
+    if (!list) return;
+    saveOwnerName(ownerName);
+    downloadSharedList(buildSharedList(list, data.gearItems, ownerName));
+    setSharing(false);
+  }
+
   // jsPDF wird nur beim Klick gebraucht und deshalb erst dann geladen.
   async function handleExportPdf() {
     if (!list) return;
@@ -170,6 +187,15 @@ function PackingListDetailInner() {
         total={progress.total}
         reference={reference}
       />
+
+      <Button
+        variant="raised"
+        onClick={() => setSharing(true)}
+        className="w-full"
+      >
+        <Share2 className="h-4 w-4" />
+        Für Vergleich exportieren
+      </Button>
 
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
@@ -267,6 +293,13 @@ function PackingListDetailInner() {
           })
         )}
       </div>
+      {sharing && (
+        <ShareExportDialog
+          initialName={loadOwnerName()}
+          onConfirm={handleShareExport}
+          onClose={() => setSharing(false)}
+        />
+      )}
     </div>
   );
 }

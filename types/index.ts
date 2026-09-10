@@ -54,6 +54,32 @@ export interface ComparisonRow {
   isCheapest: boolean;
 }
 
+/* ---------------------------------------------------------------- *
+ * Austauschformat: eine Packliste, die eine andere Person als Datei
+ * bekommt. Items sind vollständig aufgelöst – Referenzen auf GearItems
+ * wären beim Empfänger wertlos, seine Library kennt sie nicht.
+ * ---------------------------------------------------------------- */
+
+export interface SharedListItem {
+  name: string;
+  category: Category;
+  weightGrams: number;
+  quantity: number;
+  price?: number;
+}
+
+export interface SharedPackingList {
+  /** Kennung des Formats, damit fremde JSON-Dateien früh auffallen. */
+  format: "gear-tracker-share";
+  version: 1;
+  ownerName: string;
+  listName: string;
+  exportedAt: string;
+  items: SharedListItem[];
+  totalWeightGrams: number;
+  totalPrice: number;
+}
+
 export type SortKey = "name" | "weightGrams" | "price";
 export type ThemeMode = "light" | "dark";
 
