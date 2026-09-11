@@ -32,6 +32,7 @@ export function StatCard({
 
   return (
     <SurfaceCard
+      pinned={`stat:${label}`}
       className="animate-rise p-3.5"
       style={{ animationDelay: staggerDelay(index, 80) }}
     >

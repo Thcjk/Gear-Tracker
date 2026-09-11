@@ -32,6 +32,7 @@ export function PackingListCard({
   return (
     <SurfaceCard
       as="article"
+      pinned={list.id}
       className="animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >

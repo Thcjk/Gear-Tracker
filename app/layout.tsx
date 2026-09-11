@@ -5,7 +5,10 @@ import { PageTransition } from "@/components/nav/PageTransition";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/splash/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
-import { splashBootScript, splashCriticalCss } from "@/components/splash/splashCss";
+import {
+  splashBootScript,
+  splashCriticalCss,
+} from "@/components/splash/splashCss";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -95,7 +98,12 @@ export default function RootLayout({
               black-translucent), unten Platz für die Bottom-Navigation */}
           <div
             className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-4 pb-36 sm:px-5"
-            style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
+            // Die Reissnägel ragen über die Kartenkante hinaus – ohne den
+            // zusätzlichen Platz schneidet der Bildschirmrand sie oben ab.
+            style={{
+              paddingTop:
+                "max(2.25rem, calc(env(safe-area-inset-top) + 1.25rem))",
+            }}
           >
             <StorageWarning />
             <PageTransition>{children}</PageTransition>

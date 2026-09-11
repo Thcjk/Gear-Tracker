@@ -58,7 +58,9 @@ export function PackingListItemCard({
   return (
     <SurfaceCard
       as="article"
-      className="relative animate-rise overflow-hidden p-4"
+      pinned={item.gearItemId}
+      pinCorner="left"
+      className="animate-rise overflow-hidden p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       {celebrating && (
