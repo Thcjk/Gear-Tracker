@@ -78,7 +78,7 @@ export function GearItemForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`${SURFACE_CLASSES} animate-rise p-5`}
+      className={`${SURFACE_CLASSES} sheet-card animate-rise p-5`}
     >
       <h2 className="text-lg font-bold text-paper-800 dark:text-paper-100">
         {title}

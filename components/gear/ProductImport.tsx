@@ -71,7 +71,7 @@ export function ProductImport({
 
   return (
     <div className="space-y-3">
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
         <h2 className="mb-1 font-bold text-paper-800 dark:text-paper-100">
           Per Link importieren
         </h2>

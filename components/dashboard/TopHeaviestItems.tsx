@@ -15,7 +15,7 @@ export function TopHeaviestItems({
   }[];
 }) {
   return (
-    <SurfaceCard className="p-4">
+    <SurfaceCard tone="card" className="p-4">
       <h3 className="mb-4 text-base font-bold text-paper-800 dark:text-paper-100">
         Top 5 schwerste Items
       </h3>

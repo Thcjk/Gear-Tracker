@@ -125,13 +125,13 @@ export default function LibraryPage() {
       <ProductImport onCreate={handleImported} />
 
       {data.gearItems.length === 0 && (
-        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+        <EmptyState seed="leer:library" illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch nichts in der Library. Klapp eine Kategorie auf und leg dein
           erstes Item an – oder importiere es per Link.
         </EmptyState>
       )}
 
-      <div className="relative space-y-3">
+      <div className="relative space-y-4">
         {/* Eine einzige, die zwischen den Sektionen hindurchläuft */}
         <span className="pointer-events-none absolute inset-x-0 top-1/3 block">
           <WanderingTurtle cycle={WANDER_CYCLE} delay={17} size={20} />

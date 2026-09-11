@@ -88,11 +88,11 @@ export default function ComparePage() {
       />
 
       {data.packingLists.length === 0 ? (
-        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+        <EmptyState seed="leer:vergleich" illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch keine eigenen Packlisten zum Vergleichen.
         </EmptyState>
       ) : (
-        <SurfaceCard className="space-y-2 p-4">
+        <SurfaceCard tone="card" className="space-y-2 p-4">
           {data.packingLists.map((list) => (
             <label
               key={list.id}
@@ -121,7 +121,7 @@ export default function ComparePage() {
         </SurfaceCard>
       )}
 
-      <SurfaceCard className="p-4">
+      <SurfaceCard tone="kraft" className="p-4">
         <h2 className="font-bold text-paper-800 dark:text-paper-100">
           Liste von jemand anderem
         </h2>

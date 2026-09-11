@@ -235,7 +235,13 @@ function PackingListDetailInner() {
       <Footprints className="-my-1 ml-6 h-5 w-40 -rotate-2 text-paper-300 dark:text-paper-700" />
 
       {pdfFailed && (
-        <SurfaceCard as="section" className="p-4" role="alert">
+        <SurfaceCard
+          as="section"
+          tone="postit"
+          torn
+          className="p-4 pb-6"
+          role="alert"
+        >
           <p className="text-sm text-paper-800 dark:text-paper-100">
             Das PDF liess sich nicht erzeugen. Versuch es noch einmal – bist
             du offline, klappt es, sobald wieder Empfang da ist.
@@ -363,6 +369,7 @@ function PackingListDetailInner() {
       <div className="space-y-3">
         {list.items.length === 0 ? (
           <EmptyState
+            seed="leer:packliste"
             illustration={
               <TurtleMascot
                 totalWeightGrams={0}

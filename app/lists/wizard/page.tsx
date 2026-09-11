@@ -146,7 +146,7 @@ function WizardInner() {
           </p>
         </div>
 
-        <SurfaceCard className="mt-6 p-4">
+        <SurfaceCard tone="card" className="mt-6 p-4">
           {rows.length === 0 ? (
             <p className="text-sm text-paper-700 dark:text-paper-400">
               Du hast alle Kategorien übersprungen. Items lassen sich jederzeit

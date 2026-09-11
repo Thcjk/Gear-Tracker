@@ -48,6 +48,21 @@
   --cat-clothing: #3f4527;
   --cat-electronics: #263241;
   --cat-hygiene-misc: #625d51;
+
+  /* Papiersorten. Alle Karten sind Papier, aber nicht dasselbe Papier:
+     Notizblock, Karteikarte, Haftnotiz, Packpapier. Der Unterschied ist
+     klein gehalten – es geht um einen Stapel aus einer Schublade, nicht
+     um ein Farbleitsystem. */
+  --sheet-note: #f3ecdc;
+  --sheet-card: #fbf7ee;
+  --sheet-postit: #f6e7bf;
+  --sheet-kraft: #ecdfc6;
+
+  /* Die Schnittkante: aussen eine Spur dunkler als die Fläche, innen
+     ein heller Grat. Ohne sie sieht das Blatt aus wie ein Rechteck in
+     der Hintergrundfarbe. */
+  --sheet-edge: rgba(69, 66, 57, 0.32);
+  --sheet-edge-light: rgba(255, 253, 245, 0.85);
 }
 
 html.dark,
@@ -76,6 +91,14 @@ html[data-theme="dark"] {
   --cat-clothing: #c8cda8;
   --cat-electronics: #f3ecdc;
   --cat-hygiene-misc: #afa48b;
+
+  --sheet-note: #1b2430;
+  --sheet-card: #222d3b;
+  --sheet-postit: #2a2c22;
+  --sheet-kraft: #202832;
+
+  --sheet-edge: rgba(0, 0, 0, 0.6);
+  --sheet-edge-light: rgba(243, 236, 220, 0.12);
 }
 
 html,
@@ -202,5 +225,127 @@ html.dark body::before {
   .handwritten {
     font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
     letter-spacing: 0.01em;
+  }
+
+  /* ---------------------------------------------------------------- *
+   * Das Blatt
+   *
+   * Jede Karte ist ein Stück Papier. Damit ein Stapel nicht wie ein
+   * Raster aus identischen Rechtecken aussieht, variieren drei Dinge pro
+   * Karte: der Papierton (Klasse), die vier Eckenradien (aus der
+   * Element-ID berechnet, inline) und die Nadel.
+   * ---------------------------------------------------------------- */
+  .sheet {
+    position: relative;
+    /* Eigener Stapelkontext: die Kanten- und Rissebenen liegen auf
+       z-index -1 und -2 und müssen innerhalb der Karte bleiben, sonst
+       verschwinden sie hinter dem Brett. */
+    isolation: isolate;
+    background-color: var(--sheet-tone, var(--sheet-note));
+  }
+
+  .sheet-card {
+    --sheet-tone: var(--sheet-card);
+  }
+  .sheet-postit {
+    --sheet-tone: var(--sheet-postit);
+  }
+  .sheet-kraft {
+    --sheet-tone: var(--sheet-kraft);
+  }
+
+  /**
+   * Die Papierkante.
+   *
+   * Eine Haarlinie entlang der Aussenkante, darüber ein heller Grat an
+   * der Oberkante und ein weicher, dunklerer Anlauf an der Unterkante –
+   * so, wie Licht auf ein leicht abstehendes Blatt fällt. Die Linie folgt
+   * border-radius:inherit und ist damit genauso ungleichmässig wie die
+   * Ecken der jeweiligen Karte.
+   */
+  .sheet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 0 0 1px var(--sheet-edge),
+      inset 0 1px 0 var(--sheet-edge-light),
+      inset 0 -10px 12px -12px var(--sheet-edge);
+  }
+
+  /**
+   * Gerissene Unterkante.
+   *
+   * clip-path schneidet alles weg, was ausserhalb der Form liegt – auch
+   * den eigenen Schlagschatten. Fläche und Schatten liegen deshalb in
+   * zwei eigenen Ebenen hinter dem Inhalt: beide mit derselben Rissform
+   * beschnitten, die hintere versetzt und weichgezeichnet. Die Karte
+   * selbst ist in diesem Fall durchsichtig und trägt keinen Schatten.
+   */
+  .sheet-torn {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .sheet-torn::after {
+    /* Die Haarlinie liefe quer über den Riss. */
+    display: none;
+  }
+
+  .sheet-torn > .sheet-layer {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Unregelmässig in Tiefe und Abstand: gleichmässige Zacken sehen
+       nach Zickzackschere aus, nicht nach gerissenem Papier. */
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 4px),
+      95.5% calc(100% - 9px),
+      91% calc(100% - 2px),
+      88% calc(100% - 3px),
+      83% calc(100% - 10px),
+      78.5% calc(100% - 4px),
+      74% calc(100% - 1px),
+      69% calc(100% - 8px),
+      66% calc(100% - 6px),
+      61% calc(100% - 2px),
+      56% calc(100% - 9px),
+      52% calc(100% - 3px),
+      47.5% calc(100% - 5px),
+      43% 100%,
+      39% calc(100% - 7px),
+      34% calc(100% - 2px),
+      30% calc(100% - 4px),
+      25% calc(100% - 10px),
+      21.5% calc(100% - 3px),
+      17% calc(100% - 6px),
+      12% calc(100% - 1px),
+      8% calc(100% - 8px),
+      4% calc(100% - 4px),
+      0 calc(100% - 7px)
+    );
+  }
+
+  .sheet-torn > .sheet-face {
+    z-index: -1;
+    background-color: var(--sheet-tone, var(--sheet-note));
+    box-shadow:
+      inset 0 0 0 1px var(--sheet-edge),
+      inset 0 1px 0 var(--sheet-edge-light),
+      /* Am Riss steht die Faser hell ab, statt scharf zu schneiden. */
+      inset 0 -14px 10px -10px var(--sheet-edge);
+  }
+
+  .sheet-torn > .sheet-shadow {
+    z-index: -2;
+    background-color: var(--shadow-card);
+    transform: translate(2px, 6px);
+    filter: blur(6px);
   }
 }

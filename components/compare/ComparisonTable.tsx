@@ -32,6 +32,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
       <EmptyState
+        seed="leer:vergleich-tabelle"
         illustration={
           <span className="relative block">
             <TurtleMascot
@@ -60,7 +61,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
     <div className="space-y-4">
       {/* Der Gewichtsunterschied auf einen Blick, vor der Tabelle: fünf
           Stufen nebeneinander sagen mehr als fünf Zahlen untereinander. */}
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
         <ul className="flex flex-wrap justify-center gap-4">
           {rows.map((row) => (
             <li key={row.entry.key} className="w-28 text-center">

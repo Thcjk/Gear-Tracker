@@ -24,7 +24,12 @@ export function StorageWarning() {
 
   if (loadFailedAt) {
     return (
-      <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="alert">
+      <SurfaceCard
+        tone="postit"
+        torn
+        className="mb-4 flex items-start gap-3 p-4 pb-6"
+        role="alert"
+      >
         <AlertTriangle
           className="mt-0.5 h-5 w-5 shrink-0 text-accent"
           aria-hidden
@@ -60,7 +65,12 @@ export function StorageWarning() {
   if (!storageBlocked) return null;
 
   return (
-    <SurfaceCard className="mb-4 flex items-start gap-3 p-4" role="status">
+    <SurfaceCard
+      tone="postit"
+      torn
+      className="mb-4 flex items-start gap-3 p-4 pb-6"
+      role="status"
+    >
       <AlertTriangle
         className="mt-0.5 h-5 w-5 shrink-0 text-accent"
         aria-hidden

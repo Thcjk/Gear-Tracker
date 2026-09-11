@@ -48,7 +48,7 @@ export default function ListsPage() {
       {showForm && (
         <form
           onSubmit={handleCreate}
-          className={`${SURFACE_CLASSES} animate-rise p-5`}
+          className={`${SURFACE_CLASSES} sheet-card animate-rise p-5`}
         >
           <label className="grid gap-2 text-sm">
             <span className="neu-label">
@@ -76,6 +76,7 @@ export default function ListsPage() {
       <div className="space-y-3">
         {data.packingLists.length === 0 ? (
           <EmptyState
+            seed="leer:listen"
             illustration={
               <span className="relative block">
                 {/* Der Kompass liegt hinter der Figur und ist leicht

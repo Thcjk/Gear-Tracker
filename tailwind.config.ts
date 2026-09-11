@@ -135,6 +135,14 @@ const config: Config = {
          * "neu" heisst hier schlicht "die Standard-Kartenerhebung".
          */
         neu: "2px 5px 12px var(--shadow-card)",
+        /**
+         * Das aufgesteckte Blatt: ein enger Kontaktschatten direkt unter
+         * der Kante und ein weiter, weicher darunter. Ein einzelner
+         * weicher Schatten sieht aus wie ein Schein, zwei Ebenen sehen
+         * aus wie Papier, das ein paar Millimeter vom Brett absteht.
+         */
+        sheet:
+          "1px 2px 3px var(--shadow-card-soft), 3px 9px 20px var(--shadow-card)",
         "neu-sm": "1px 3px 7px var(--shadow-card-soft)",
         "neu-lg": "4px 10px 22px var(--shadow-card)",
         /* Eingelassen – Eingabefelder, Chips, aktive Tabs */

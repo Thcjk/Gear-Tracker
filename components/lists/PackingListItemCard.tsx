@@ -46,7 +46,12 @@ export function PackingListItemCard({
 
   if (!gear) {
     return (
-      <SurfaceCard as="article" className="p-4 text-sm text-red-700 dark:text-red-300">
+      <SurfaceCard
+        as="article"
+        tone="postit"
+        torn
+        className="p-4 text-sm text-red-700 dark:text-red-300"
+      >
         Item fehlt in der Library.
         <button type="button" onClick={onRemove} className="ml-2 underline">
           Entfernen
@@ -59,7 +64,6 @@ export function PackingListItemCard({
     <SurfaceCard
       as="article"
       pinned={item.gearItemId}
-      pinCorner="left"
       className="animate-rise overflow-hidden p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >

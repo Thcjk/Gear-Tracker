@@ -55,7 +55,7 @@ export function BackupSection() {
   if (!ready) return null;
 
   return (
-    <SurfaceCard as="section" className="p-4">
+    <SurfaceCard as="section" tone="card" className="p-4">
       <h3 className="mb-1 font-bold text-paper-800 dark:text-paper-100">
         Automatische Backups
       </h3>
