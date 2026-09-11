@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowLeft, FileDown, Pencil } from "lucide-react";
-import { MountainSketch } from "@/components/sketch/MountainSketch";
+import { Compass } from "@/components/doodle/Doodles";
 import { ProgressBar } from "@/components/lists/ProgressBar";
 import { getSeasonalTheme } from "@/lib/seasons";
 
@@ -48,13 +48,9 @@ export function DashboardHeader({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,var(--season-from),var(--season-via)_55%,var(--season-to))] opacity-[0.14] transition-opacity duration-500"
       />
-      {/* Die Bergkette ersetzt das frühere Höhenlinien-Muster: eine
-          konkrete Zeichnung statt abstrakter Linien, aber genauso zurück-
-          haltend. Sie sitzt unten rechts, damit sie dem Titel und dem
-          Fortschritt nicht in den Weg kommt. */}
-      <MountainSketch
-        className="pointer-events-none absolute -bottom-2 right-0 h-28 w-64 text-[color:var(--season-via)] opacity-20"
-      />
+      {/* Kompass als Deko in der Ecke – zurückhaltend genug, dass er dem
+          Titel und dem Fortschritt nicht in den Weg kommt. */}
+      <Compass className="pointer-events-none absolute -right-3 -top-3 h-28 w-28 text-[color:var(--season-via)] opacity-25" />
 
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CampScene } from "@/components/splash/CampScene";
+import { Compass } from "@/components/doodle/Doodles";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { useAppStore } from "@/lib/store";
 import {
   SPLASH_FADE_MS,
@@ -18,9 +19,10 @@ import {
  * Markup und Gestaltung stecken im vorgerenderten HTML bzw. als <style> im
  * <head> (siehe splashCss.ts): Szene und Schriftzug erscheinen mit dem
  * ersten Paint, statt auf das Tailwind-Stylesheet zu warten. Deshalb
- * tragen die Elemente eigene splash__-Klassen und keine Tailwind-Klassen,
- * und die Szene zeichnet mit currentColor statt mit var(--accent) – die
- * Variable ist zu diesem Zeitpunkt noch nicht definiert.
+ * tragen die Elemente eigene splash__-Klassen und keine Tailwind-Klassen.
+ * Die Schildkröte bringt ihre Farben als feste Werte im SVG mit, der
+ * Kompass zeichnet mit currentColor – var(--accent) wäre zu diesem
+ * Zeitpunkt noch nicht definiert.
  *
  * Ablauf: der Splash steht SPLASH_MIN_VISIBLE_MS, auch wenn die App längst
  * bereit ist. Braucht das Laden länger, wird nicht künstlich verlängert –
@@ -83,8 +85,16 @@ export function SplashScreen() {
 
   return (
     <div aria-hidden className="splash">
+      <Compass className="splash__compass" />
       <div className="splash__stage">
-        <CampScene className="splash__mark" />
+        <span className="splash__pin" />
+        {/* Ohne Einlauf-Animation: der Splash blendet ohnehin schon ein,
+            zwei Bewegungen gleichzeitig sind eine zu viel. */}
+        <TurtleMascot
+          totalWeightGrams={4200}
+          animated={false}
+          className="splash__mark"
+        />
         <p className="splash__title">Gear-Tracker</p>
       </div>
       <p className="splash__tagline">Pack leicht. Wandere weit.</p>

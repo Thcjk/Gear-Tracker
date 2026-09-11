@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
 import { TurtleMascot, STAGE_LABEL, getPackStage } from "@/components/mascot/TurtleMascot";
+import { DoodleArrow, WaypointLine } from "@/components/doodle/Doodles";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -257,6 +258,8 @@ function PackingListDetailInner() {
         }}
       />
 
+      <WaypointLine className="text-paper-200 dark:text-paper-300/50" />
+
       <CategoryWeightChart data={chartData} />
       <TopHeaviestItems items={heaviest} />
 
@@ -307,6 +310,16 @@ function PackingListDetailInner() {
           </div>
         )}
       </SurfaceCard>
+
+      {/* Kleiner Pfeil vom Abschnitt darüber in die Item-Liste */}
+      {list.items.length > 0 && (
+        <div className="-mb-1 flex items-center gap-2 pl-2">
+          <DoodleArrow className="h-7 w-7 text-paper-600 dark:text-paper-400" />
+          <span className="handwritten text-base text-paper-700 dark:text-paper-300">
+            {progress.packed} von {progress.total} gepackt
+          </span>
+        </div>
+      )}
 
       <div className="space-y-3">
         {list.items.length === 0 ? (
