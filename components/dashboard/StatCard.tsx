@@ -37,10 +37,17 @@ export function StatCard({
       className="animate-rise p-3.5"
       style={{ animationDelay: staggerDelay(index, 80) }}
     >
-      <p className="text-[0.625rem] font-bold uppercase leading-tight tracking-wider text-paper-700 dark:text-paper-400">
+      {/* Kurze Wörter statt Silbentrennung: hyphens:auto braucht ein
+          Trennwörterbuch, das nicht jede Umgebung mitbringt – fehlt es,
+          greift die Grundregel overflow-wrap:break-word und trennt mitten
+          im Wort ("GESAMTGEWIC / HT"). Ein Etikett, das in die Spalte
+          passt, braucht die Trennung gar nicht erst. */}
+      <p className="text-[0.625rem] font-bold uppercase leading-tight tracking-wide text-paper-700 dark:text-paper-400">
         {label}
       </p>
-      <p className="mt-1.5 text-lg font-extrabold leading-tight tracking-tight tabular-nums text-paper-800 dark:text-paper-100 sm:text-2xl">
+      {/* whitespace-nowrap: die Grundregel würde sonst auch eine Zahl
+          umbrechen – "CHF 549" stand auf 320 px als "CHF 5 / 49" da. */}
+      <p className="mt-1.5 whitespace-nowrap text-lg font-extrabold leading-tight tracking-tight tabular-nums text-paper-800 dark:text-paper-100 sm:text-2xl">
         {shown}
       </p>
       {hint && (

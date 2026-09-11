@@ -40,7 +40,7 @@ import {
   topHeaviestItems,
   weightByCategory,
 } from "@/lib/calculations";
-import { formatPrice, formatWeight } from "@/lib/categories";
+import { formatPriceNumber, formatWeight } from "@/lib/categories";
 import {
   buildSharedList,
   downloadSharedList,
@@ -286,20 +286,22 @@ function PackingListDetailInner() {
 
       <div className="grid grid-cols-3 gap-3">
         <StatCard
-          label="Gesamtgewicht"
+          label="Gewicht"
           countTo={totalWeight}
           format={formatWeight}
           duration={1100}
           index={0}
         />
         <StatCard
-          label="Gesamtwert"
+          // Die Währung steht im Etikett, nicht im Wert: "CHF 549" passt
+          // auf 320 px nicht in eine Spalte von drei.
+          label="Wert (CHF)"
           countTo={totalPrice}
-          format={formatPrice}
+          format={formatPriceNumber}
           duration={900}
           index={1}
         />
-        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
+        <StatCard label="Items" value={String(itemCount)} index={2} />
       </div>
 
       <AchievementBadges
