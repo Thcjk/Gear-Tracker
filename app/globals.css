@@ -415,6 +415,29 @@ html.dark body::before {
     transform: rotate(calc(var(--stamp-tilt, 0deg) * 0.25)) scale(0.94);
   }
 
+  /**
+   * Leaflets Bedienknöpfe im Papier-Ton.
+   *
+   * Nur die Knöpfe – die Karte selbst bleibt eine echte Karte. Ein
+   * eingefärbter Kartenausschnitt wäre hübsch und unbrauchbar.
+   */
+  .leaflet-control-zoom a {
+    background-color: var(--sheet-note) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--sheet-edge) !important;
+  }
+
+  .leaflet-control-zoom a:hover {
+    background-color: var(--sheet-card) !important;
+  }
+
+  .leaflet-bar {
+    border-radius: 0.7rem !important;
+    overflow: hidden;
+    box-shadow: 1px 2px 6px var(--shadow-card) !important;
+    border: none !important;
+  }
+
   .handwritten {
     font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
     letter-spacing: 0.01em;
@@ -430,10 +453,6 @@ html.dark body::before {
    * ---------------------------------------------------------------- */
   .sheet {
     position: relative;
-    /* Eigener Stapelkontext: die Kanten- und Rissebenen liegen auf
-       z-index -1 und -2 und müssen innerhalb der Karte bleiben, sonst
-       verschwinden sie hinter dem Brett. */
-    isolation: isolate;
     background-color: var(--sheet-tone, var(--sheet-note));
   }
 
@@ -480,6 +499,14 @@ html.dark body::before {
   .sheet-torn {
     background-color: transparent;
     box-shadow: none;
+    /* Eigener Stapelkontext, damit die Rissebenen auf z-index -1 und -2
+       innerhalb der Karte bleiben und nicht hinter dem Brett landen.
+       Bewusst NUR hier und nicht auf jeder .sheet: ein Stapelkontext auf
+       allen Karten sperrt auch alles darin ein – das aufgeklappte
+       Auswahlfeld (z-index 30) verschwand dadurch hinter der nächsten
+       Karte, weil sein z-index nicht mehr über die eigene Karte
+       hinausreichte. */
+    isolation: isolate;
   }
 
   .sheet-torn::after {

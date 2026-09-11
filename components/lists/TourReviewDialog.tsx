@@ -8,6 +8,7 @@ import { Button, IconButton } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
 import { NoteTextarea } from "@/components/ui/NoteInput";
 import { StampCheckbox } from "@/components/ui/StampCheckbox";
+import { DialogOverlay } from "@/components/ui/DialogOverlay";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import type {
@@ -154,15 +155,7 @@ export function TourReviewDialog({
 
   if (done) {
     return (
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Tour ausgewertet"
-        className="fixed inset-0 z-50 flex items-end justify-center bg-black/30 p-4 backdrop-blur-sm sm:items-center"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) onClose();
-        }}
-      >
+      <DialogOverlay label="Tour ausgewertet" onClose={onClose}>
         <SurfaceCard className="animate-rise relative w-full max-w-md p-6 text-center">
           <CampMark className="absolute right-5 top-5 h-9 w-9 rotate-12 text-paper-400 dark:text-paper-600" />
           <TurtleMascot
@@ -188,20 +181,12 @@ export function TourReviewDialog({
             Fertig
           </StampButton>
         </SurfaceCard>
-      </div>
+      </DialogOverlay>
     );
   }
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Tour beenden – ${list.name}`}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/30 p-4 backdrop-blur-sm sm:items-center"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <DialogOverlay label={`Tour beenden – ${list.name}`} onClose={onClose}>
       <SurfaceCard className="animate-rise flex max-h-[85vh] w-full max-w-md flex-col p-5">
         <div className="mb-4 flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900">
@@ -366,7 +351,7 @@ export function TourReviewDialog({
           </div>
         </form>
       </SurfaceCard>
-    </div>
+    </DialogOverlay>
   );
 }
 

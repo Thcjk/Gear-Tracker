@@ -207,12 +207,16 @@ export function NoteDropdown<T extends string>({
               role="option"
               aria-selected={option.value === value}
               data-active={index === active || undefined}
-              // onPointerDown statt onClick: der Fokus soll gar nicht
-              // erst vom Knopf wegwandern.
-              onPointerDown={(event) => {
-                event.preventDefault();
-                choose(index);
-              }}
+              // Gewählt wird auf click, nicht auf pointerdown.
+              //
+              // pointerdown wäre naheliegend, weil es den Fokus gar nicht
+              // erst wegwandern lässt – aber dann verschwindet die Zeile
+              // unter dem Finger, bevor die Geste zu Ende ist: wer daneben
+              // loslässt, hat trotzdem gewählt, und ein abgebrochener
+              // Klick lässt sich nicht mehr abbrechen. Den Fokus hält
+              // stattdessen preventDefault auf mousedown.
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => choose(index)}
               onPointerEnter={() => setActive(index)}
               className="note-stack__item"
               style={

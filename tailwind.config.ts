@@ -232,6 +232,11 @@ const config: Config = {
           "80%": { transform: "translate3d(-1%, 0, 0) rotate(-1deg)" },
           "100%": { opacity: "1", transform: "translate3d(0, 0, 0) rotate(0deg)" },
         },
+        // Overlay: der dunkle Grund blendet auf, statt zu springen
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
         // Karte: kurzes Aufblitzen beim Abhaken
         flash: {
           "0%": { opacity: "0.45" },
@@ -242,6 +247,7 @@ const config: Config = {
         rise: "rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both",
         pop: "pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1)",
         flash: "flash 650ms ease-out forwards",
+        "fade-in": "fade-in 180ms ease-out both",
         "splash-in": "splash-in 520ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "slide-forward":
           "slide-forward 260ms cubic-bezier(0.32, 0.72, 0, 1) both",

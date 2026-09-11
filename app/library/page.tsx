@@ -150,7 +150,12 @@ export default function LibraryPage() {
               onToggle={() => toggleCategory(meta.id)}
             >
               {items.length === 0 && creatingIn !== meta.id && (
-                <p className="px-3 text-sm text-paper-700 dark:text-paper-400">
+                // Dieser Satz steht als einziger Inhalt der Sektion direkt
+                // auf dem Brett, nicht auf Papier. paper-700 erreicht dort
+                // nur 3.2:1 – die dunkelste Stufe schafft 5.1:1. Im Dark
+                // Mode liegt paper-400 auf dunklem Filz bei 5.3:1 und darf
+                // bleiben.
+                <p className="handwritten px-3 text-base text-paper-900 dark:text-paper-400">
                   Noch keine Items in dieser Kategorie.
                 </p>
               )}

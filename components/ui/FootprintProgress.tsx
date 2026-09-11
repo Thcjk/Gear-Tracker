@@ -70,6 +70,16 @@ export function FootprintProgress({
 
   return (
     <div
+      /**
+       * Die Anzeige fängt keine Klicks ab.
+       *
+       * Der Weg und die Reihe der Abdrücke sind positioniert und stehen
+       * im Baum NACH dem Link, der sich über die ganze Listenkarte legt
+       * (PackingListCard) – beim Treffertest gewinnt damit die Anzeige,
+       * und die untere Hälfte der Karte war tot. Zu klicken gibt es hier
+       * ohnehin nichts; für Screenreader ändert pointer-events nichts.
+       */
+      className="pointer-events-none"
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={total}

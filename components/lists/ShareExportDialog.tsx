@@ -5,6 +5,7 @@ import { Share2, X } from "lucide-react";
 import { Button, IconButton } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
 import { NoteInput } from "@/components/ui/NoteInput";
+import { DialogOverlay } from "@/components/ui/DialogOverlay";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 
 /**
@@ -39,15 +40,7 @@ export function ShareExportDialog({
   }
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Für Vergleich exportieren"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/30 p-4 backdrop-blur-sm sm:items-center"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <DialogOverlay label="Für Vergleich exportieren" onClose={onClose}>
       <SurfaceCard className="animate-rise w-full max-w-md p-5">
         <div className="mb-4 flex items-start gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900">
@@ -87,6 +80,6 @@ export function ShareExportDialog({
           </div>
         </form>
       </SurfaceCard>
-    </div>
+    </DialogOverlay>
   );
 }
