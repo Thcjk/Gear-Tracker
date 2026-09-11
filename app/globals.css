@@ -415,6 +415,29 @@ html.dark body::before {
     transform: rotate(calc(var(--stamp-tilt, 0deg) * 0.25)) scale(0.94);
   }
 
+  /**
+   * Leaflets Bedienknöpfe im Papier-Ton.
+   *
+   * Nur die Knöpfe – die Karte selbst bleibt eine echte Karte. Ein
+   * eingefärbter Kartenausschnitt wäre hübsch und unbrauchbar.
+   */
+  .leaflet-control-zoom a {
+    background-color: var(--sheet-note) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--sheet-edge) !important;
+  }
+
+  .leaflet-control-zoom a:hover {
+    background-color: var(--sheet-card) !important;
+  }
+
+  .leaflet-bar {
+    border-radius: 0.7rem !important;
+    overflow: hidden;
+    box-shadow: 1px 2px 6px var(--shadow-card) !important;
+    border: none !important;
+  }
+
   .handwritten {
     font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
     letter-spacing: 0.01em;
