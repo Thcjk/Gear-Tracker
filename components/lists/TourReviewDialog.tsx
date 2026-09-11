@@ -6,6 +6,7 @@ import { CampMark } from "@/components/doodle/Doodles";
 import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
+import { NoteTextarea } from "@/components/ui/NoteInput";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import type {
@@ -379,15 +380,12 @@ function TextField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="grid gap-1.5 text-sm">
-      <span className="neu-label">{label}</span>
-      <textarea
-        rows={2}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        maxLength={500}
-        className="neu-field"
-      />
-    </label>
+    <NoteTextarea
+      label={label}
+      rows={2}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      maxLength={500}
+    />
   );
 }

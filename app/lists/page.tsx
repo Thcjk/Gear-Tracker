@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { PackingListCard } from "@/components/lists/PackingListCard";
 import { Button } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
+import { NoteInput } from "@/components/ui/NoteInput";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
@@ -51,18 +52,13 @@ export default function ListsPage() {
           onSubmit={handleCreate}
           className={`${SURFACE_CLASSES} sheet-card animate-rise p-5`}
         >
-          <label className="grid gap-2 text-sm">
-            <span className="neu-label">
-              Listenname
-            </span>
-            <input
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="z.B. Weekend Alps"
-              className="neu-field"
-            />
-          </label>
+          <NoteInput
+            label="Listenname"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="z.B. Weekend Alps"
+          />
           <div className="mt-3 flex gap-2">
             <StampButton type="submit">Erstellen</StampButton>
             <Button type="button" onClick={() => setShowForm(false)}>

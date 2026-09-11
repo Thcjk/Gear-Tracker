@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
+import { NoteInput, NoteTextarea } from "@/components/ui/NoteInput";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import {
   CATEGORIES,
@@ -86,17 +87,12 @@ export function GearItemForm({
       </h2>
       {hint}
       <div className="mt-4 grid gap-3">
-        <label className="grid gap-1 text-sm">
-          <span className="neu-label">
-            Name
-          </span>
-          <input
-            required
-            value={values.name}
-            onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
-            className="neu-field"
-          />
-        </label>
+        <NoteInput
+          label="Name"
+          required
+          value={values.name}
+          onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
+        />
         <label className={`grid gap-1 text-sm ${hideCategory ? "hidden" : ""}`}>
           <span className="neu-label">
             Kategorie
@@ -119,81 +115,61 @@ export function GearItemForm({
           </select>
         </label>
         <div className="grid grid-cols-2 gap-3">
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">
-              Gewicht (g)
-            </span>
-            <input
-              required
-              type="number"
-              min={1}
-              value={values.weightGrams || ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  weightGrams: Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">
-              Preis (CHF)
-            </span>
-            <input
-              type="number"
-              min={0}
-              step="0.01"
-              value={values.price ?? ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  price:
-                    e.target.value === "" ? undefined : Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
+          <NoteInput
+            label="Gewicht (g)"
+            required
+            type="number"
+            min={1}
+            value={values.weightGrams || ""}
+            onChange={(e) =>
+              setValues((v) => ({
+                ...v,
+                weightGrams: Number(e.target.value),
+              }))
+            }
+          />
+          <NoteInput
+            label="Preis (CHF)"
+            type="number"
+            min={0}
+            step="0.01"
+            value={values.price ?? ""}
+            onChange={(e) =>
+              setValues((v) => ({
+                ...v,
+                price:
+                  e.target.value === "" ? undefined : Number(e.target.value),
+              }))
+            }
+          />
         </div>
         {showComfortTemp && (
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">Komforttemperatur (°C)</span>
-            <input
-              type="number"
-              min={COMFORT_TEMP_MIN}
-              max={COMFORT_TEMP_MAX}
-              step="0.5"
-              // Minuszeichen sind der Normalfall; ohne die Angabe zeigt iOS
-              // ein Ziffernfeld ganz ohne Vorzeichentaste.
-              inputMode="text"
-              placeholder="z. B. -5"
-              value={values.comfortTempC ?? ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  comfortTempC:
-                    e.target.value === "" ? undefined : Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
-        )}
-        <label className="grid gap-1 text-sm">
-          <span className="neu-label">
-            Notizen
-          </span>
-          <textarea
-            rows={2}
-            value={values.notes ?? ""}
+          <NoteInput
+            label="Komforttemperatur (°C)"
+            type="number"
+            min={COMFORT_TEMP_MIN}
+            max={COMFORT_TEMP_MAX}
+            step="0.5"
+            // Minuszeichen sind der Normalfall; ohne die Angabe zeigt iOS
+            // ein Ziffernfeld ganz ohne Vorzeichentaste.
+            inputMode="text"
+            placeholder="z. B. -5"
+            value={values.comfortTempC ?? ""}
             onChange={(e) =>
-              setValues((v) => ({ ...v, notes: e.target.value }))
+              setValues((v) => ({
+                ...v,
+                comfortTempC:
+                  e.target.value === "" ? undefined : Number(e.target.value),
+              }))
             }
-            className="neu-field"
           />
-        </label>
+        )}
+        <NoteTextarea
+          label="Notizen"
+          rows={2}
+          value={values.notes ?? ""}
+          onChange={(e) => setValues((v) => ({ ...v, notes: e.target.value }))}
+        />
       </div>
       <div className="mt-4 flex gap-2">
         <StampButton type="submit">{submitLabel}</StampButton>
