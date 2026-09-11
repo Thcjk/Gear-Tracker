@@ -49,7 +49,7 @@ export function CategorySection({
         className={`${SURFACE_CLASSES} flex w-full items-center gap-3 p-3 text-left transition-all duration-150 active:translate-y-px`}
       >
         <CategoryIcon category={category} className="h-5 w-5" />
-        <span className="min-w-0 flex-1 truncate font-bold text-paper-800 dark:text-paper-100">
+        <span className="handwritten min-w-0 flex-1 truncate text-xl font-bold text-paper-800 dark:text-paper-100">
           {meta.label}
         </span>
         <span

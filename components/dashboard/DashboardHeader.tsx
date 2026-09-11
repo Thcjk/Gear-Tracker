@@ -67,7 +67,7 @@ export function DashboardHeader({
               <ArrowLeft className="h-4 w-4" />
               Listen
             </button>
-            <span className="rounded-full bg-paper-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-paper-900 dark:text-[color:var(--season-accent)]">
+            <span className="handwritten rounded-full bg-paper-200 px-3 py-0.5 text-base font-bold text-[color:var(--season-from)] shadow-neu-sm dark:bg-paper-950 dark:text-[color:var(--season-accent)]">
               {theme.label}
             </span>
           </div>

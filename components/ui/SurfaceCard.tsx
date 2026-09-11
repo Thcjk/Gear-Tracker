@@ -89,7 +89,7 @@ export function EmptyState({
   return (
     <SurfaceCard className="flex flex-col items-center gap-4 p-8 text-center text-sm text-paper-700 dark:text-paper-300">
       <span className="text-accent opacity-80">{illustration}</span>
-      <span className="max-w-xs">{children}</span>
+      <span className="handwritten max-w-xs text-base leading-snug">{children}</span>
     </SurfaceCard>
   );
 }
