@@ -68,17 +68,29 @@ export function WaypointLine({ className = "" }: { className?: string }) {
 }
 
 /**
- * Kleiner gebogener Pfeil als Verbindungselement, etwa vom Fortschritts-
- * text zur Liste darunter.
+ * Pfeil als Verbindungselement, in drei Handschriften.
+ *
+ * "curved" biegt nach unten ab, "hook" holt weit aus, "straight" ist der
+ * knappe Strich. Drei Formen, damit nicht an jeder Stelle derselbe Pfeil
+ * klebt – gleich ausgerichtete Wiederholung sieht nach Symbolsatz aus,
+ * nicht nach Hand.
  */
 export function DoodleArrow({
   className = "h-8 w-8",
+  variant = "curved",
   flip = false,
 }: {
   className?: string;
+  variant?: "curved" | "straight" | "hook";
   /** Spiegelt den Pfeil, damit er auch nach links zeigen kann. */
   flip?: boolean;
 }) {
+  const shapes = {
+    curved: ["M7 8 Q26 9 29 30", "M23 24 L29 32 L34 23"],
+    straight: ["M6 14 Q20 17 33 21", "M26 15 L34 21 L26 27"],
+    hook: ["M9 32 Q6 12 22 9 Q34 7 33 20", "M27 15 L33 22 L38 14"],
+  } as const;
+  const [body, head] = shapes[variant];
   return (
     <svg
       viewBox="0 0 40 40"
@@ -90,8 +102,68 @@ export function DoodleArrow({
       style={flip ? { transform: "scaleX(-1)" } : undefined}
       aria-hidden
     >
-      <path d="M7 8 Q26 9 29 30" strokeWidth="2.2" />
-      <path d="M23 24 L29 32 L34 23" strokeWidth="2.2" />
+      <path d={body} strokeWidth="2.2" />
+      <path d={head} strokeWidth="2.2" />
+    </svg>
+  );
+}
+
+/**
+ * Fussspuren-Pfad: eine Reihe kleiner Abdrücke, links und rechts versetzt
+ * wie ein echter Gang. Die Abdrücke stehen bewusst nicht auf einer Linie
+ * und sind unterschiedlich gedreht.
+ */
+export function Footprints({ className = "h-6 w-40" }: { className?: string }) {
+  const steps = [
+    { x: 6, y: 15, r: -18 },
+    { x: 26, y: 8, r: -10 },
+    { x: 46, y: 17, r: -22 },
+    { x: 68, y: 9, r: -6 },
+    { x: 90, y: 16, r: -16 },
+    { x: 112, y: 8, r: -12 },
+    { x: 134, y: 15, r: -20 },
+  ];
+  return (
+    <svg
+      viewBox="0 0 150 28"
+      className={className}
+      fill="currentColor"
+      aria-hidden
+    >
+      {steps.map((s) => (
+        <g key={`${s.x}-${s.y}`} transform={`translate(${s.x} ${s.y}) rotate(${s.r})`}>
+          {/* Ballen und drei Zehen – auf dieser Grösse reicht das */}
+          <ellipse cx="0" cy="3" rx="3.1" ry="4.2" />
+          <circle cx="-2.6" cy="-2.2" r="1.05" />
+          <circle cx="0.2" cy="-3.2" r="1.05" />
+          <circle cx="2.9" cy="-2" r="1.05" />
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/**
+ * Lagerplatz-Markierung: ein Kreuz im offenen Kreis, wie auf einer
+ * Wanderkarte. Der Kreis ist gestrichelt und hat eine Lücke – ein
+ * geschlossener Ring sähe nach Symbol aus, nicht nach Notiz.
+ */
+export function CampMark({ className = "h-10 w-10" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      aria-hidden
+    >
+      <path
+        d="M20 4 Q35 5 36 20 Q37 35 21 36 Q6 37 4 22 Q3 8 17 4"
+        strokeWidth="1.8"
+        strokeDasharray="4 3.5"
+      />
+      <path d="M13 13 L27 27 M27 13 L13 27" strokeWidth="2.6" />
     </svg>
   );
 }

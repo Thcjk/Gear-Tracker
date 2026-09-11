@@ -5,8 +5,17 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
-import { TurtleMascot, STAGE_LABEL, getPackStage } from "@/components/mascot/TurtleMascot";
-import { DoodleArrow, WaypointLine } from "@/components/doodle/Doodles";
+import {
+  TurtleMascot,
+  STAGE_LABEL,
+  getPackStage,
+  getTurtleVariant,
+} from "@/components/mascot/TurtleMascot";
+import {
+  DoodleArrow,
+  Footprints,
+  WaypointLine,
+} from "@/components/doodle/Doodles";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -197,6 +206,7 @@ function PackingListDetailInner() {
         <div className="flex items-center gap-4">
           <TurtleMascot
             totalWeightGrams={totalWeight}
+            variant={getTurtleVariant(list.id)}
             className="h-32 w-32 shrink-0"
             title={`Schildkröte, ${STAGE_LABEL[getPackStage(totalWeight)]}`}
           />
@@ -210,6 +220,11 @@ function PackingListDetailInner() {
           </div>
         </div>
       </SurfaceCard>
+
+      {/* Spur von der Schildkröte zu den Kennzahlen. Leicht schief und
+          nach links versetzt – mittig ausgerichtet sähe sie nach Trennlinie
+          aus statt nach Notiz. */}
+      <Footprints className="-my-1 ml-6 h-5 w-40 -rotate-2 text-paper-300 dark:text-paper-700" />
 
       <div className="grid grid-cols-3 gap-3">
         <StatCard
@@ -327,6 +342,7 @@ function PackingListDetailInner() {
             illustration={
               <TurtleMascot
                 totalWeightGrams={0}
+                variant={getTurtleVariant(list.id)}
                 animated={false}
                 className="h-28 w-28"
               />

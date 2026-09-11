@@ -152,6 +152,16 @@ html.dark body::before {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  /* Wer reduzierte Bewegung eingestellt hat, will kein Tier über den
+     Bildschirm laufen sehen. Die globale Regel oben drückt die Animation
+     nur auf 0.01 ms zusammen – die Figur bliebe stehen und wäre sichtbar.
+     Hier verschwindet sie ganz, und der Compositor hat nichts zu tun. */
+  .animate-wander {
+    display: none !important;
+  }
+}
+
 @layer components {
   /* Eingabefelder wirken eingelassen ins Papier */
   .neu-field {

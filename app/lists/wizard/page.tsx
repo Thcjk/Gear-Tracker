@@ -4,7 +4,11 @@ import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import {
+  TurtleMascot,
+  getTurtleVariant,
+} from "@/components/mascot/TurtleMascot";
+import { Footprints } from "@/components/doodle/Doodles";
 import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
@@ -36,7 +40,8 @@ function WizardInner() {
   );
 
   const onSummary = stepIndex >= WIZARD_CATEGORIES.length;
-  const category = WIZARD_CATEGORIES[Math.min(stepIndex, WIZARD_CATEGORIES.length - 1)];
+  const category =
+    WIZARD_CATEGORIES[Math.min(stepIndex, WIZARD_CATEGORIES.length - 1)];
 
   const categoryItems = useMemo(
     () =>
@@ -127,9 +132,11 @@ function WizardInner() {
               nicht ein Symbol dafür. */}
           <TurtleMascot
             totalWeightGrams={listTotalWeight(list, data.gearItems)}
+            variant={getTurtleVariant(list.id)}
             className="h-36 w-36"
           />
-          <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
+          <Footprints className="-mt-2 h-5 w-36 rotate-3 text-paper-300 dark:text-paper-700" />
+          <h2 className="animate-label-in mt-3 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
             {list.name}
           </h2>
           <p className="animate-label-in mt-1 text-sm text-paper-700 [animation-delay:140ms] dark:text-paper-400">
@@ -204,7 +211,9 @@ function WizardInner() {
               ? router.replace(`/lists/detail?id=${list.id}`)
               : (setStepIndex(stepIndex - 1), setMode("library"))
           }
-          aria-label={stepIndex === 0 ? "Wizard verlassen" : "Ein Schritt zurück"}
+          aria-label={
+            stepIndex === 0 ? "Wizard verlassen" : "Ein Schritt zurück"
+          }
         >
           <ArrowLeft className="h-5 w-5" />
         </IconButton>

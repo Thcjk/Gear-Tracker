@@ -3,6 +3,8 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { ArrowLeft, FileDown, Pencil } from "lucide-react";
 import { Compass } from "@/components/doodle/Doodles";
+import { WanderingTurtle } from "@/components/mascot/WanderingTurtle";
+import { WANDER_CYCLE } from "@/lib/wander";
 import { ProgressBar } from "@/components/lists/ProgressBar";
 import { getSeasonalTheme } from "@/lib/seasons";
 
@@ -51,6 +53,11 @@ export function DashboardHeader({
       {/* Kompass als Deko in der Ecke – zurückhaltend genug, dass er dem
           Titel und dem Fortschritt nicht in den Weg kommt. */}
       <Compass className="pointer-events-none absolute -right-3 -top-3 h-28 w-28 text-[color:var(--season-via)] opacity-25" />
+
+      {/* Läuft am unteren Rand des Kopfs entlang, wie auf einer Kante */}
+      <span className="pointer-events-none absolute inset-x-0 bottom-0 block">
+        <WanderingTurtle cycle={WANDER_CYCLE} delay={5} size={20} />
+      </span>
 
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
