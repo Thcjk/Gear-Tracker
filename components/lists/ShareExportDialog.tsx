@@ -48,14 +48,14 @@ export function ShareExportDialog({
     >
       <SurfaceCard className="animate-rise w-full max-w-md p-5">
         <div className="mb-4 flex items-start gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900">
             <Share2 className="h-5 w-5" />
           </span>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-clay-900 dark:text-clay-50">
+            <h2 className="font-bold text-paper-800 dark:text-paper-100">
               Wie sollen wir dich in diesem Export nennen?
             </h2>
-            <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+            <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
               Der Name steht in der Datei und erscheint beim Empfänger über
               deiner Spalte.
             </p>

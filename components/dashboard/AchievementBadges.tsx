@@ -77,7 +77,7 @@ export function AchievementBadges({
       )} leichter als „${reference.name}“`,
       Icon: TrendingDown,
       className:
-        "text-ocean-800 dark:text-ocean-300",
+        "text-olive-700 dark:text-olive-300",
     });
   }
 
@@ -87,7 +87,7 @@ export function AchievementBadges({
       label: "Alles gepackt – los geht's!",
       Icon: CheckCheck,
       className:
-        "text-clay-700 dark:text-clay-200",
+        "text-paper-700 dark:text-paper-200",
     });
   }
 
@@ -98,7 +98,7 @@ export function AchievementBadges({
       {badges.map(({ id, label, Icon, className }) => (
         <li key={id}>
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full bg-clay-200 px-3.5 py-2 text-xs font-semibold shadow-neu-sm dark:bg-clay-800 ${className}`}
+            className={`handwritten inline-flex items-center gap-1.5 rounded-full bg-paper-200 px-3.5 py-1.5 text-[0.95rem] font-bold shadow-neu-sm dark:bg-paper-950 ${className}`}
           >
             <Icon className="h-3.5 w-3.5 shrink-0" />
             {label}

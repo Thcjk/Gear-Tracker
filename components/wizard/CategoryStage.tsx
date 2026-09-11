@@ -1,8 +1,7 @@
 "use client";
 
 import type { Category } from "@/types";
-import { SketchIcon } from "@/components/ui/SketchIcon";
-import { CATEGORY_SKETCH } from "@/lib/sketchIcons";
+import { FlatlayObject } from "@/components/flatlay/FlatlayObject";
 import { getCategoryMeta } from "@/lib/categories";
 
 /**
@@ -18,12 +17,12 @@ export function CategoryStage({ category }: { category: Category }) {
   return (
     <div key={category} className="flex flex-col items-center py-2 text-center">
       <span
-        className="animate-icon-in flex h-28 w-28 items-center justify-center rounded-full bg-clay-200 shadow-neu-lg dark:bg-clay-800"
+        className="animate-icon-in flex h-28 w-28 items-center justify-center rounded-full bg-paper-200 shadow-neu-lg dark:bg-paper-900"
         style={{ color: meta.chartColor }}
       >
-        <SketchIcon type={CATEGORY_SKETCH[category]} className="h-14 w-14" />
+        <FlatlayObject category={category} className="h-16 w-16" />
       </span>
-      <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-clay-900 [animation-delay:90ms] dark:text-clay-50">
+      <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
         {meta.label}
       </h2>
     </div>

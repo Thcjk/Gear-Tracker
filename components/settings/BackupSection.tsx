@@ -65,10 +65,10 @@ export function BackupSection() {
 
   return (
     <SurfaceCard as="section" className="p-4">
-      <h3 className="mb-1 font-bold text-clay-900 dark:text-clay-50">
+      <h3 className="mb-1 font-bold text-paper-800 dark:text-paper-100">
         Automatische Backups
       </h3>
-      <p className="mb-4 text-sm text-clay-700 dark:text-clay-400">
+      <p className="mb-4 text-sm text-paper-700 dark:text-paper-400">
         Bei jeder Änderung wird eine Sicherung abgelegt. Die letzten drei
         Stände bleiben erhalten.
       </p>
@@ -80,8 +80,8 @@ export function BackupSection() {
             aria-hidden
           />
           <div className="min-w-0 flex-1">
-            <p className="text-sm text-clay-700 dark:text-clay-300">
-              <strong className="font-bold text-clay-900 dark:text-clay-50">
+            <p className="text-sm text-paper-700 dark:text-paper-300">
+              <strong className="font-bold text-paper-800 dark:text-paper-100">
                 Beschädigter Stand gesichert
               </strong>{" "}
               vom {formatMoment(quarantined.at)}. Er wurde nicht überschrieben
@@ -125,14 +125,14 @@ export function BackupSection() {
       {restored && (
         <p
           role="status"
-          className="mb-4 rounded-control px-3 py-2.5 text-sm text-clay-700 shadow-neu-in-sm dark:text-clay-300"
+          className="mb-4 rounded-control px-3 py-2.5 text-sm text-paper-700 shadow-neu-in-sm dark:text-paper-300"
         >
           Backup vom {restored} wurde eingespielt.
         </p>
       )}
 
       {backups.length === 0 ? (
-        <p className="text-sm text-clay-700 dark:text-clay-400">
+        <p className="text-sm text-paper-700 dark:text-paper-400">
           Noch keine Sicherung vorhanden. Sobald du etwas änderst, entsteht die
           erste.
         </p>
@@ -144,14 +144,14 @@ export function BackupSection() {
               className="flex flex-wrap items-center gap-3 rounded-control px-3 py-2.5 shadow-neu-in-sm"
             >
               <Clock
-                className="h-4 w-4 shrink-0 text-clay-700 dark:text-clay-400"
+                className="h-4 w-4 shrink-0 text-paper-700 dark:text-paper-400"
                 aria-hidden
               />
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-clay-900 dark:text-clay-50">
+                <p className="font-semibold text-paper-800 dark:text-paper-100">
                   {formatMoment(entry.at)}
                 </p>
-                <p className="text-xs text-clay-700 dark:text-clay-400">
+                <p className="text-xs text-paper-700 dark:text-paper-400">
                   {entry.gearItemCount}{" "}
                   {entry.gearItemCount === 1 ? "Item" : "Items"} ·{" "}
                   {entry.packingListCount}{" "}

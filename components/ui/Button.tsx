@@ -17,15 +17,17 @@ type Variant = "raised" | "accent" | "cool" | "quiet" | "danger";
 
 const VARIANTS: Record<Variant, string> = {
   raised:
-    "bg-clay-200 text-clay-800 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-100",
+    "bg-paper-200 text-paper-800 shadow-neu-sm active:shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-100",
   accent:
     "bg-accent text-on-accent shadow-neu-accent active:shadow-neu-in-sm active:opacity-90",
   cool:
-    "bg-accent-warm text-onyx shadow-neu-accent active:shadow-neu-in-sm active:opacity-90 dark:bg-clay-800 dark:text-nectarine dark:shadow-neu-sm",
+    "bg-accent-tertiary text-on-accent shadow-neu-accent active:shadow-neu-in-sm active:opacity-90 dark:bg-paper-900 dark:text-mustard-400 dark:shadow-neu-sm",
+  // "quiet" steht oft direkt auf dem Brett, nicht auf Papier – dort
+  // erreicht paper-700 nur 3.2:1 auf Kork.
   quiet:
-    "bg-transparent text-clay-700 hover:text-clay-900 dark:text-clay-300 dark:hover:text-clay-50",
+    "bg-transparent text-paper-900 hover:text-accent dark:text-paper-100 dark:hover:text-accent",
   danger:
-    "bg-clay-200 text-red-700 shadow-neu-sm active:shadow-neu-in-sm dark:bg-clay-800 dark:text-red-300",
+    "bg-paper-200 text-red-700 shadow-neu-sm active:shadow-neu-in-sm dark:bg-paper-900 dark:text-red-300",
 };
 
 export function Button({

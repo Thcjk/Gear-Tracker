@@ -5,7 +5,7 @@ import { ChevronsDownUp, ChevronsUpDown, Plus } from "lucide-react";
 import { CategorySection } from "@/components/gear/CategorySection";
 import { GearItemCard } from "@/components/gear/GearItemCard";
 import { ProductImport } from "@/components/gear/ProductImport";
-import { BackpackSketch } from "@/components/sketch/BackpackSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { EmptyState } from "@/components/ui/SurfaceCard";
 import {
   GearItemForm,
@@ -80,14 +80,14 @@ export default function LibraryPage() {
 
   if (!ready) {
     return (
-      <p className="text-sm text-clay-700 dark:text-clay-400">Lade Library…</p>
+      <p className="text-sm text-paper-700 dark:text-paper-400">Lade Library…</p>
     );
   }
 
   return (
     <div className="space-y-4">
       <ScreenHeader
-        title="Gear-Library"
+        title="Gear-Library  "
         subtitle={`${data.gearItems.length} Items in ${CATEGORIES.length} Kategorien`}
       />
 
@@ -95,7 +95,7 @@ export default function LibraryPage() {
         <select
           value={sortKey}
           onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="neu-field w-auto flex-1 py-2 text-sm"
+          className="neu-field h-11 w-auto flex-1 py-0 text-sm"
           aria-label="Sortierung innerhalb der Kategorien"
         >
           <option value="name">Sortierung: Name</option>
@@ -123,7 +123,7 @@ export default function LibraryPage() {
       <ProductImport onCreate={handleImported} />
 
       {data.gearItems.length === 0 && (
-        <EmptyState illustration={<BackpackSketch />}>
+        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch nichts in der Library. Klapp eine Kategorie auf und leg dein
           erstes Item an – oder importiere es per Link.
         </EmptyState>
@@ -141,7 +141,7 @@ export default function LibraryPage() {
               onToggle={() => toggleCategory(meta.id)}
             >
               {items.length === 0 && creatingIn !== meta.id && (
-                <p className="px-3 text-sm text-clay-700 dark:text-clay-400">
+                <p className="px-3 text-sm text-paper-700 dark:text-paper-400">
                   Noch keine Items in dieser Kategorie.
                 </p>
               )}

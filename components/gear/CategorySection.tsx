@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import type { Category } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CATEGORY_NUMBER } from "@/components/flatlay/FlatlayObject";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { getCategoryMeta } from "@/lib/categories";
 
@@ -48,21 +49,29 @@ export function CategorySection({
         aria-expanded={open}
         className={`${SURFACE_CLASSES} flex w-full items-center gap-3 p-3 text-left transition-all duration-150 active:translate-y-px`}
       >
-        <CategoryIcon category={category} className="h-5 w-5" />
-        <span className="min-w-0 flex-1 truncate font-bold text-clay-900 dark:text-clay-50">
+        <CategoryIcon category={category} className="h-8 w-8" />
+        {/* Die laufende Nummer bleibt in Inter: Ziffern gehören nicht in
+            die Handschrift, auch wenn sie hier nur ordnen. */}
+        <span
+          aria-hidden
+          className="shrink-0 text-xs font-bold tabular-nums text-paper-600 dark:text-paper-400"
+        >
+          {CATEGORY_NUMBER[category]}
+        </span>
+        <span className="handwritten min-w-0 flex-1 truncate text-xl font-bold text-paper-800 dark:text-paper-100">
           {meta.label}
         </span>
         <span
           className={`min-w-7 rounded-full px-2 py-1 text-center text-xs font-bold tabular-nums ${
             count === 0
-              ? "text-clay-700 dark:text-clay-400"
-              : "bg-clay-200 text-clay-700 shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-300"
+              ? "text-paper-700 dark:text-paper-400"
+              : "bg-paper-200 text-paper-700 shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-300"
           }`}
         >
           {count}
         </span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-clay-600 transition-transform duration-300 dark:text-clay-400 ${
+          className={`h-5 w-5 shrink-0 text-paper-600 transition-transform duration-300 dark:text-paper-400 ${
             open ? "rotate-180" : ""
           }`}
           aria-hidden

@@ -43,48 +43,77 @@ export const SPLASH_TOTAL_MS = SPLASH_MIN_VISIBLE_MS + SPLASH_FADE_MS;
 const EASE_OUT = "cubic-bezier(.22,1,.36,1)";
 
 /**
+ * Dieselbe Körnung wie am body. Sie steht hier ein zweites Mal, weil der
+ * Splash vor dem Stylesheet steht – ohne sie würde beim Ausblenden eine
+ * glatte Fläche in eine körnige übergehen, und genau das sieht man.
+ */
+const CORK_NOISE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23c)' opacity='0.5'/%3E%3C/svg%3E";
+
+/**
  * Der Splash folgt dem Theme. Die Klasse .dark setzt das Anti-Flash-Skript
  * im <body> noch vor dem ersten Paint, also greifen beide Varianten
  * sofort – ohne sie stünde in einem der Modi heller Text auf hellem Grund.
  */
-const LIGHT_BG = "#FFF6E9"; /* Wheat */
-const LIGHT_INK = "#0A171D"; /* Onyx */
-const LIGHT_LINE = "#003F47"; /* Oceanic */
-const DARK_BG = "#0A171D"; /* Onyx */
-const DARK_INK = "#FFF6E9"; /* Wheat */
-const DARK_LINE = "#FFBD76"; /* Nectarine */
+const LIGHT_BG = "#B8895F"; /* Cork – das Brett */
+const LIGHT_CARD = "#F3ECDC"; /* Paper */
+const LIGHT_INK = "#263241"; /* Ink */
+const LIGHT_LINE = "#A8401F"; /* Rust 600 */
+const DARK_BG = "#3A2E22"; /* Cork Night */
+const DARK_CARD = "#1B2430"; /* Ink Night */
+const DARK_INK = "#F3ECDC"; /* Paper */
+const DARK_LINE = "#E3A73E"; /* Mustard */
 
 export const splashCriticalCss = `
 .splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
-align-items:center;justify-content:center;background:${LIGHT_BG};
+align-items:center;justify-content:center;background-color:${LIGHT_BG};
+background-image:url("${CORK_NOISE}");background-blend-mode:overlay;
 color:${LIGHT_LINE};pointer-events:none;
 animation:splash-out ${SPLASH_FADE_MS}ms ease-out ${SPLASH_MIN_VISIBLE_MS}ms both}
 @keyframes splash-out{
 from{opacity:1;visibility:visible}
 to{opacity:0;visibility:hidden}}
+html.dark .splash{background-color:${DARK_BG};background-blend-mode:soft-light;\ncolor:${DARK_LINE}}
 
-html.dark .splash{background:${DARK_BG};color:${DARK_LINE}}
-
-.splash__stage{position:relative;z-index:1;display:flex;
-flex-direction:column;align-items:center}
-
-/* Die Szene zeichnet mit currentColor, geerbt von .splash. */
-.splash__mark{width:16rem;height:11rem;
+/* Das aufgesteckte Blatt. Leicht schief, wie jede andere Karte auch. */
+.splash__stage{position:relative;display:flex;flex-direction:column;
+align-items:center;padding:1.75rem 2.5rem 1.5rem;border-radius:1.5rem;
+background:${LIGHT_CARD};box-shadow:2px 5px 14px rgba(38,50,65,.3);
+transform:rotate(-1.25deg);
 animation:splash-mark 720ms ${EASE_OUT} both}
+html.dark .splash__stage{background:${DARK_CARD};
+box-shadow:2px 5px 14px rgba(0,0,0,.55)}
 @keyframes splash-mark{
-from{opacity:0;transform:scale(.84)}
-to{opacity:1;transform:scale(1)}}
+from{opacity:0;transform:rotate(-1.25deg) scale(.9)}
+to{opacity:1;transform:rotate(-1.25deg) scale(1)}}
 
-.splash__title{margin:1rem 0 0;font-size:1.875rem;line-height:1.15;
-font-weight:700;letter-spacing:-.02em;color:${LIGHT_INK};
-animation:splash-mark 720ms ${EASE_OUT} 180ms both}
+/* Der Reissnagel oben in der Mitte des Blattes */
+.splash__pin{position:absolute;top:-.6rem;left:50%;margin-left:-.55rem;
+width:1.1rem;height:1.1rem;border-radius:50% 50% 45% 45%;
+background:#C1502E;box-shadow:0 2px 3px rgba(38,50,65,.5)}
+
+.splash__mark{display:block;width:11rem;height:11.5rem}
+.splash__mark svg{width:100%;height:100%}
+
+.splash__title{margin:.75rem 0 0;font-size:1.75rem;line-height:1.15;
+font-weight:800;letter-spacing:-.02em;color:${LIGHT_INK}}
 html.dark .splash__title{color:${DARK_INK}}
 
+.splash__compass{position:absolute;right:8%;top:12%;width:5rem;height:5rem;
+opacity:.4;animation:splash-fade 900ms ease-out 260ms both}
+
 /* Unten links, oberhalb der Home-Anzeige des Geräts */
-.splash__tagline{position:absolute;z-index:1;left:1.5rem;
+/* Die Tagline steht auf einem eigenen Zettel. Paper auf Kork erreicht
+   nur 2.6:1 – als freier Text auf dem Brett wäre sie schlecht lesbar. */
+.splash__tagline{position:absolute;z-index:1;left:1.25rem;
 bottom:calc(2rem + env(safe-area-inset-bottom));margin:0;
-font-size:.875rem;letter-spacing:.01em;color:inherit;
-animation:splash-mark 720ms ${EASE_OUT} 320ms both}
+padding:.15rem .8rem .3rem;border-radius:.7rem;
+background:${LIGHT_CARD};color:${LIGHT_INK};
+font-size:1.15rem;transform:rotate(-1.5deg);
+box-shadow:1px 3px 8px rgba(38,50,65,.28);
+animation:splash-fade 720ms ease-out 320ms both}
+html.dark .splash__tagline{background:${DARK_CARD};color:${DARK_INK};
+box-shadow:1px 3px 8px rgba(0,0,0,.5)}
 
 /* Inhalt und Navigation kommen hinter dem Splash hervor. Der Schlusswert
    ist transform:none – ein bleibendes transform würde für fixierte
@@ -102,10 +131,8 @@ html[data-splash="hold"] .splash-reveal,
 html[data-splash="hold"] .splash-fade{animation:none;opacity:0}
 
 html[data-splash="leaving"] .splash{animation:splash-out ${SPLASH_FADE_MS}ms ease-out forwards}
-html[data-splash="leaving"] .splash__mark,
-html[data-splash="leaving"] .splash__title,
-html[data-splash="leaving"] .splash__tagline{animation:splash-mark-out ${SPLASH_FADE_MS}ms ease-in forwards}
-@keyframes splash-mark-out{to{opacity:0;transform:scale(1.05)}}
+html[data-splash="leaving"] .splash__stage{animation:splash-stage-out ${SPLASH_FADE_MS}ms ease-in forwards}
+@keyframes splash-stage-out{to{opacity:0;transform:rotate(-1.25deg) scale(1.04)}}
 html[data-splash="leaving"] .splash-reveal{animation:splash-reveal ${SPLASH_REVEAL_MS}ms ease-out both}
 html[data-splash="leaving"] .splash-fade{animation:splash-fade ${SPLASH_REVEAL_MS}ms ease-out both}
 
@@ -115,10 +142,8 @@ html[data-splash="done"] .splash-fade{animation:none;opacity:1}
 /* Reduzierte Bewegung: der Splash bleibt (er ist Teil des Starts), aber
    ohne Skalieren. Reine Deckkraft-Übergänge gelten als unkritisch. */
 @media (prefers-reduced-motion:reduce){
-.splash__mark,.splash__title,.splash__tagline{animation-name:splash-fade}
-html[data-splash="leaving"] .splash__mark,
-html[data-splash="leaving"] .splash__title,
-html[data-splash="leaving"] .splash__tagline{animation:splash-fade-out ${SPLASH_FADE_MS}ms ease-in forwards}
+.splash__stage{animation-name:splash-fade}
+html[data-splash="leaving"] .splash__stage{animation:splash-fade-out ${SPLASH_FADE_MS}ms ease-in forwards}
 @keyframes splash-fade-out{to{opacity:0}}
 .splash-reveal,html[data-splash="leaving"] .splash-reveal{animation-name:splash-fade}}
 `;

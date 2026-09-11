@@ -16,8 +16,8 @@ import type { GearItem, TourReview, WeightFeeling } from "@/types";
 
 const FEELING_STYLES: Record<WeightFeeling, string> = {
   "zu schwer": "text-red-700 dark:text-red-300",
-  "genau richtig": "text-ocean-800 dark:text-ocean-300",
-  "zu leicht": "text-clay-700 dark:text-clay-300",
+  "genau richtig": "text-olive-700 dark:text-olive-300",
+  "zu leicht": "text-paper-700 dark:text-paper-300",
 };
 
 function formatMoment(iso: string): string {
@@ -41,11 +41,11 @@ export function TourReviewLog({
 
   return (
     <SurfaceCard as="section" className="p-4">
-      <h3 className="mb-1 flex items-center gap-2 text-base font-bold text-clay-900 dark:text-clay-50">
+      <h3 className="mb-1 flex items-center gap-2 text-base font-bold text-paper-800 dark:text-paper-100">
         <Flag className="h-4 w-4 text-accent" aria-hidden />
         Tourbuch
       </h3>
-      <p className="mb-4 text-sm text-clay-700 dark:text-clay-400">
+      <p className="mb-4 text-sm text-paper-700 dark:text-paper-400">
         {reviews.length === 1
           ? "Eine abgeschlossene Tour."
           : `${reviews.length} abgeschlossene Touren.`}
@@ -71,7 +71,7 @@ export function TourReviewLog({
               className="rounded-control px-3 py-3 shadow-neu-in-sm"
             >
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <p className="font-semibold text-clay-900 dark:text-clay-50">
+                <p className="font-semibold text-paper-800 dark:text-paper-100">
                   {formatMoment(review.completedAt)}
                 </p>
                 <p
@@ -100,8 +100,8 @@ export function TourReviewLog({
               </div>
 
               {unused.length > 0 && (
-                <p className="mt-2 text-sm text-clay-700 dark:text-clay-300">
-                  <strong className="font-semibold text-clay-900 dark:text-clay-50">
+                <p className="mt-2 text-sm text-paper-700 dark:text-paper-300">
+                  <strong className="font-semibold text-paper-800 dark:text-paper-100">
                     Nicht gebraucht:
                   </strong>{" "}
                   {unused.join(", ")}
@@ -118,9 +118,9 @@ export function TourReviewLog({
                   {notes.map((entry) => (
                     <li
                       key={entry.name}
-                      className="text-sm text-clay-700 dark:text-clay-300"
+                      className="text-sm text-paper-700 dark:text-paper-300"
                     >
-                      <strong className="font-semibold text-clay-900 dark:text-clay-50">
+                      <strong className="font-semibold text-paper-800 dark:text-paper-100">
                         {entry.name}:
                       </strong>{" "}
                       {entry.note}
@@ -139,8 +139,8 @@ export function TourReviewLog({
 function Answer({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
-    <p className="mt-2 text-sm text-clay-700 dark:text-clay-300">
-      <strong className="font-semibold text-clay-900 dark:text-clay-50">
+    <p className="mt-2 text-sm text-paper-700 dark:text-paper-300">
+      <strong className="font-semibold text-paper-800 dark:text-paper-100">
         {label}:
       </strong>{" "}
       {value}

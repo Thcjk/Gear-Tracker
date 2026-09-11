@@ -80,7 +80,7 @@ export function GearItemForm({
       onSubmit={handleSubmit}
       className={`${SURFACE_CLASSES} animate-rise p-5`}
     >
-      <h2 className="text-lg font-bold text-clay-900 dark:text-clay-50">
+      <h2 className="text-lg font-bold text-paper-800 dark:text-paper-100">
         {title}
       </h2>
       {hint}

@@ -3,84 +3,79 @@
 @tailwind utilities;
 
 /* ------------------------------------------------------------------ *
- * Semantische Farbvariablen
+ * Semantische Farbvariablen – "Paper & Ink"
  *
- * Komponenten sollen "Grundfläche" oder "Überschriftenfarbe" sagen, nicht
- * "Morning Snow" – sonst müsste jede Datei angefasst werden, wenn sich die
- * Palette wieder ändert.
+ * Das Brett ist der Hintergrund, das Papier liegt darauf. Komponenten
+ * sagen "Grundfläche" oder "Akzent", nicht "Rust" – sonst müsste jede
+ * Datei angefasst werden, wenn sich die Palette wieder ändert.
  *
  * Der Dark Mode hängt an der Klasse .dark am <html> (Tailwind darkMode:
  * "class", gesetzt vom Anti-Flash-Skript im Layout). [data-theme="dark"]
- * ist zusätzlich aufgeführt, damit die Variablen auch dann stimmen, wenn
- * das Theme über das Attribut gesetzt wird.
+ * steht zusätzlich daneben.
  * ------------------------------------------------------------------ */
 
 :root {
   color-scheme: light;
 
-  --bg-base: #fff6e9; /* Wheat */
-  --bg-surface: #ffffff; /* leicht abgesetztes Weiss für Karten auf Wheat */
-  --accent: #003f47; /* Oceanic */
-  --accent-warm: #ffbd76; /* Nectarine */
-  --text-primary: #0a171d; /* Onyx, als Text auf hellem Grund */
-  --text-headline: #003f47; /* Oceanic, für Überschriften */
-  /** Schrift auf einer Akzentfläche: Wheat auf Oceanic sind 11.2:1. */
-  --on-accent: #fff6e9;
+  --bg-base: #b8895f; /* Cork – das Brett */
+  --bg-surface: #f3ecdc; /* Paper – die aufgesteckte Fläche */
+  --text-primary: #263241; /* Ink */
+  --text-headline: #8a3419; /* tiefes Rust */
 
-  /* Farben der beiden Schlagschatten. Die Geometrie steckt in den
-     Tailwind-Utilities shadow-neu*, hier wechselt nur die Färbung. */
-  --neu-light: rgba(255, 255, 255, 0.95);
-  --neu-dark: rgba(10, 23, 29, 0.14);
+  /**
+   * Keiner der drei Akzente trägt auf beiden Papieren als Schrift:
+   * Mustard erreicht auf Paper 1.8:1, Rust 4.0:1. Die Variablen zeigen
+   * deshalb hell auf die vertieften und dunkel auf die aufgehellten
+   * Stufen – jede Stelle, die "den Akzent" meint, bekommt automatisch
+   * den lesbaren.
+   */
+  --accent-primary: #a8401f; /* Rust 600 – 5.2:1 auf Paper */
+  --accent-secondary: #545c34; /* Olive 700 – 6.0:1 */
+  --accent-tertiary: #8a6210; /* Mustard 700 – 4.7:1 */
+  --on-accent: #f3ecdc; /* Paper auf Rust 600 – 5.2:1 */
 
-  /* ---------------------------------------------------------------- *
-   * Kategorietöne für Diagramme und Illustrationen
-   *
-   * Als Variablen und nicht als feste Werte, weil keine der beiden
-   * Akzentfarben in beiden Themes trägt: Nectarine hat auf Weiss 1.6:1,
-   * Oceanic auf Onyx 1.6:1. Jede Stufe erreicht auf ihrem Grund
-   * mindestens 3:1, die Schwelle für bedeutungstragende Grafik.
-   *
-   * Sieben Kategorien aus vier Palettenfarben: gespreizt wird über die
-   * Rampen zwischen Oceanic und Nectarine. Balken und Segmente tragen
-   * zusätzlich Beschriftung und Wert – die Zuordnung hängt nie allein
-   * an der Farbe.
-   * ---------------------------------------------------------------- */
-  --cat-shelter: #003f47; /* Oceanic */
-  --cat-sleep-system: #b5711a;
-  --cat-backpack: #10707d;
-  --cat-kitchen: #8a3b12;
-  --cat-clothing: #3e8e92;
-  --cat-electronics: #0a171d; /* Onyx */
-  --cat-hygiene-misc: #6b655d;
+  /* Die Karte steht vom Brett ab, statt in es eingelassen zu sein. */
+  --shadow-card: rgba(38, 50, 65, 0.25);
+  --shadow-card-soft: rgba(38, 50, 65, 0.18);
+  --shadow-inset: rgba(38, 50, 65, 0.16);
+  --pin-shadow: rgba(38, 50, 65, 0.45);
+
+  /* Kategorietöne für Diagramme und Illustrationen. */
+  --cat-shelter: #a8401f;
+  --cat-sleep-system: #545c34;
+  --cat-backpack: #8a6210;
+  --cat-kitchen: #8a3419;
+  --cat-clothing: #3f4527;
+  --cat-electronics: #263241;
+  --cat-hygiene-misc: #625d51;
 }
 
 html.dark,
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg-base: #0a171d; /* Onyx */
-  --bg-surface: #142229; /* etwas hellerer Onyx-Ton für Karten */
-  /* Nectarine wird im Dark Mode zum Hauptakzent, da Oceanic auf dunklem
-     Grund zu wenig Kontrast hätte (1.6:1). */
-  --accent: #ffbd76; /* Nectarine */
-  --accent-warm: #ffbd76;
-  --text-primary: #fff6e9; /* Wheat, als Text auf dunklem Grund */
-  --text-headline: #ffbd76; /* Nectarine für Überschriften im Dark Mode */
-  /** Auf der Nectarine-Fläche steht Onyx: 11.1:1. */
-  --on-accent: #0a171d;
+  --bg-base: #3a2e22; /* Cork Night – dunkles Holz/Filz */
+  --bg-surface: #1b2430; /* Ink Night – die Karte */
+  --text-primary: #f3ecdc; /* Paper */
+  --text-headline: #e3a73e; /* Mustard */
 
-  --neu-light: rgba(255, 189, 118, 0.06);
-  --neu-dark: rgba(0, 0, 0, 0.6);
+  --accent-primary: #e07a55; /* Rust 400 – 5.3:1 auf Ink Night */
+  --accent-secondary: #a8b472; /* Olive 300 – 7.0:1 */
+  --accent-tertiary: #e3a73e; /* Mustard 400 – 7.4:1 */
+  --on-accent: #1b2430; /* Ink Night auf Rust 400 – 5.3:1 */
 
-  /* Auf der dunklen Karte kehrt sich alles um: die tiefen Töne von oben
-     wären dort unsichtbar, gebraucht werden die hellen. */
-  --cat-shelter: #ffbd76; /* Nectarine */
-  --cat-sleep-system: #c98a4e;
-  --cat-backpack: #7fcbd3;
-  --cat-kitchen: #f08a4b;
-  --cat-clothing: #4e9aa2;
-  --cat-electronics: #fff6e9; /* Wheat */
-  --cat-hygiene-misc: #a79c8c;
+  --shadow-card: rgba(0, 0, 0, 0.55);
+  --shadow-card-soft: rgba(0, 0, 0, 0.4);
+  --shadow-inset: rgba(0, 0, 0, 0.45);
+  --pin-shadow: rgba(0, 0, 0, 0.6);
+
+  --cat-shelter: #e07a55;
+  --cat-sleep-system: #a8b472;
+  --cat-backpack: #e3a73e;
+  --cat-kitchen: #edb29b;
+  --cat-clothing: #c8cda8;
+  --cat-electronics: #f3ecdc;
+  --cat-hygiene-misc: #afa48b;
 }
 
 html,
@@ -90,8 +85,57 @@ body {
   overflow-x: hidden;
 }
 
+/**
+ * Das Brett.
+ *
+ * Die Körnung ist ein eingebettetes SVG mit feTurbulence – kein
+ * nachgeladenes Bild: ein eigener Request für eine Textur, die bei jedem
+ * Start zu sehen ist, wäre genau der Request, der auf dem Berg fehlt.
+ * Die Deckkraft ist niedrig gehalten; die Textur soll das Brett andeuten,
+ * nicht mit dem Inhalt konkurrieren.
+ */
 body {
-  @apply bg-clay-100 font-sans text-clay-900 antialiased dark:bg-clay-900 dark:text-clay-100;
+  @apply font-sans text-paper-800 antialiased dark:text-paper-100;
+  background-color: var(--bg-base);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23c)' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  /* Overlay lässt die Körnung den Korkton dunkler und heller ziehen,
+     statt ihn grau zu überdecken. */
+  background-blend-mode: overlay;
+}
+
+html.dark body {
+  /* Auf dunklem Holz bräuchte overlay zu viel Deckkraft, um sichtbar zu
+     sein – soft-light bleibt dezent und frisst die Farbe nicht. */
+  background-blend-mode: soft-light;
+}
+
+/**
+ * Zweite Brett-Ebene: die Korkgranulate.
+ *
+ * Rauschen allein sieht nach Filmkorn aus; Kork hat sichtbare, ungleich
+ * grosse Krümel. Sie liegen als eigenes, gekacheltes SVG darüber – auf
+ * einem ::before am body, damit dafür kein zusätzlicher Knoten im DOM
+ * steht und nichts davon anklickbar ist.
+ *
+ * position:fixed statt absolute: die Ebene soll beim Scrollen stehen
+ * bleiben wie ein echtes Brett, nicht mitwandern.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 120 120'%3E%3Cg fill='%235B3E28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='3' transform='rotate(-18 14 18)'/%3E%3Cellipse cx='52' cy='9' rx='3.5' ry='2' transform='rotate(24 52 9)'/%3E%3Cellipse cx='88' cy='22' rx='6' ry='2.6' transform='rotate(-8 88 22)'/%3E%3Cellipse cx='108' cy='47' rx='3' ry='2' transform='rotate(40 108 47)'/%3E%3Cellipse cx='30' cy='44' rx='4.5' ry='2.2' transform='rotate(12 30 44)'/%3E%3Cellipse cx='66' cy='38' rx='2.6' ry='1.6' transform='rotate(-32 66 38)'/%3E%3Cellipse cx='18' cy='72' rx='5.5' ry='2.4' transform='rotate(-6 18 72)'/%3E%3Cellipse cx='48' cy='66' rx='3.2' ry='2.1' transform='rotate(52 48 66)'/%3E%3Cellipse cx='84' cy='70' rx='4.2' ry='2' transform='rotate(-22 84 70)'/%3E%3Cellipse cx='104' cy='92' rx='5' ry='2.4' transform='rotate(16 104 92)'/%3E%3Cellipse cx='36' cy='100' rx='3.6' ry='2.2' transform='rotate(-44 36 100)'/%3E%3Cellipse cx='70' cy='108' rx='4.8' ry='2.2' transform='rotate(6 70 108)'/%3E%3Cellipse cx='8' cy='108' rx='2.8' ry='1.7' transform='rotate(30 8 108)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+html.dark body::before {
+  /* Auf dunklem Filz sind die Krümel heller als der Grund, nicht dunkler. */
+  opacity: 0.12;
+  filter: invert(1) sepia(0.4);
 }
 
 * {
@@ -108,33 +152,23 @@ body {
   }
 }
 
-/**
- * Die unscharfen Farbflecken der GradientField-Ebene.
- *
- * will-change schiebt die Unschärfe einmalig auf die GPU. Ohne das rechnet
- * der Browser blur(64px) über drei grosse Flächen bei jedem Bildaufbau neu
- * – auf älteren Telefonen sieht man das.
- */
-.gradient-blob {
-  will-change: transform;
-}
-
-/* Wer reduzierte Bewegung eingestellt hat, will keine teure Optik: die
-   Unschärfe fällt weg, die Farbflächen bleiben als weiche Kreise. */
-@media (prefers-reduced-motion: reduce) {
-  .gradient-blob {
-    filter: none;
-    will-change: auto;
-  }
-}
-
 @layer components {
-  /* Eingabefelder wirken eingelassen statt aufgesetzt */
+  /* Eingabefelder wirken eingelassen ins Papier */
   .neu-field {
-    @apply w-full rounded-control bg-clay-200 px-3.5 py-2.5 text-clay-900 shadow-neu-in-sm outline-none transition-shadow placeholder:text-clay-600 focus:shadow-neu dark:bg-clay-800 dark:text-clay-50;
+    @apply w-full rounded-control bg-paper-200 px-3.5 py-2.5 text-paper-800 shadow-neu-in-sm outline-none transition-shadow placeholder:text-paper-600 focus:shadow-neu dark:bg-paper-950 dark:text-paper-100 dark:placeholder:text-paper-400;
   }
 
   .neu-label {
-    @apply text-sm font-medium text-clay-700 dark:text-clay-300;
+    @apply text-sm font-medium text-paper-700 dark:text-paper-300;
+  }
+
+  /**
+   * Handschrift ist für Etiketten, Marginalien und die Sprechblase des
+   * Maskottchens da – nie für Zahlen. Ein Gewicht, das man zweimal lesen
+   * muss, ist ein schlechteres Gewicht.
+   */
+  .handwritten {
+    font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
+    letter-spacing: 0.01em;
   }
 }

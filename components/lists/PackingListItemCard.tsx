@@ -58,22 +58,26 @@ export function PackingListItemCard({
   return (
     <SurfaceCard
       as="article"
-      className="relative animate-rise overflow-hidden p-4"
+      pinned={item.gearItemId}
+      pinCorner="left"
+      className="animate-rise overflow-hidden p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       {celebrating && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-accent-warm"
+          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-accent-tertiary"
         />
       )}
       <div className="relative flex items-start gap-3">
-        <label className="relative mt-1 flex items-center">
+        {/* Padding plus negativer Rand: das Kästchen bleibt 24 px gross,
+            die Trefferfläche wird 44 px – Daumen sind breiter als Kästchen. */}
+        <label className="relative -m-2.5 mt-0 flex items-center p-2.5">
           <input
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-clay-800 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-paper-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-paper-900 ${
               celebrating ? "animate-pop" : ""
             }`}
           />
@@ -93,13 +97,13 @@ export function PackingListItemCard({
             <h3
               className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
-                  ? "text-clay-700 line-through dark:text-clay-400"
-                  : "text-clay-900 dark:text-clay-50"
+                  ? "text-paper-700 line-through dark:text-paper-400"
+                  : "text-paper-800 dark:text-paper-100"
               }`}
             >
               {gear.name}
             </h3>
-            <p className="shrink-0 whitespace-nowrap font-extrabold text-ocean-800 dark:text-ocean-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-olive-700 dark:text-olive-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
@@ -107,7 +111,7 @@ export function PackingListItemCard({
             <ComfortTempBadge celsius={gear.comfortTempC} className="mt-2" />
           )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <label className="inline-flex items-center gap-2 text-sm text-clay-700 dark:text-clay-400">
+            <label className="inline-flex items-center gap-2 text-sm text-paper-700 dark:text-paper-400">
               Menge
               <input
                 type="number"
@@ -116,13 +120,13 @@ export function PackingListItemCard({
                 onChange={(e) =>
                   onQuantityChange(Math.max(1, Number(e.target.value) || 1))
                 }
-                className="neu-field w-16 px-2 py-1 text-center"
+                className="neu-field h-11 w-16 px-2 py-1 text-center"
               />
             </label>
             <button
               type="button"
               onClick={onRemove}
-              className="text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-300"
+              className="-mx-2 inline-flex h-11 items-center px-2 text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-300"
             >
               Entfernen
             </button>

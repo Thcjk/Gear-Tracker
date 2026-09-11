@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
-import { CampfireSketch } from "@/components/sketch/CampfireSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -142,6 +142,11 @@ export function TourReviewDialog({
   }
 
   const unusedCount = [...draft.reviews.values()].filter((r) => !r.used).length;
+  /** Was auf dieser Tour tatsächlich mitgereist ist. */
+  const carriedGrams = items.reduce(
+    (sum, { item, gear }) => sum + gear.weightGrams * item.quantity,
+    0,
+  );
 
   if (done) {
     return (
@@ -155,11 +160,11 @@ export function TourReviewDialog({
         }}
       >
         <SurfaceCard className="animate-rise w-full max-w-md p-6 text-center">
-          <CampfireSketch className="mx-auto h-28 w-28 text-accent" />
-          <h2 className="mt-4 text-xl font-bold text-clay-900 dark:text-clay-50">
+          <TurtleMascot totalWeightGrams={carriedGrams} className="mx-auto h-32 w-32" />
+          <h2 className="mt-4 text-xl font-bold text-paper-800 dark:text-paper-100">
             Tour im Buch
           </h2>
-          <p className="mx-auto mt-2 max-w-xs text-sm text-clay-700 dark:text-clay-300">
+          <p className="mx-auto mt-2 max-w-xs text-sm text-paper-700 dark:text-paper-300">
             {unusedCount === 0
               ? "Alles gebraucht – so kann die Liste bleiben."
               : `${unusedCount} ${unusedCount === 1 ? "Item war" : "Items waren"} umsonst dabei. Beim nächsten Packen weisst du es.`}
@@ -190,14 +195,14 @@ export function TourReviewDialog({
     >
       <SurfaceCard className="animate-rise flex max-h-[85vh] w-full max-w-md flex-col p-5">
         <div className="mb-4 flex items-start gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900">
             <Flag className="h-5 w-5" aria-hidden />
           </span>
           <div className="min-w-0 flex-1">
-            <h2 className="font-bold text-clay-900 dark:text-clay-50">
+            <h2 className="font-bold text-paper-800 dark:text-paper-100">
               {existing ? "Auswertung bearbeiten" : "Tour beenden"}
             </h2>
-            <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+            <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
               Schritt {step} von 2 ·{" "}
               {step === 1 ? "Wie war’s insgesamt?" : "Was hast du gebraucht?"}
             </p>
@@ -234,13 +239,13 @@ export function TourReviewDialog({
                           onChange={() =>
                             setAnswer("weightFeeling", option.value)
                           }
-                          className="h-4 w-4 shrink-0 accent-oceanic dark:accent-nectarine"
+                          className="h-4 w-4 shrink-0 accent-rust-600 dark:accent-rust-400"
                         />
                         <span className="min-w-0">
-                          <span className="font-semibold text-clay-900 dark:text-clay-50">
+                          <span className="font-semibold text-paper-800 dark:text-paper-100">
                             {option.value}
                           </span>
-                          <span className="block text-clay-700 dark:text-clay-400">
+                          <span className="block text-paper-700 dark:text-paper-400">
                             {option.hint}
                           </span>
                         </span>
@@ -271,7 +276,7 @@ export function TourReviewDialog({
                 />
               </div>
             ) : items.length === 0 ? (
-              <p className="text-sm text-clay-700 dark:text-clay-400">
+              <p className="text-sm text-paper-700 dark:text-paper-400">
                 In dieser Liste ist kein Item, das sich beurteilen liesse.
               </p>
             ) : (
@@ -291,19 +296,19 @@ export function TourReviewDialog({
                           onChange={() =>
                             setReview(item.gearItemId, { used: !used })
                           }
-                          className="mt-0.5 h-4 w-4 shrink-0 accent-oceanic dark:accent-nectarine"
+                          className="mt-0.5 h-4 w-4 shrink-0 accent-rust-600 dark:accent-rust-400"
                         />
                         <span className="min-w-0 flex-1">
                           <span
                             className={`block font-semibold ${
                               used
-                                ? "text-clay-900 dark:text-clay-50"
-                                : "text-clay-700 dark:text-clay-400"
+                                ? "text-paper-800 dark:text-paper-100"
+                                : "text-paper-700 dark:text-paper-400"
                             }`}
                           >
                             {gear.name}
                           </span>
-                          <span className="block text-xs text-clay-700 dark:text-clay-400">
+                          <span className="block text-xs text-paper-700 dark:text-paper-400">
                             {formatWeight(gear.weightGrams * item.quantity)}
                             {used ? " · benutzt" : " · nicht gebraucht"}
                           </span>
@@ -327,7 +332,7 @@ export function TourReviewDialog({
           </div>
 
           {step === 2 && items.length > 0 && (
-            <p className="text-sm text-clay-700 dark:text-clay-400">
+            <p className="text-sm text-paper-700 dark:text-paper-400">
               {unusedCount === 0
                 ? "Alles gebraucht."
                 : `${unusedCount} ${unusedCount === 1 ? "Item" : "Items"} nicht gebraucht.`}

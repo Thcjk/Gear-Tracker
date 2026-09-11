@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Caveat, Inter } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { PageTransition } from "@/components/nav/PageTransition";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/splash/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
-import { splashBootScript, splashCriticalCss } from "@/components/splash/splashCss";
+import {
+  splashBootScript,
+  splashCriticalCss,
+} from "@/components/splash/splashCss";
 import { AppStoreProvider } from "@/lib/store";
 import { STORAGE_KEY } from "@/lib/storage";
 
@@ -17,14 +20,30 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * daneben Onyx als festen Wert – dort ist nur einer vorgesehen.
  */
 const THEME_COLORS = [
-  { media: "(prefers-color-scheme: light)", color: "#FFF6E9" },
-  { media: "(prefers-color-scheme: dark)", color: "#0A171D" },
+  { media: "(prefers-color-scheme: light)", color: "#B8895F" },
+  { media: "(prefers-color-scheme: dark)", color: "#3A2E22" },
 ];
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+/**
+ * Akzentschrift für Etiketten, Marginalien und die Sprechblase des
+ * Maskottchens – nie für Zahlen. Ein Gewicht, das man zweimal lesen muss,
+ * ist ein schlechteres Gewicht.
+ *
+ * display:"swap" statt "optional": die Handschrift ist Teil des Looks,
+ * nicht nur Zierde; sie darf einen Moment später kommen, aber sie soll
+ * kommen. Nur zwei Schnitte, damit der Download klein bleibt.
+ */
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -66,7 +85,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="de"
+      className={`${inter.variable} ${caveat.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Inline, damit der Splash schon beim ersten Paint aussieht wie
             gedacht – das Tailwind-Stylesheet ist ein eigener Request. */}
@@ -94,8 +117,13 @@ export default function RootLayout({
           {/* Oben unter der Notch freihalten (status-bar-style ist
               black-translucent), unten Platz für die Bottom-Navigation */}
           <div
-            className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
-            style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
+            className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-4 pb-36 sm:px-5"
+            // Die Reissnägel ragen über die Kartenkante hinaus – ohne den
+            // zusätzlichen Platz schneidet der Bildschirmrand sie oben ab.
+            style={{
+              paddingTop:
+                "max(2.25rem, calc(env(safe-area-inset-top) + 1.25rem))",
+            }}
           >
             <StorageWarning />
             <PageTransition>{children}</PageTransition>

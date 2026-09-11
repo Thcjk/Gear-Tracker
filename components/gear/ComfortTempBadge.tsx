@@ -17,7 +17,7 @@ export function ComfortTempBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full bg-clay-200 px-2.5 py-1 text-xs font-bold tabular-nums text-clay-700 shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-300 ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full bg-paper-200 px-2.5 py-1 text-xs font-bold tabular-nums text-paper-700 shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-300 ${className}`}
     >
       <Thermometer className="h-3.5 w-3.5 shrink-0" aria-hidden />
       {/* Ohne den Zusatz liest ein Screenreader nur "-5 Grad Celsius" vor. */}

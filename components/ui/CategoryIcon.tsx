@@ -1,10 +1,9 @@
 import type { Category } from "@/types";
 import { getCategoryMeta } from "@/lib/categories";
-import { CATEGORY_SKETCH } from "@/lib/sketchIcons";
-import { SketchIcon } from "@/components/ui/SketchIcon";
+import { FlatlayObject } from "@/components/flatlay/FlatlayObject";
 
 /**
- * Nacktes Icon ohne Pillen-Hintergrund. Rendert ein <svg>, das sich auch
+ * Nacktes Objekt ohne Papier-Scheibe. Rendert ein <svg>, das sich auch
  * innerhalb eines anderen SVG (z. B. als Recharts-Achsenbeschriftung)
  * über x/y positionieren lässt.
  */
@@ -13,28 +12,22 @@ export function CategoryGlyph({
   size = 16,
   x,
   y,
-  className,
 }: {
   category: Category;
   size?: number;
   x?: number;
   y?: number;
-  className?: string;
 }) {
   return (
-    <SketchIcon
-      type={CATEGORY_SKETCH[category]}
-      size={size}
-      x={x}
-      y={y}
-      className={className}
-    />
+    <svg x={x} y={y} width={size} height={size} viewBox="0 0 48 48" aria-hidden>
+      <FlatlayObject category={category} className="" />
+    </svg>
   );
 }
 
 export function CategoryIcon({
   category,
-  className = "h-5 w-5",
+  className = "h-7 w-7",
 }: {
   category: Category;
   className?: string;
@@ -42,13 +35,12 @@ export function CategoryIcon({
   const meta = getCategoryMeta(category);
   return (
     <span
-      // Weiche erhabene Scheibe in der Grundfläche; die Kategoriefarbe
-      // steckt nur noch im Strich des Icons, nicht mehr in der Fläche.
-      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 shadow-neu-sm dark:bg-clay-800"
+      // Das Objekt liegt auf einer hellen Papier-Scheibe, damit die
+      // Ink-Konturen auch auf der dunklen Karte stehen bleiben.
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 shadow-neu-in-sm dark:bg-paper-200"
       title={meta.label}
-      style={{ color: meta.chartColor }}
     >
-      <SketchIcon type={CATEGORY_SKETCH[category]} className={className} />
+      <FlatlayObject category={category} className={className} />
     </span>
   );
 }

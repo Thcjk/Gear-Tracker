@@ -3,7 +3,8 @@
 import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
-import { BootsSketch } from "@/components/sketch/BootsSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
 
@@ -12,12 +13,12 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
   return (
     <div className="min-w-0">
       {entry.imported && entry.owner && (
-        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-clay-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent shadow-neu-sm dark:bg-clay-800">
+        <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-paper-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent shadow-neu-sm dark:bg-paper-900">
           <Download className="h-3 w-3" aria-hidden />
           importiert
         </span>
       )}
-      <p className="font-bold text-clay-900 dark:text-clay-50">
+      <p className="font-bold text-paper-800 dark:text-paper-100">
         {entry.imported && entry.owner ? `${entry.owner} — ` : ""}
         {entry.title}
       </p>
@@ -28,7 +29,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
 export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
-      <EmptyState illustration={<BootsSketch />}>
+      <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
         Wähle mindestens zwei Packlisten zum Vergleichen – eigene oder eine
         importierte Datei.
       </EmptyState>
@@ -40,10 +41,32 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
 
   return (
     <div className="space-y-4">
+      {/* Der Gewichtsunterschied auf einen Blick, vor der Tabelle: fünf
+          Stufen nebeneinander sagen mehr als fünf Zahlen untereinander. */}
+      <SurfaceCard as="section" className="p-4">
+        <ul className="flex flex-wrap justify-center gap-4">
+          {rows.map((row) => (
+            <li key={row.entry.key} className="w-28 text-center">
+              <TurtleMascot
+                totalWeightGrams={row.weightGrams}
+                animated={false}
+                className="mx-auto h-24 w-24"
+              />
+              <p className="truncate text-sm font-bold text-paper-800 dark:text-paper-100">
+                {row.entry.title}
+              </p>
+              <p className="text-sm tabular-nums text-paper-700 dark:text-paper-300">
+                {formatWeight(row.weightGrams)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </SurfaceCard>
+
       <SurfaceCard className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-clay-300 dark:border-clay-600">
-            <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
+          <thead className="border-b border-paper-300 dark:border-paper-700">
+            <tr className="text-xs uppercase tracking-wider text-paper-700 dark:text-paper-400">
               <th className="px-4 py-3 font-medium">Liste</th>
               <th className="px-4 py-3 font-medium">Items</th>
               <th className="px-4 py-3 font-medium">Gewicht</th>
@@ -56,26 +79,26 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
             {rows.map((row) => (
               <tr
                 key={row.entry.key}
-                className="border-b border-clay-300/60 last:border-0 dark:border-clay-600"
+                className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
               >
                 <td className="px-4 py-3.5">
                   <EntryTitle entry={row.entry} />
                 </td>
-                <td className="px-4 py-3.5 text-clay-700 dark:text-clay-300">
+                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-300">
                   {row.itemCount}
                 </td>
-                <td className="px-4 py-3.5 font-semibold text-ocean-800 dark:text-ocean-300">
+                <td className="px-4 py-3.5 font-semibold text-olive-700 dark:text-olive-300">
                   {formatWeight(row.weightGrams)}
                 </td>
-                <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
+                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
                   {row.isLightest
                     ? "leichteste"
                     : `+${formatWeight(row.weightDiff)}`}
                 </td>
-                <td className="px-4 py-3.5 text-ocean-800 dark:text-ocean-300">
+                <td className="px-4 py-3.5 text-olive-700 dark:text-olive-300">
                   {formatPrice(row.price)}
                 </td>
-                <td className="px-4 py-3.5 text-clay-700 dark:text-clay-400">
+                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
                   {row.isCheapest ? "günstigste" : `+${formatPrice(row.priceDiff)}`}
                 </td>
               </tr>
@@ -87,8 +110,8 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
       {categoryRows.length > 0 && (
         <SurfaceCard className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-clay-300 dark:border-clay-600">
-              <tr className="text-xs uppercase tracking-wider text-clay-700 dark:text-clay-400">
+            <thead className="border-b border-paper-300 dark:border-paper-700">
+              <tr className="text-xs uppercase tracking-wider text-paper-700 dark:text-paper-400">
                 <th className="px-4 py-3 font-medium">Kategorie</th>
                 {rows.map((row) => (
                   <th
@@ -108,9 +131,9 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 return (
                   <tr
                     key={row.category}
-                    className="border-b border-clay-300/60 last:border-0 dark:border-clay-600"
+                    className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
                   >
-                    <td className="px-4 py-3 font-semibold text-clay-900 dark:text-clay-50">
+                    <td className="px-4 py-3 font-semibold text-paper-800 dark:text-paper-100">
                       <span className="inline-flex items-center gap-2">
                         <span
                           className="h-2.5 w-2.5 shrink-0 rounded-full"
@@ -124,8 +147,8 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                         key={rows[index].entry.key}
                         className={`whitespace-nowrap px-4 py-3 tabular-nums ${
                           weight > 0 && weight === min
-                            ? "font-bold text-ocean-800 dark:text-ocean-300"
-                            : "text-clay-700 dark:text-clay-300"
+                            ? "font-bold text-olive-700 dark:text-olive-300"
+                            : "text-paper-700 dark:text-paper-300"
                         }`}
                       >
                         {weight > 0 ? formatWeight(weight) : "—"}

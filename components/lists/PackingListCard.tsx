@@ -12,6 +12,7 @@ import { formatWeight } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
 import { IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { ProgressBar } from "./ProgressBar";
 
 export function PackingListCard({
@@ -32,18 +33,27 @@ export function PackingListCard({
   return (
     <SurfaceCard
       as="article"
+      pinned={list.id}
       className="animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       <div className="flex items-start justify-between gap-3">
-        <div>
+        {/* Die kleine Schildkröte ordnet das Gewicht ein, bevor man die
+            Zahl daneben gelesen hat. Ohne Einlauf-Animation: in einer
+            Liste mit zehn Karten liefe sonst zehnmal dasselbe. */}
+        <TurtleMascot
+          totalWeightGrams={weight}
+          animated={false}
+          className="-my-1 h-14 w-14 shrink-0"
+        />
+        <div className="min-w-0 flex-1">
           <Link
             href={`/lists/detail?id=${list.id}`}
-            className="text-lg font-bold text-clay-900 transition-colors hover:text-accent dark:text-clay-50 dark:hover:text-accent"
+            className="-my-2 inline-flex min-h-[2.75rem] items-center text-lg font-bold text-paper-800 transition-colors hover:text-accent dark:text-paper-100 dark:hover:text-accent"
           >
             {list.name}
           </Link>
-          <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+          <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
             {count} Items · {formatWeight(weight)}
           </p>
         </div>
