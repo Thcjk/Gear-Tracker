@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCheck, Dumbbell, Feather, TrendingDown } from "lucide-react";
 import { formatWeight } from "@/lib/categories";
 import type { WeightSnapshot } from "@/lib/weightHistory";
+import { playBadgeSound } from "@/lib/sounds";
 
 /** Bis hierhin gilt die Liste als leicht. */
 const LIGHT_LIMIT = 5000;
@@ -90,6 +91,23 @@ export function AchievementBadges({
         "text-paper-700 dark:text-paper-200",
     });
   }
+
+  /**
+   * Der Ton gehört zum Dazukommen, nicht zum Dasein: er läuft nur, wenn
+   * eine Auszeichnung neu auftaucht. Beim ersten Rendern schweigt er –
+   * sonst klingelte es bei jedem Öffnen der Seite, obwohl gerade nichts
+   * passiert ist.
+   */
+  const seen = useRef<string[] | null>(null);
+  const ids = badges.map((badge) => badge.id).join("|");
+
+  useEffect(() => {
+    const current = ids ? ids.split("|") : [];
+    const before = seen.current;
+    seen.current = current;
+    if (before === null) return;
+    if (current.some((id) => !before.includes(id))) playBadgeSound();
+  }, [ids]);
 
   if (badges.length === 0) return null;
 
