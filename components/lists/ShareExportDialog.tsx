@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Share2, X } from "lucide-react";
 import { Button, IconButton } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 
 /**
@@ -78,10 +79,10 @@ export function ShareExportDialog({
             />
           </label>
           <div className="flex gap-2">
-            <Button type="submit" variant="accent" disabled={!name.trim()}>
+            <StampButton stampSeed="exportieren" type="submit" disabled={!name.trim()}>
               <Share2 className="h-4 w-4" />
               Exportieren
-            </Button>
+            </StampButton>
             <Button type="button" onClick={onClose}>
               Abbrechen
             </Button>

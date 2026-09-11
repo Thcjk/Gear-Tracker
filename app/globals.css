@@ -222,6 +222,23 @@ html.dark body::before {
    * Maskottchens da – nie für Zahlen. Ein Gewicht, das man zweimal lesen
    * muss, ist ein schlechteres Gewicht.
    */
+  /**
+   * Der Stempel wird aufgedrückt, nicht angetippt: beim Drücken sinkt er
+   * in die Fläche und richtet sich dabei fast gerade aus.
+   *
+   * Der Ruhewinkel steht als Variable am Element, damit die Drehung im
+   * Stylesheet bleibt – sonst müsste jede Zustandsänderung den kompletten
+   * transform-Wert neu zusammensetzen und würde dabei die Skalierung
+   * überschreiben.
+   */
+  .stamp {
+    transform: rotate(var(--stamp-tilt, 0deg));
+  }
+
+  .stamp:active:not(:disabled) {
+    transform: rotate(calc(var(--stamp-tilt, 0deg) * 0.25)) scale(0.94);
+  }
+
   .handwritten {
     font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
     letter-spacing: 0.01em;

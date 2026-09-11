@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import {
   CATEGORIES,
@@ -195,9 +196,7 @@ export function GearItemForm({
         </label>
       </div>
       <div className="mt-4 flex gap-2">
-        <Button type="submit" variant="accent">
-          {submitLabel}
-        </Button>
+        <StampButton type="submit">{submitLabel}</StampButton>
         <Button type="button" variant="raised" onClick={onCancel}>
           Abbrechen
         </Button>

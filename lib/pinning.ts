@@ -141,3 +141,21 @@ export function pinsFor(seed: string, count?: 1 | 2): PinPlacement[] {
     },
   ];
 }
+
+/* ------------------------------------------------------------------ *
+ * Stempel
+ * ------------------------------------------------------------------ */
+
+export interface StampLook {
+  /** −3° bis +3°: schief aufgedrückt, aber nicht umgefallen. */
+  tilt: number;
+  /** Welche der drei ausgefransten Kanten (components/ui/InkDefs). */
+  edge: number;
+}
+
+export function stampLookFor(seed: string): StampLook {
+  return {
+    tilt: (pick(seed, "stampTilt", 13) - 6) / 2,
+    edge: pick(seed, "stampEdge", 3),
+  };
+}

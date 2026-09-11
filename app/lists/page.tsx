@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { PackingListCard } from "@/components/lists/PackingListCard";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
@@ -38,10 +39,10 @@ export default function ListsPage() {
         title="Packlisten"
         subtitle={`${data.packingLists.length} Listen`}
         action={
-          <Button variant="accent" onClick={() => setShowForm((v) => !v)}>
+          <StampButton stampSeed="neue-liste" onClick={() => setShowForm((v) => !v)}>
             <Plus className="h-4 w-4" />
             Neu
-          </Button>
+          </StampButton>
         }
       />
 
@@ -63,9 +64,7 @@ export default function ListsPage() {
             />
           </label>
           <div className="mt-3 flex gap-2">
-            <Button type="submit" variant="cool">
-              Erstellen
-            </Button>
+            <StampButton type="submit">Erstellen</StampButton>
             <Button type="button" onClick={() => setShowForm(false)}>
               Abbrechen
             </Button>

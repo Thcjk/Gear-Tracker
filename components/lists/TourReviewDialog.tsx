@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
 import { CampMark } from "@/components/doodle/Doodles";
 import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import type {
@@ -175,15 +176,15 @@ export function TourReviewDialog({
               ? "Alles gebraucht – so kann die Liste bleiben."
               : `${unusedCount} ${unusedCount === 1 ? "Item war" : "Items waren"} umsonst dabei. Beim nächsten Packen weisst du es.`}
           </p>
-          <Button
+          <StampButton
+            stampSeed="tour-fertig"
             type="button"
-            variant="accent"
             onClick={onClose}
             className="mt-5 w-full"
           >
             <Check className="h-4 w-4" />
             Fertig
-          </Button>
+          </StampButton>
         </SurfaceCard>
       </div>
     );
@@ -347,10 +348,10 @@ export function TourReviewDialog({
 
           <div className="flex flex-wrap gap-2">
             {step === 1 ? (
-              <Button type="button" variant="accent" onClick={() => setStep(2)}>
+              <StampButton stampSeed="tour-weiter" type="button" onClick={() => setStep(2)}>
                 Weiter
                 <ArrowRight className="h-4 w-4" />
-              </Button>
+              </StampButton>
             ) : (
               <Button type="button" onClick={() => setStep(1)}>
                 <ArrowLeft className="h-4 w-4" />

@@ -26,6 +26,7 @@ import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   indexGearItems,
@@ -343,15 +344,15 @@ function PackingListDetailInner() {
                 </option>
               ))}
             </select>
-            <Button
-              variant="accent"
+            <StampButton
+              stampSeed="item-hinzufuegen"
               onClick={addItem}
               disabled={!selectedGearId}
-              className="px-3"
+              className="px-4"
             >
               <Plus className="h-4 w-4" />
               Add
-            </Button>
+            </StampButton>
           </div>
         )}
       </SurfaceCard>
