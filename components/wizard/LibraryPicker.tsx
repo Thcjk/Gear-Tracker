@@ -39,7 +39,9 @@ export function LibraryPicker({
                 type="button"
                 onClick={() => onToggle(item.id)}
                 aria-pressed={Boolean(chosen)}
-                className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150 ${
+                // -m-2.5/p-2.5: die sichtbare Fläche bleibt 24 px, der
+                // Treffbereich wird 44 px.
+                className={`relative -m-2.5 box-content flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-clip-content p-2.5 transition-all duration-150 ${
                   chosen
                     ? "bg-accent shadow-neu-in-sm"
                     : "bg-paper-200 shadow-neu-sm dark:bg-paper-900"
@@ -57,7 +59,7 @@ export function LibraryPicker({
               <button
                 type="button"
                 onClick={() => onToggle(item.id)}
-                className="min-w-0 flex-1 text-left"
+                className="min-w-0 flex-1 py-1.5 text-left"
               >
                 <p className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100">
                   {item.name}
@@ -78,7 +80,7 @@ export function LibraryPicker({
                     }
                     disabled={chosen.quantity <= 1}
                     aria-label="Menge verringern"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-paper-900 dark:text-paper-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-paper-900 dark:text-paper-300"
                   >
                     <Minus className="h-3.5 w-3.5" />
                   </button>
@@ -89,7 +91,7 @@ export function LibraryPicker({
                     type="button"
                     onClick={() => onQuantity(item.id, chosen.quantity + 1)}
                     aria-label="Menge erhöhen"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-300"
                   >
                     <Plus className="h-3.5 w-3.5" />
                   </button>

@@ -4,7 +4,7 @@ import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { BackpackSketch } from "@/components/sketch/BackpackSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
@@ -122,9 +122,13 @@ function WizardInner() {
     return (
       <div className="flex min-h-[70vh] flex-col">
         <div className="flex flex-col items-center py-2 text-center">
-          {/* Der Rucksack ist gepackt – dieselbe Bildsprache wie im Splash
-              und in den Leerzuständen, hier als Abschluss. */}
-          <BackpackSketch className="animate-icon-in h-32 w-28 text-accent" />
+          {/* Die Schildkröte trägt jetzt genau das, was der Durchgang
+              zusammengetragen hat – der Abschluss zeigt das Ergebnis,
+              nicht ein Symbol dafür. */}
+          <TurtleMascot
+            totalWeightGrams={listTotalWeight(list, data.gearItems)}
+            className="h-36 w-36"
+          />
           <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
             {list.name}
           </h2>
@@ -230,7 +234,7 @@ function WizardInner() {
               role="tab"
               aria-selected={mode === modeId}
               onClick={() => setMode(modeId)}
-              className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-150 ${
+              className={`inline-flex h-10 items-center rounded-xl px-4 text-sm font-semibold transition-all duration-150 ${
                 mode === modeId
                   ? "bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900"
                   : "text-paper-700 dark:text-paper-400"
@@ -256,7 +260,7 @@ function WizardInner() {
       </SurfaceCard>
 
       <div className="mt-auto flex items-center gap-3 pt-8">
-        <Button variant="quiet" onClick={goNext} className="px-2">
+        <Button variant="quiet" onClick={goNext} className="h-11 px-3">
           Überspringen
         </Button>
         <Button

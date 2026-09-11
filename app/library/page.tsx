@@ -87,7 +87,7 @@ export default function LibraryPage() {
   return (
     <div className="space-y-4">
       <ScreenHeader
-        title="Gear-Library"
+        title="Gear-Library  "
         subtitle={`${data.gearItems.length} Items in ${CATEGORIES.length} Kategorien`}
       />
 
@@ -95,7 +95,7 @@ export default function LibraryPage() {
         <select
           value={sortKey}
           onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="neu-field w-auto flex-1 py-2 text-sm"
+          className="neu-field h-11 w-auto flex-1 py-0 text-sm"
           aria-label="Sortierung innerhalb der Kategorien"
         >
           <option value="name">Sortierung: Name</option>

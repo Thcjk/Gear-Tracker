@@ -70,7 +70,9 @@ export function PackingListItemCard({
         />
       )}
       <div className="relative flex items-start gap-3">
-        <label className="relative mt-1 flex items-center">
+        {/* Padding plus negativer Rand: das Kästchen bleibt 24 px gross,
+            die Trefferfläche wird 44 px – Daumen sind breiter als Kästchen. */}
+        <label className="relative -m-2.5 mt-0 flex items-center p-2.5">
           <input
             type="checkbox"
             checked={item.packed}
@@ -118,13 +120,13 @@ export function PackingListItemCard({
                 onChange={(e) =>
                   onQuantityChange(Math.max(1, Number(e.target.value) || 1))
                 }
-                className="neu-field w-16 px-2 py-1 text-center"
+                className="neu-field h-11 w-16 px-2 py-1 text-center"
               />
             </label>
             <button
               type="button"
               onClick={onRemove}
-              className="text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-300"
+              className="-mx-2 inline-flex h-11 items-center px-2 text-sm font-semibold text-red-700 transition-opacity active:opacity-60 dark:text-red-300"
             >
               Entfernen
             </button>

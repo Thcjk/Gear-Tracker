@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
-import { CampfireSketch } from "@/components/sketch/CampfireSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -142,6 +142,11 @@ export function TourReviewDialog({
   }
 
   const unusedCount = [...draft.reviews.values()].filter((r) => !r.used).length;
+  /** Was auf dieser Tour tatsächlich mitgereist ist. */
+  const carriedGrams = items.reduce(
+    (sum, { item, gear }) => sum + gear.weightGrams * item.quantity,
+    0,
+  );
 
   if (done) {
     return (
@@ -155,7 +160,7 @@ export function TourReviewDialog({
         }}
       >
         <SurfaceCard className="animate-rise w-full max-w-md p-6 text-center">
-          <CampfireSketch className="mx-auto h-28 w-28 text-accent" />
+          <TurtleMascot totalWeightGrams={carriedGrams} className="mx-auto h-32 w-32" />
           <h2 className="mt-4 text-xl font-bold text-paper-800 dark:text-paper-100">
             Tour im Buch
           </h2>

@@ -49,7 +49,7 @@ export function PackingListCard({
         <div className="min-w-0 flex-1">
           <Link
             href={`/lists/detail?id=${list.id}`}
-            className="text-lg font-bold text-paper-800 transition-colors hover:text-accent dark:text-paper-100 dark:hover:text-accent"
+            className="-my-2 inline-flex min-h-[2.75rem] items-center text-lg font-bold text-paper-800 transition-colors hover:text-accent dark:text-paper-100 dark:hover:text-accent"
           >
             {list.name}
           </Link>

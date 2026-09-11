@@ -136,7 +136,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
               role="tab"
               aria-selected={mode === id}
               onClick={() => setMode(id)}
-              className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
+              className={`inline-flex h-10 items-center gap-1.5 rounded-xl px-3.5 text-sm font-medium transition ${
                 mode === id
                   ? "bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900"
                   : "text-paper-700 dark:text-paper-400"

@@ -88,7 +88,7 @@ export default function ComparePage() {
               key={list.id}
               className="flex cursor-pointer items-center gap-3 rounded-control px-3 py-2.5 transition-shadow active:shadow-neu-in-sm"
             >
-              <span className="relative flex items-center">
+              <span className="relative -m-3 flex items-center p-3">
                 <input
                   type="checkbox"
                   checked={selected.includes(list.id)}

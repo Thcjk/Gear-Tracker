@@ -58,7 +58,7 @@ export function DashboardHeader({
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-paper-700 transition-colors hover:text-paper-800 dark:text-paper-400 dark:hover:text-paper-100"
+              className="-ml-2 inline-flex h-11 items-center gap-1 rounded-lg px-2 text-sm font-medium text-paper-700 transition-colors hover:text-accent dark:text-paper-300 dark:hover:text-accent"
             >
               <ArrowLeft className="h-4 w-4" />
               Listen
@@ -91,7 +91,7 @@ export function DashboardHeader({
                 setDraft(name);
                 setRenaming(true);
               }}
-              className="group mt-1 flex items-center gap-2 text-left"
+              className="group -mx-1 mt-0.5 flex min-h-[2.75rem] items-center gap-2 rounded-lg px-1 text-left"
               title="Name bearbeiten"
             >
               <h2 className="truncate text-2xl font-extrabold tracking-tight text-paper-800 dark:text-paper-100">
