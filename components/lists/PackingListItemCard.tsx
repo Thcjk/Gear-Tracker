@@ -64,7 +64,7 @@ export function PackingListItemCard({
       {celebrating && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-accent-warm"
+          className="pointer-events-none absolute inset-0 animate-flash rounded-card bg-accent-tertiary"
         />
       )}
       <div className="relative flex items-start gap-3">
@@ -73,7 +73,7 @@ export function PackingListItemCard({
             type="checkbox"
             checked={item.packed}
             onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-clay-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-clay-800 ${
+            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-paper-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-paper-900 ${
               celebrating ? "animate-pop" : ""
             }`}
           />
@@ -93,13 +93,13 @@ export function PackingListItemCard({
             <h3
               className={`min-w-0 flex-1 break-words font-bold leading-snug transition-colors ${
                 item.packed
-                  ? "text-clay-700 line-through dark:text-clay-400"
-                  : "text-clay-900 dark:text-clay-50"
+                  ? "text-paper-700 line-through dark:text-paper-400"
+                  : "text-paper-800 dark:text-paper-100"
               }`}
             >
               {gear.name}
             </h3>
-            <p className="shrink-0 whitespace-nowrap font-extrabold text-ocean-800 dark:text-ocean-300">
+            <p className="shrink-0 whitespace-nowrap font-extrabold text-olive-700 dark:text-olive-300">
               {formatWeight(gear.weightGrams * item.quantity)}
             </p>
           </div>
@@ -107,7 +107,7 @@ export function PackingListItemCard({
             <ComfortTempBadge celsius={gear.comfortTempC} className="mt-2" />
           )}
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <label className="inline-flex items-center gap-2 text-sm text-clay-700 dark:text-clay-400">
+            <label className="inline-flex items-center gap-2 text-sm text-paper-700 dark:text-paper-400">
               Menge
               <input
                 type="number"

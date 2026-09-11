@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
-import { GradientField } from "@/components/ui/GradientField";
 import { TentSketch } from "@/components/sketch/TentSketch";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
@@ -125,7 +124,7 @@ function PackingListDetailInner() {
 
   if (!ready) {
     return (
-      <p className="text-sm text-clay-700 dark:text-clay-400">
+      <p className="text-sm text-paper-700 dark:text-paper-400">
         Lade Packliste…
       </p>
     );
@@ -134,13 +133,10 @@ function PackingListDetailInner() {
   if (!list || !stats) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-clay-700 dark:text-clay-400">
+        <p className="text-sm text-paper-700 dark:text-paper-400">
           Packliste nicht gefunden.
         </p>
-        <Link
-          href="/lists"
-          className="text-accent underline"
-        >
+        <Link href="/lists" className="text-accent underline">
           Zurück zu den Listen
         </Link>
       </div>
@@ -193,32 +189,22 @@ function PackingListDetailInner() {
         onExportPdf={handleExportPdf}
       />
 
-      {/* Die Farbfeld-Ebene liegt hinter den Kennzahlen und ist bewusst
-          schwach: sie soll den Block vom Seitenhintergrund abheben, nicht
-          mit den Karten konkurrieren. */}
-      <div className="relative isolate">
-        <GradientField
-          variant="cool"
-          opacity={0.22}
-          className="absolute -inset-x-4 -inset-y-3 -z-10 rounded-card"
+      <div className="grid grid-cols-3 gap-3">
+        <StatCard
+          label="Gesamtgewicht"
+          countTo={totalWeight}
+          format={formatWeight}
+          duration={1100}
+          index={0}
         />
-        <div className="grid grid-cols-3 gap-3">
-          <StatCard
-            label="Gesamtgewicht"
-            countTo={totalWeight}
-            format={formatWeight}
-            duration={1100}
-            index={0}
-          />
-          <StatCard
-            label="Gesamtwert"
-            countTo={totalPrice}
-            format={formatPrice}
-            duration={900}
-            index={1}
-          />
-          <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
-        </div>
+        <StatCard
+          label="Gesamtwert"
+          countTo={totalPrice}
+          format={formatPrice}
+          duration={900}
+          index={1}
+        />
+        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
       </div>
 
       <AchievementBadges
@@ -254,7 +240,7 @@ function PackingListDetailInner() {
       <TopHeaviestItems items={heaviest} />
 
       <SurfaceCard className="p-4">
-        <h3 className="mb-3 text-base font-bold text-clay-900 dark:text-clay-50">
+        <h3 className="mb-3 text-base font-bold text-paper-800 dark:text-paper-100">
           Item hinzufügen
         </h3>
         <Button
@@ -267,13 +253,10 @@ function PackingListDetailInner() {
         </Button>
 
         {availableGear.length === 0 ? (
-          <p className="text-sm text-clay-700 dark:text-clay-400">
+          <p className="text-sm text-paper-700 dark:text-paper-400">
             Alle Library-Items sind bereits in der Liste, oder die Library ist
             leer.{" "}
-            <Link
-              href="/library"
-              className="text-accent underline"
-            >
+            <Link href="/library" className="text-accent underline">
               Zur Library
             </Link>
           </p>
@@ -307,9 +290,9 @@ function PackingListDetailInner() {
       <div className="space-y-3">
         {list.items.length === 0 ? (
           <EmptyState illustration={<TentSketch />}>
-              Diese Liste ist noch leer. Such dir unten ein Item aus der
-              Library oder geh die Kategorien durch.
-            </EmptyState>
+            Diese Liste ist noch leer. Such dir unten ein Item aus der Library
+            oder geh die Kategorien durch.
+          </EmptyState>
         ) : (
           list.items.map((item, index) => {
             const gear = gearIndex.get(item.gearItemId);
@@ -390,7 +373,7 @@ export default function PackingListDetailPage() {
   return (
     <Suspense
       fallback={
-        <p className="text-sm text-clay-700 dark:text-clay-400">
+        <p className="text-sm text-paper-700 dark:text-paper-400">
           Lade Packliste…
         </p>
       }

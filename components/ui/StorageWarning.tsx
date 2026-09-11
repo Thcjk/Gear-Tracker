@@ -30,8 +30,8 @@ export function StorageWarning() {
           aria-hidden
         />
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-clay-700 dark:text-clay-300">
-            <strong className="font-bold text-clay-900 dark:text-clay-50">
+          <p className="text-sm text-paper-700 dark:text-paper-300">
+            <strong className="font-bold text-paper-800 dark:text-paper-100">
               Deine Daten konnten nicht gelesen werden.
             </strong>{" "}
             Der gespeicherte Stand ist beschädigt. Er wurde unverändert
@@ -65,8 +65,8 @@ export function StorageWarning() {
         className="mt-0.5 h-5 w-5 shrink-0 text-accent"
         aria-hidden
       />
-      <p className="text-sm text-clay-700 dark:text-clay-300">
-        <strong className="font-bold text-clay-900 dark:text-clay-50">
+      <p className="text-sm text-paper-700 dark:text-paper-300">
+        <strong className="font-bold text-paper-800 dark:text-paper-100">
           Daten können nicht gespeichert werden.
         </strong>{" "}
         Im privaten Modus oder bei vollem Speicher bleiben Änderungen nur bis

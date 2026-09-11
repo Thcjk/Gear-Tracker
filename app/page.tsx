@@ -11,7 +11,7 @@ export default function HomePage() {
   }, [router]);
 
   return (
-    <p className="text-sm text-clay-700 dark:text-clay-400">
+    <p className="text-sm text-paper-700 dark:text-paper-400">
       Weiterleitung zur Library…
     </p>
   );

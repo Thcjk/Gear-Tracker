@@ -35,14 +35,14 @@ export function StatCard({
       className="animate-rise p-3.5"
       style={{ animationDelay: staggerDelay(index, 80) }}
     >
-      <p className="text-[0.625rem] font-bold uppercase leading-tight tracking-wider text-clay-700 dark:text-clay-400">
+      <p className="text-[0.625rem] font-bold uppercase leading-tight tracking-wider text-paper-700 dark:text-paper-400">
         {label}
       </p>
-      <p className="mt-1.5 text-lg font-extrabold leading-tight tracking-tight tabular-nums text-clay-900 dark:text-clay-50 sm:text-2xl">
+      <p className="mt-1.5 text-lg font-extrabold leading-tight tracking-tight tabular-nums text-paper-800 dark:text-paper-100 sm:text-2xl">
         {shown}
       </p>
       {hint && (
-        <p className="mt-1 text-xs text-clay-700 dark:text-clay-400">{hint}</p>
+        <p className="mt-1 text-xs text-paper-700 dark:text-paper-400">{hint}</p>
       )}
     </SurfaceCard>
   );

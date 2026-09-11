@@ -39,11 +39,11 @@ export function PackingListCard({
         <div>
           <Link
             href={`/lists/detail?id=${list.id}`}
-            className="text-lg font-bold text-clay-900 transition-colors hover:text-accent dark:text-clay-50 dark:hover:text-accent"
+            className="text-lg font-bold text-paper-800 transition-colors hover:text-accent dark:text-paper-100 dark:hover:text-accent"
           >
             {list.name}
           </Link>
-          <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+          <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
             {count} Items · {formatWeight(weight)}
           </p>
         </div>

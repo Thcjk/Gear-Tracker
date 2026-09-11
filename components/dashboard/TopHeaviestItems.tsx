@@ -15,11 +15,11 @@ export function TopHeaviestItems({
 }) {
   return (
     <SurfaceCard className="p-4">
-      <h3 className="mb-4 text-base font-bold text-clay-900 dark:text-clay-50">
+      <h3 className="mb-4 text-base font-bold text-paper-800 dark:text-paper-100">
         Top 5 schwerste Items
       </h3>
       {items.length === 0 ? (
-        <p className="text-sm text-clay-700 dark:text-clay-400">
+        <p className="text-sm text-paper-700 dark:text-paper-400">
           Noch keine Items in dieser Liste.
         </p>
       ) : (
@@ -30,19 +30,19 @@ export function TopHeaviestItems({
               className="flex items-center justify-between gap-3"
             >
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-clay-200 text-xs font-bold text-accent shadow-neu-sm dark:bg-clay-800">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-paper-200 text-xs font-bold text-accent shadow-neu-sm dark:bg-paper-900">
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
+                  <p className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100">
                     {item.name}
                   </p>
-                  <p className="text-xs text-clay-700 dark:text-clay-400">
+                  <p className="text-xs text-paper-700 dark:text-paper-400">
                     {formatWeight(item.weightGrams)} × {item.quantity}
                   </p>
                 </div>
               </div>
-              <p className="shrink-0 font-bold text-ocean-800 dark:text-ocean-300">
+              <p className="shrink-0 font-bold text-olive-700 dark:text-olive-300">
                 {formatWeight(item.totalGrams)}
               </p>
             </li>

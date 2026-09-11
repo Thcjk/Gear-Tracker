@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="112" fill="#0A171D"/>
-  <circle cx="256" cy="256" r="188" fill="none" stroke="#FFF6E9" stroke-width="5" opacity="0.20"/>
-  <circle cx="256" cy="256" r="160" fill="none" stroke="#FFF6E9" stroke-width="6" opacity="0.32"/>
-  <circle cx="256" cy="256" r="132" fill="none" stroke="#FFF6E9" stroke-width="6" opacity="0.48"/>
-  <circle cx="256" cy="256" r="104" fill="none" stroke="#FFF6E9" stroke-width="6" opacity="0.72"/>
-  <path d="M180 312 L236 212 L268 264 L296 192 L348 312 Z" fill="#FFBD76"/>
-  <path d="M296 192 L348 312 L314 312 Z" fill="#FFD5A4"/>
-  <path d="M296 192 L312 228 L304 222 L294 234 L284 218 Z" fill="#FFF6E9"/>
-  <rect x="180" y="312" width="168" height="7" rx="3.5" fill="#FFF6E9" opacity="0.9"/>
+  <rect width="512" height="512" rx="112" fill="#3A2E22"/>
+  <!-- Aufgestecktes Papier, leicht schief -->
+  <g transform="rotate(-3 256 256)">
+    <rect x="96" y="104" width="320" height="304" rx="14" fill="#F3ECDC"/>
+    <!-- Reissnagel -->
+    <circle cx="256" cy="132" r="17" fill="#C1502E"/>
+    <circle cx="250" cy="126" r="5" fill="#EDB29B"/>
+    <!-- Schildkrötenpanzer mit Gepäckstapel -->
+    <path d="M150 320 Q166 266 216 264 Q266 262 284 316 Z" fill="#74804B"/>
+    <path d="M150 320 Q166 266 216 264 Q266 262 284 316 Z" fill="none" stroke="#263241" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M196 268 L196 318 M236 266 L240 318" stroke="#263241" stroke-width="7"/>
+    <rect x="188" y="216" width="72" height="34" rx="9" fill="#C1502E" stroke="#263241" stroke-width="9"/>
+    <rect x="200" y="182" width="48" height="30" rx="8" fill="#E3A73E" stroke="#263241" stroke-width="9"/>
+    <!-- Kopf und Beine -->
+    <path d="M284 300 Q320 292 322 266 Q324 244 300 246 Q284 250 284 272 Z" fill="#74804B" stroke="#263241" stroke-width="9" stroke-linejoin="round"/>
+    <circle cx="308" cy="266" r="6" fill="#263241"/>
+    <path d="M170 318 L170 344 M212 320 L212 346 M258 318 L258 344" stroke="#263241" stroke-width="14" stroke-linecap="round"/>
+    <path d="M132 356 Q256 344 306 356" stroke="#263241" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.55"/>
+  </g>
 </svg>

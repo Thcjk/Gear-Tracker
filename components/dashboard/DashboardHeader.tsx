@@ -39,7 +39,7 @@ export function DashboardHeader({
     <header
       data-season={theme.season}
       style={theme.vars as CSSProperties}
-      className="relative isolate overflow-hidden rounded-card bg-clay-200 p-5 shadow-neu dark:bg-clay-800"
+      className="relative isolate overflow-hidden rounded-card bg-paper-200 p-5 shadow-neu dark:bg-paper-900"
     >
       {/* Die Jahreszeit tönt die Fläche nur noch, statt sie auszufüllen:
           grosse Akzentflächen widersprechen der neuen Bildsprache. Season
@@ -62,12 +62,12 @@ export function DashboardHeader({
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-clay-700 transition-colors hover:text-clay-900 dark:text-clay-400 dark:hover:text-clay-100"
+              className="inline-flex items-center gap-1 rounded-lg text-sm font-medium text-paper-700 transition-colors hover:text-paper-800 dark:text-paper-400 dark:hover:text-paper-100"
             >
               <ArrowLeft className="h-4 w-4" />
               Listen
             </button>
-            <span className="rounded-full bg-clay-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-clay-800 dark:text-[color:var(--season-accent)]">
+            <span className="rounded-full bg-paper-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--season-from)] shadow-neu-sm dark:bg-paper-900 dark:text-[color:var(--season-accent)]">
               {theme.label}
             </span>
           </div>
@@ -98,10 +98,10 @@ export function DashboardHeader({
               className="group mt-1 flex items-center gap-2 text-left"
               title="Name bearbeiten"
             >
-              <h2 className="truncate text-2xl font-extrabold tracking-tight text-clay-900 dark:text-clay-50">
+              <h2 className="truncate text-2xl font-extrabold tracking-tight text-paper-800 dark:text-paper-100">
                 {name}
               </h2>
-              <Pencil className="h-4 w-4 shrink-0 text-clay-700 opacity-0 transition group-hover:opacity-100" />
+              <Pencil className="h-4 w-4 shrink-0 text-paper-700 opacity-0 transition group-hover:opacity-100" />
             </button>
           )}
         </div>
@@ -109,7 +109,7 @@ export function DashboardHeader({
         <button
           type="button"
           onClick={onExportPdf}
-          className="relative inline-flex shrink-0 items-center gap-2 rounded-control bg-clay-200 px-4 py-2.5 text-sm font-semibold text-clay-800 shadow-neu-sm transition-all duration-150 active:translate-y-px active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-100"
+          className="relative inline-flex shrink-0 items-center gap-2 rounded-control bg-paper-200 px-4 py-2.5 text-sm font-semibold text-paper-800 shadow-neu-sm transition-all duration-150 active:translate-y-px active:shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-100"
         >
           <FileDown className="h-4 w-4" />
           PDF

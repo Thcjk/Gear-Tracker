@@ -53,7 +53,7 @@ function CategoryTick({
         x={22}
         y={0}
         dy={4}
-        className="fill-clay-700 dark:fill-clay-300"
+        className="fill-paper-700 dark:fill-paper-300"
         fontSize={12}
       >
         {row.label}
@@ -86,7 +86,7 @@ function BarValueLabel({
       y={y + (height ?? 0) / 2}
       dy={4}
       fontSize={11}
-      className="fill-clay-700 dark:fill-clay-400"
+      className="fill-paper-700 dark:fill-paper-400"
     >
       {formatWeight(Number(value ?? 0))}
     </text>
@@ -103,7 +103,7 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
 
   if (data.length === 0) {
     return (
-      <SurfaceCard className="p-4 text-sm text-clay-700 dark:text-clay-400">
+      <SurfaceCard className="p-4 text-sm text-paper-700 dark:text-paper-400">
         Noch keine Gewichtsdaten für ein Diagramm.
       </SurfaceCard>
     );
@@ -115,14 +115,14 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
   return (
     <SurfaceCard as="section" className="p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h3 className="text-base font-bold text-clay-900 dark:text-clay-50">
+        <h3 className="text-base font-bold text-paper-800 dark:text-paper-100">
           Gewicht pro Kategorie
         </h3>
 
         <div
           role="tablist"
           aria-label="Diagrammtyp"
-          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-800"
+          className="inline-flex rounded-control bg-paper-200 p-1 shadow-neu-in-sm dark:bg-paper-900"
         >
           {(
             [
@@ -138,8 +138,8 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
               onClick={() => setMode(id)}
               className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
                 mode === id
-                  ? "bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800"
-                  : "text-clay-700 dark:text-clay-400"
+                  ? "bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900"
+                  : "text-paper-700 dark:text-paper-400"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -226,10 +226,10 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
                   className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: row.color }}
                 />
-                <span className="truncate text-clay-700 dark:text-clay-300">
+                <span className="truncate text-paper-700 dark:text-paper-300">
                   {row.label}
                 </span>
-                <span className="ml-auto font-bold tabular-nums text-clay-900 dark:text-clay-100">
+                <span className="ml-auto font-bold tabular-nums text-paper-800 dark:text-paper-100">
                   {`${categoryShare(row.weightGrams, totalGrams).toFixed(
                     categoryShare(row.weightGrams, totalGrams) < 10 ? 1 : 0,
                   )} %`}

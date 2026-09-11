@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
  * Padding und Zusätze kommen über className.
  */
 export const SURFACE_CLASSES =
-  "rounded-card bg-clay-50 shadow-neu dark:bg-clay-800";
+  "rounded-card bg-paper-100 shadow-neu dark:bg-paper-900";
 
 export function SurfaceCard({
   as: Tag = "div",
@@ -45,13 +45,13 @@ export function EmptyState({
 }) {
   if (!illustration) {
     return (
-      <SurfaceCard className="p-6 text-sm text-clay-700 dark:text-clay-300">
+      <SurfaceCard className="p-6 text-sm text-paper-700 dark:text-paper-300">
         {children}
       </SurfaceCard>
     );
   }
   return (
-    <SurfaceCard className="flex flex-col items-center gap-4 p-8 text-center text-sm text-clay-700 dark:text-clay-300">
+    <SurfaceCard className="flex flex-col items-center gap-4 p-8 text-center text-sm text-paper-700 dark:text-paper-300">
       <span className="text-accent opacity-80">{illustration}</span>
       <span className="max-w-xs">{children}</span>
     </SurfaceCard>

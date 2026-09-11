@@ -56,13 +56,13 @@ function WizardInner() {
   const chosenInStep = categoryItems.filter((item) => selection.has(item.id));
 
   if (!ready) {
-    return <p className="text-sm text-clay-700 dark:text-clay-400">Lade…</p>;
+    return <p className="text-sm text-paper-700 dark:text-paper-400">Lade…</p>;
   }
 
   if (!list) {
     return (
       <div className="space-y-3">
-        <p className="text-sm text-clay-700 dark:text-clay-400">
+        <p className="text-sm text-paper-700 dark:text-paper-400">
           Packliste nicht gefunden.
         </p>
         <Link href="/lists" className="text-accent underline">
@@ -125,10 +125,10 @@ function WizardInner() {
           {/* Der Rucksack ist gepackt – dieselbe Bildsprache wie im Splash
               und in den Leerzuständen, hier als Abschluss. */}
           <BackpackSketch className="animate-icon-in h-32 w-28 text-accent" />
-          <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-clay-900 [animation-delay:90ms] dark:text-clay-50">
+          <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
             {list.name}
           </h2>
-          <p className="animate-label-in mt-1 text-sm text-clay-700 [animation-delay:140ms] dark:text-clay-400">
+          <p className="animate-label-in mt-1 text-sm text-paper-700 [animation-delay:140ms] dark:text-paper-400">
             {rows.length} {rows.length === 1 ? "Item" : "Items"} ·{" "}
             {formatWeight(listTotalWeight(list, data.gearItems))}
           </p>
@@ -136,7 +136,7 @@ function WizardInner() {
 
         <SurfaceCard className="mt-6 p-4">
           {rows.length === 0 ? (
-            <p className="text-sm text-clay-700 dark:text-clay-400">
+            <p className="text-sm text-paper-700 dark:text-paper-400">
               Du hast alle Kategorien übersprungen. Items lassen sich jederzeit
               im Dashboard ergänzen.
             </p>
@@ -146,20 +146,20 @@ function WizardInner() {
                 <li key={item.gearItemId} className="flex items-center gap-3">
                   <CategoryIcon category={gear.category} className="h-4 w-4" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                    <p className="truncate font-semibold text-paper-800 dark:text-paper-100">
                       {gear.name}
                       {item.quantity > 1 && (
-                        <span className="text-clay-700 dark:text-clay-400">
+                        <span className="text-paper-700 dark:text-paper-400">
                           {" "}
                           x{item.quantity}
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-clay-700 dark:text-clay-400">
+                    <p className="text-xs text-paper-700 dark:text-paper-400">
                       {getCategoryMeta(gear.category).label}
                     </p>
                   </div>
-                  <p className="shrink-0 font-bold tabular-nums text-ocean-800 dark:text-ocean-300">
+                  <p className="shrink-0 font-bold tabular-nums text-olive-700 dark:text-olive-300">
                     {formatWeight(gear.weightGrams * item.quantity)}
                   </p>
                 </li>
@@ -204,7 +204,7 @@ function WizardInner() {
         >
           <ArrowLeft className="h-5 w-5" />
         </IconButton>
-        <p className="truncate text-sm font-semibold text-clay-700 dark:text-clay-400">
+        <p className="truncate text-sm font-semibold text-paper-700 dark:text-paper-400">
           {list.name}
         </p>
       </div>
@@ -215,7 +215,7 @@ function WizardInner() {
         <div
           role="tablist"
           aria-label="Eingabeart"
-          className="inline-flex rounded-control bg-clay-200 p-1 shadow-neu-in-sm dark:bg-clay-800"
+          className="inline-flex rounded-control bg-paper-200 p-1 shadow-neu-in-sm dark:bg-paper-900"
         >
           {(
             [
@@ -231,8 +231,8 @@ function WizardInner() {
               onClick={() => setMode(modeId)}
               className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-150 ${
                 mode === modeId
-                  ? "bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800"
-                  : "text-clay-700 dark:text-clay-400"
+                  ? "bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900"
+                  : "text-paper-700 dark:text-paper-400"
               }`}
             >
               {label}
@@ -275,7 +275,7 @@ export default function PackingListWizardPage() {
   return (
     <Suspense
       fallback={
-        <p className="text-sm text-clay-700 dark:text-clay-400">Lade…</p>
+        <p className="text-sm text-paper-700 dark:text-paper-400">Lade…</p>
       }
     >
       <WizardInner />

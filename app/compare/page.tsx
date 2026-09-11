@@ -64,7 +64,7 @@ export default function ComparePage() {
 
   if (!ready) {
     return (
-      <p className="text-sm text-clay-700 dark:text-clay-400">
+      <p className="text-sm text-paper-700 dark:text-paper-400">
         Lade Vergleich…
       </p>
     );
@@ -93,7 +93,7 @@ export default function ComparePage() {
                   type="checkbox"
                   checked={selected.includes(list.id)}
                   onChange={() => toggle(list.id)}
-                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-clay-200 shadow-neu-sm transition-all checked:bg-accent checked:shadow-neu-in-sm dark:bg-clay-800"
+                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-paper-200 shadow-neu-sm transition-all checked:bg-accent checked:shadow-neu-in-sm dark:bg-paper-900"
                 />
                 <Check
                   className={`pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-on-accent transition-opacity ${
@@ -103,7 +103,7 @@ export default function ComparePage() {
                   aria-hidden
                 />
               </span>
-              <span className="font-semibold text-clay-900 dark:text-clay-50">
+              <span className="font-semibold text-paper-800 dark:text-paper-100">
                 {list.name}
               </span>
             </label>
@@ -112,10 +112,10 @@ export default function ComparePage() {
       )}
 
       <SurfaceCard className="p-4">
-        <h2 className="font-bold text-clay-900 dark:text-clay-50">
+        <h2 className="font-bold text-paper-800 dark:text-paper-100">
           Liste von jemand anderem
         </h2>
-        <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+        <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
           Exportdatei laden. Sie wird nur für diesen Vergleich gehalten und
           nicht gespeichert.
         </p>
@@ -126,14 +126,14 @@ export default function ComparePage() {
               key={key}
               className="flex items-center gap-3 rounded-control px-3 py-2.5"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-clay-200 text-accent shadow-neu-sm dark:bg-clay-800">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-paper-200 text-accent shadow-neu-sm dark:bg-paper-900">
                 <Download className="h-4 w-4" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold text-clay-900 dark:text-clay-50">
+                <p className="truncate font-semibold text-paper-800 dark:text-paper-100">
                   {shared.ownerName} — {shared.listName}
                 </p>
-                <p className="text-xs text-clay-700 dark:text-clay-400">
+                <p className="text-xs text-paper-700 dark:text-paper-400">
                   {shared.items.length}{" "}
                   {shared.items.length === 1 ? "Eintrag" : "Einträge"}
                 </p>

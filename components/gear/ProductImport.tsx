@@ -72,10 +72,10 @@ export function ProductImport({
   return (
     <div className="space-y-3">
       <SurfaceCard as="section" className="p-4">
-        <h2 className="mb-1 font-bold text-clay-900 dark:text-clay-50">
+        <h2 className="mb-1 font-bold text-paper-800 dark:text-paper-100">
           Per Link importieren
         </h2>
-        <p className="mb-3 text-sm text-clay-700 dark:text-clay-400">
+        <p className="mb-3 text-sm text-paper-700 dark:text-paper-400">
           Produktseite einfügen – Name, Gewicht und Preis werden
           vorgeschlagen. Du bestätigst sie, bevor etwas gespeichert wird.
         </p>
@@ -171,7 +171,7 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
           className="mt-0.5 h-4 w-4 shrink-0 text-accent"
           aria-hidden
         />
-        <p className="min-w-0 text-clay-700 dark:text-clay-300">
+        <p className="min-w-0 text-paper-700 dark:text-paper-300">
           {outcome.message} Trag die Werte so lange von Hand ein – der Link
           steht in den Notizen.
         </p>
@@ -183,10 +183,10 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
     return (
       <div className={HINT_BOX}>
         <Info
-          className="mt-0.5 h-4 w-4 shrink-0 text-clay-700 dark:text-clay-400"
+          className="mt-0.5 h-4 w-4 shrink-0 text-paper-700 dark:text-paper-400"
           aria-hidden
         />
-        <p className="min-w-0 text-clay-700 dark:text-clay-300">
+        <p className="min-w-0 text-paper-700 dark:text-paper-300">
           Auf der Seite war nichts Auslesbares. Manche Shops laden ihre
           Angaben erst im Browser nach. Von Hand geht es genauso – der Link
           steht in den Notizen.
@@ -207,7 +207,7 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
             className="mt-0.5 h-4 w-4 shrink-0 text-accent"
             aria-hidden
           />
-          <p className="min-w-0 text-clay-700 dark:text-clay-300">
+          <p className="min-w-0 text-paper-700 dark:text-paper-300">
             Unsicherer Treffer, bitte prüfen.
           </p>
         </div>
@@ -215,16 +215,16 @@ function ImportHint({ outcome, source }: { outcome: Outcome; source: string }) {
       {foreignCurrency && (
         <div className={HINT_BOX}>
           <Info
-            className="mt-0.5 h-4 w-4 shrink-0 text-clay-700 dark:text-clay-400"
+            className="mt-0.5 h-4 w-4 shrink-0 text-paper-700 dark:text-paper-400"
             aria-hidden
           />
-          <p className="min-w-0 text-clay-700 dark:text-clay-300">
+          <p className="min-w-0 text-paper-700 dark:text-paper-300">
             Der Preis stand in {hit.currency}. Das Feld rechnet in CHF – bitte
             umrechnen.
           </p>
         </div>
       )}
-      <p className="break-words text-xs text-clay-700 dark:text-clay-400">
+      <p className="break-words text-xs text-paper-700 dark:text-paper-400">
         Gelesen von {source}
       </p>
     </div>

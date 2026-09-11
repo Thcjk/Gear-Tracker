@@ -17,7 +17,7 @@ export function ProgressBar({
     <div>
       <div
         className={`mb-1 flex justify-between text-sm ${
-          onDark ? "text-white/85" : "text-clay-700 dark:text-clay-400"
+          onDark ? "text-white/85" : "text-paper-700 dark:text-paper-400"
         }`}
       >
         <span>
@@ -27,7 +27,7 @@ export function ProgressBar({
       </div>
       <div
         className={`h-2.5 overflow-hidden rounded-full ${
-          onDark ? "bg-black/25" : "bg-clay-200 shadow-neu-in-sm dark:bg-clay-800"
+          onDark ? "bg-black/25" : "bg-paper-200 shadow-neu-in-sm dark:bg-paper-900"
         }`}
       >
         <div
@@ -43,7 +43,7 @@ export function ProgressBar({
             // als Tailwind-Arbitrary-Value, weil var()-Fallbacks mit Komma
             // beim Purge nicht zuverlässig erzeugt werden.
             ...(onDark
-              ? { backgroundColor: "var(--season-accent, #FFBD76)" }
+              ? { backgroundColor: "var(--season-accent, #E3A73E)" }
               : {}),
           }}
         />

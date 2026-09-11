@@ -17,11 +17,11 @@ export function ScreenHeader({
   return (
     <header className="mb-6 flex items-center justify-between gap-4">
       <div className="min-w-0">
-        <h1 className="truncate text-[1.75rem] font-extrabold leading-tight tracking-tight text-clay-900 dark:text-clay-50">
+        <h1 className="truncate text-[1.75rem] font-extrabold leading-tight tracking-tight text-paper-800 dark:text-paper-100">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-1 text-sm text-clay-700 dark:text-clay-400">
+          <p className="mt-1 text-sm text-paper-700 dark:text-paper-400">
             {subtitle}
           </p>
         )}

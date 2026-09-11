@@ -44,7 +44,7 @@ export function CategoryIcon({
     <span
       // Weiche erhabene Scheibe in der Grundfläche; die Kategoriefarbe
       // steckt nur noch im Strich des Icons, nicht mehr in der Fläche.
-      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay-200 shadow-neu-sm dark:bg-clay-800"
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-paper-200 shadow-neu-sm dark:bg-paper-900"
       title={meta.label}
       style={{ color: meta.chartColor }}
     >

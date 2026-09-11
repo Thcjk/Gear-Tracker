@@ -21,7 +21,7 @@ export function LibraryPicker({
 }) {
   if (items.length === 0) {
     return (
-      <p className="px-1 py-3 text-sm text-clay-700 dark:text-clay-400">
+      <p className="px-1 py-3 text-sm text-paper-700 dark:text-paper-400">
         In dieser Kategorie liegt noch nichts in der Library. Leg unter „Neu
         anlegen“ direkt etwas an.
       </p>
@@ -42,7 +42,7 @@ export function LibraryPicker({
                 className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all duration-150 ${
                   chosen
                     ? "bg-accent shadow-neu-in-sm"
-                    : "bg-clay-200 shadow-neu-sm dark:bg-clay-800"
+                    : "bg-paper-200 shadow-neu-sm dark:bg-paper-900"
                 }`}
               >
                 <Check
@@ -59,10 +59,10 @@ export function LibraryPicker({
                 onClick={() => onToggle(item.id)}
                 className="min-w-0 flex-1 text-left"
               >
-                <p className="break-words font-semibold leading-snug text-clay-900 dark:text-clay-50">
+                <p className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100">
                   {item.name}
                 </p>
-                <p className="text-xs text-clay-700 dark:text-clay-400">
+                <p className="text-xs text-paper-700 dark:text-paper-400">
                   {formatWeight(item.weightGrams)}
                   {item.comfortTempC != null &&
                     ` · ${formatComfortTemp(item.comfortTempC)}`}
@@ -78,18 +78,18 @@ export function LibraryPicker({
                     }
                     disabled={chosen.quantity <= 1}
                     aria-label="Menge verringern"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-clay-800 dark:text-clay-300"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm disabled:opacity-40 dark:bg-paper-900 dark:text-paper-300"
                   >
                     <Minus className="h-3.5 w-3.5" />
                   </button>
-                  <span className="w-5 text-center text-sm font-bold tabular-nums text-clay-900 dark:text-clay-50">
+                  <span className="w-5 text-center text-sm font-bold tabular-nums text-paper-800 dark:text-paper-100">
                     {chosen.quantity}
                   </span>
                   <button
                     type="button"
                     onClick={() => onQuantity(item.id, chosen.quantity + 1)}
                     aria-label="Menge erhöhen"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-clay-200 text-clay-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-clay-800 dark:text-clay-300"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-paper-200 text-paper-700 shadow-neu-sm transition-all active:shadow-neu-in-sm dark:bg-paper-900 dark:text-paper-300"
                   >
                     <Plus className="h-3.5 w-3.5" />
                   </button>

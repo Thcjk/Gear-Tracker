@@ -17,8 +17,8 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
  * daneben Onyx als festen Wert – dort ist nur einer vorgesehen.
  */
 const THEME_COLORS = [
-  { media: "(prefers-color-scheme: light)", color: "#FFF6E9" },
-  { media: "(prefers-color-scheme: dark)", color: "#0A171D" },
+  { media: "(prefers-color-scheme: light)", color: "#B8895F" },
+  { media: "(prefers-color-scheme: dark)", color: "#3A2E22" },
 ];
 import "./globals.css";
 

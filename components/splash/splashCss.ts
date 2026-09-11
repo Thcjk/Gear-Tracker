@@ -47,12 +47,12 @@ const EASE_OUT = "cubic-bezier(.22,1,.36,1)";
  * im <body> noch vor dem ersten Paint, also greifen beide Varianten
  * sofort – ohne sie stünde in einem der Modi heller Text auf hellem Grund.
  */
-const LIGHT_BG = "#FFF6E9"; /* Wheat */
-const LIGHT_INK = "#0A171D"; /* Onyx */
-const LIGHT_LINE = "#003F47"; /* Oceanic */
-const DARK_BG = "#0A171D"; /* Onyx */
-const DARK_INK = "#FFF6E9"; /* Wheat */
-const DARK_LINE = "#FFBD76"; /* Nectarine */
+const LIGHT_BG = "#F3ECDC"; /* Paper */
+const LIGHT_INK = "#263241"; /* Ink */
+const LIGHT_LINE = "#A8401F"; /* Rust 600 */
+const DARK_BG = "#1B2430"; /* Ink Night */
+const DARK_INK = "#F3ECDC"; /* Paper */
+const DARK_LINE = "#E3A73E"; /* Mustard */
 
 export const splashCriticalCss = `
 .splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;
