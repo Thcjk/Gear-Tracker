@@ -430,10 +430,6 @@ html.dark body::before {
    * ---------------------------------------------------------------- */
   .sheet {
     position: relative;
-    /* Eigener Stapelkontext: die Kanten- und Rissebenen liegen auf
-       z-index -1 und -2 und müssen innerhalb der Karte bleiben, sonst
-       verschwinden sie hinter dem Brett. */
-    isolation: isolate;
     background-color: var(--sheet-tone, var(--sheet-note));
   }
 
@@ -480,6 +476,14 @@ html.dark body::before {
   .sheet-torn {
     background-color: transparent;
     box-shadow: none;
+    /* Eigener Stapelkontext, damit die Rissebenen auf z-index -1 und -2
+       innerhalb der Karte bleiben und nicht hinter dem Brett landen.
+       Bewusst NUR hier und nicht auf jeder .sheet: ein Stapelkontext auf
+       allen Karten sperrt auch alles darin ein – das aufgeklappte
+       Auswahlfeld (z-index 30) verschwand dadurch hinter der nächsten
+       Karte, weil sein z-index nicht mehr über die eigene Karte
+       hinausreichte. */
+    isolation: isolate;
   }
 
   .sheet-torn::after {
