@@ -94,7 +94,7 @@ export default function RootLayout({
           {/* Oben unter der Notch freihalten (status-bar-style ist
               black-translucent), unten Platz für die Bottom-Navigation */}
           <div
-            className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-5 pb-36"
+            className="splash-reveal mx-auto min-h-screen w-full max-w-3xl px-4 pb-36 sm:px-5"
             style={{ paddingTop: "max(1.5rem, calc(env(safe-area-inset-top) + 0.75rem))" }}
           >
             <StorageWarning />

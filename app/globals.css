@@ -110,6 +110,34 @@ html.dark body {
   background-blend-mode: soft-light;
 }
 
+/**
+ * Zweite Brett-Ebene: die Korkgranulate.
+ *
+ * Rauschen allein sieht nach Filmkorn aus; Kork hat sichtbare, ungleich
+ * grosse Krümel. Sie liegen als eigenes, gekacheltes SVG darüber – auf
+ * einem ::before am body, damit dafür kein zusätzlicher Knoten im DOM
+ * steht und nichts davon anklickbar ist.
+ *
+ * position:fixed statt absolute: die Ebene soll beim Scrollen stehen
+ * bleiben wie ein echtes Brett, nicht mitwandern.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 120 120'%3E%3Cg fill='%235B3E28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='3' transform='rotate(-18 14 18)'/%3E%3Cellipse cx='52' cy='9' rx='3.5' ry='2' transform='rotate(24 52 9)'/%3E%3Cellipse cx='88' cy='22' rx='6' ry='2.6' transform='rotate(-8 88 22)'/%3E%3Cellipse cx='108' cy='47' rx='3' ry='2' transform='rotate(40 108 47)'/%3E%3Cellipse cx='30' cy='44' rx='4.5' ry='2.2' transform='rotate(12 30 44)'/%3E%3Cellipse cx='66' cy='38' rx='2.6' ry='1.6' transform='rotate(-32 66 38)'/%3E%3Cellipse cx='18' cy='72' rx='5.5' ry='2.4' transform='rotate(-6 18 72)'/%3E%3Cellipse cx='48' cy='66' rx='3.2' ry='2.1' transform='rotate(52 48 66)'/%3E%3Cellipse cx='84' cy='70' rx='4.2' ry='2' transform='rotate(-22 84 70)'/%3E%3Cellipse cx='104' cy='92' rx='5' ry='2.4' transform='rotate(16 104 92)'/%3E%3Cellipse cx='36' cy='100' rx='3.6' ry='2.2' transform='rotate(-44 36 100)'/%3E%3Cellipse cx='70' cy='108' rx='4.8' ry='2.2' transform='rotate(6 70 108)'/%3E%3Cellipse cx='8' cy='108' rx='2.8' ry='1.7' transform='rotate(30 8 108)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+html.dark body::before {
+  /* Auf dunklem Filz sind die Krümel heller als der Grund, nicht dunkler. */
+  opacity: 0.12;
+  filter: invert(1) sepia(0.4);
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
