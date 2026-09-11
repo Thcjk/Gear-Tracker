@@ -6,6 +6,8 @@ import { CategorySection } from "@/components/gear/CategorySection";
 import { GearItemCard } from "@/components/gear/GearItemCard";
 import { ProductImport } from "@/components/gear/ProductImport";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import { WanderingTurtle } from "@/components/mascot/WanderingTurtle";
+import { WANDER_CYCLE } from "@/lib/wander";
 import { EmptyState } from "@/components/ui/SurfaceCard";
 import {
   GearItemForm,
@@ -129,7 +131,12 @@ export default function LibraryPage() {
         </EmptyState>
       )}
 
-      <div className="space-y-3">
+      <div className="relative space-y-3">
+        {/* Eine einzige, die zwischen den Sektionen hindurchläuft */}
+        <span className="pointer-events-none absolute inset-x-0 top-1/3 block">
+          <WanderingTurtle cycle={WANDER_CYCLE} delay={17} size={20} />
+        </span>
+
         {CATEGORIES.map((meta) => {
           const items = grouped.get(meta.id) ?? [];
           return (

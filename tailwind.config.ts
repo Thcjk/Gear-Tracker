@@ -184,6 +184,34 @@ const config: Config = {
           "0%": { opacity: "0", transform: "scale(0.86)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
+        /**
+         * Deko-Schildkröte: läuft einmal durchs Bild und lässt sich dann
+         * lange nicht blicken.
+         *
+         * Die Pause steckt in der Kurve selbst und nicht in einer
+         * Wiederholungsverzögerung: die Überquerung belegt die ersten
+         * 25 % des Zyklus, die restlichen 75 % steht die Figur unsichtbar
+         * am rechten Rand. Bei einem Zyklus von 32 s sind das 8 s Laufen
+         * und 24 s Ruhe.
+         *
+         * Die Prozente von translateX beziehen sich auf die eigene Breite
+         * des Elements, nicht auf die des Elternteils. Das animierte
+         * Element ist deshalb so breit wie sein Elternteil und trägt die
+         * Figur an seinem linken Rand – nur so entspricht ±104 % einer
+         * vollen Überquerung.
+         */
+        wander: {
+          "0%": { transform: "translateX(-104%)", opacity: "0" },
+          "3%": { opacity: "1" },
+          "21%": { opacity: "1" },
+          "25%": { transform: "translateX(104%)", opacity: "0" },
+          "100%": { transform: "translateX(104%)", opacity: "0" },
+        },
+        /* Leichtes Auf und Ab, damit das Laufen nicht wie Gleiten wirkt */
+        plod: {
+          "0%, 100%": { transform: "translateY(0) rotate(-1deg)" },
+          "50%": { transform: "translateY(-1.5px) rotate(1deg)" },
+        },
         // Überladene Schildkröte: mühsames Schwanken
         sway: {
           "0%, 100%": { transform: "rotate(-1.6deg)" },
@@ -214,6 +242,8 @@ const config: Config = {
         "icon-in": "icon-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
         "label-in": "label-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both",
         sway: "sway 2.6s ease-in-out infinite",
+        wander: "wander var(--wander-cycle, 32s) linear infinite",
+        plod: "plod 900ms ease-in-out infinite",
         "walk-in": "walk-in 720ms cubic-bezier(0.34, 1.3, 0.64, 1) both",
       },
     },

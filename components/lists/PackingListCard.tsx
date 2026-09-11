@@ -16,6 +16,8 @@ import {
   TurtleMascot,
   getTurtleVariant,
 } from "@/components/mascot/TurtleMascot";
+import { WanderingTurtle } from "@/components/mascot/WanderingTurtle";
+import { WANDER_CYCLE, wanderSlot } from "@/lib/wander";
 import { ProgressBar } from "./ProgressBar";
 
 export function PackingListCard({
@@ -40,6 +42,12 @@ export function PackingListCard({
       className="animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
+      {/* Nur auf jeder dritten Karte und zeitlich versetzt – gleichzeitig
+          soll höchstens eine unterwegs sein. */}
+      {wanderSlot(index) !== null && (
+        <WanderingTurtle cycle={WANDER_CYCLE} delay={wanderSlot(index)!} />
+      )}
+
       <div className="flex items-start justify-between gap-3">
         {/* Die kleine Schildkröte ordnet das Gewicht ein, bevor man die
             Zahl daneben gelesen hat. Ohne Einlauf-Animation: in einer
