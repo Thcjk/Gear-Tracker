@@ -28,6 +28,8 @@ import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
 import { Button } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
 import { NoteDropdown } from "@/components/ui/NoteDropdown";
+import { DestinationField } from "@/components/weather/DestinationField";
+import { ForecastStrip } from "@/components/weather/ForecastStrip";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   indexGearItems,
@@ -229,6 +231,28 @@ function PackingListDetailInner() {
             </p>
           </div>
         </div>
+      </SurfaceCard>
+
+      {/* Zielort und Wetter.
+          Ohne gesetzten Zielort steht hier nur das Suchfeld und es geht
+          kein einziger Request hinaus; mit Zielort kommen fünf Tage dazu.
+          Geht dabei etwas schief, verschwindet der Streifen ganz – eine
+          Fehlermeldung über das Wetter wäre in einer Packliste Lärm. */}
+      <SurfaceCard as="section" tone="kraft" className="p-4">
+        <DestinationField
+          destination={list.destination}
+          onChange={(destination) =>
+            saveList(
+              destination
+                ? { ...list, destination }
+                : // Das Feld ganz entfernen statt auf undefined setzen:
+                  // ein Schlüssel mit undefined überlebt JSON.stringify
+                  // nicht und sähe im Backup aus wie ein Datenverlust.
+                  (({ destination: _drop, ...rest }) => rest)(list),
+            )
+          }
+        />
+        {list.destination && <ForecastStrip destination={list.destination} />}
       </SurfaceCard>
 
       {/* Spur von der Schildkröte zu den Kennzahlen. Leicht schief und

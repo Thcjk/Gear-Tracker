@@ -15,6 +15,7 @@ import {
   COMFORT_TEMP_MIN,
   hasComfortTemp,
 } from "@/lib/categories";
+import { isDestination } from "@/lib/weather";
 
 /**
  * Einziger Ort, an dem der Schlüssel definiert wird (auch vom Anti-Flash-
@@ -67,6 +68,12 @@ export const SCHEMA_VERSION = 3;
  * ausgewiesener Version – die Felder, die seither dazukamen
  * (comfortTempC), sind durchweg optional, es gibt also nichts umzurechnen.
  * Version 3 bringt das Tourbuch (tourReviews) mit.
+ *
+ * Der Zielort einer Packliste (destination) braucht KEINE Migration und
+ * damit keine neue Version: das Feld ist optional, und ein Stand ohne
+ * Zielort ist ein gültiger Stand. Migrationen füllen fehlende PFLICHT-
+ * felder; für ein optionales Feld wäre der Schritt eine Identität und
+ * die Versionsnummer eine Lüge über eine Änderung, die es nicht gibt.
  */
 const MIGRATIONS: Record<
   number,
@@ -275,6 +282,9 @@ function normalizePackingList(raw: unknown): PackingList | null {
     id,
     name,
     items: [...merged.values()],
+    // Unplausible Koordinaten fliegen hier raus, statt später eine
+    // Wetterabfrage für einen Ort auszulösen, den es nicht gibt.
+    ...(isDestination(raw.destination) ? { destination: raw.destination } : {}),
     createdAt,
     updatedAt: toText(raw.updatedAt) ?? createdAt,
   };
