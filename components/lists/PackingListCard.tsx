@@ -39,7 +39,9 @@ export function PackingListCard({
     <SurfaceCard
       as="article"
       pinned={list.id}
-      className="animate-rise p-4"
+      // group/card + die Fläche des Links darunter: die ganze Karte
+      // reagiert, nicht nur der Name.
+      className="group/card animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
       {/* Nur auf jeder dritten Karte und zeitlich versetzt – gleichzeitig
@@ -59,9 +61,15 @@ export function PackingListCard({
           className="-my-1 h-14 w-14 shrink-0"
         />
         <div className="min-w-0 flex-1">
+          {/* Der Link bleibt der Name – für Tastatur und Screenreader ist
+              das die richtige Beschriftung. Sein ::after legt sich über
+              die ganze Karte und macht sie als Ganzes antippbar, ohne
+              dass der Lösch-Knopf in einem Anker landet (verschachtelte
+              interaktive Elemente sind ungültig und für Screenreader
+              kaum bedienbar). */}
           <Link
             href={`/lists/detail?id=${list.id}`}
-            className="-my-2 inline-flex min-h-[2.75rem] items-center text-lg font-bold text-paper-800 transition-colors hover:text-accent dark:text-paper-100 dark:hover:text-accent"
+            className="-my-2 inline-flex min-h-[2.75rem] items-center text-lg font-bold text-paper-800 transition-colors after:absolute after:inset-0 after:content-[''] hover:text-accent group-hover/card:text-accent dark:text-paper-100 dark:hover:text-accent dark:group-hover/card:text-accent"
           >
             {list.name}
           </Link>
@@ -69,9 +77,16 @@ export function PackingListCard({
             {count} Items · {formatWeight(weight)}
           </p>
         </div>
+        {/* Über der Linkfläche, sonst würde der Klick die Liste öffnen
+            statt sie zu löschen. */}
         <IconButton
           variant="danger"
-          onClick={() => onDelete(list.id)}
+          className="relative z-10"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDelete(list.id);
+          }}
           aria-label="Liste löschen"
         >
           <Trash2 className="h-4 w-4" />

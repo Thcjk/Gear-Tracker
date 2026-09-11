@@ -29,9 +29,31 @@ export function GearItemCard({
     <SurfaceCard
       as="article"
       pinned={item.id}
-      className="animate-rise p-4"
+      className="group/card animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
+      {/* Antippfläche über der ganzen Karte.
+          
+          Als eigenes Element und nicht als ::after am Bearbeiten-Knopf:
+          der bekommt beim Drücken active:translate-y-px, und ein transform
+          macht ihn zum Bezugsrahmen seines eigenen Pseudo-Elements. Die
+          Fläche schrumpft dann zwischen mousedown und mouseup auf
+          Knopfgrösse zusammen, das Klick-Ereignis landet beim gemeinsamen
+          Vorfahren – und nichts passiert. Auf den Listen-Karten geht der
+          ::after-Weg, weil ein Link keinen solchen Effekt hat.
+          
+          Für Tastatur und Screenreader zählt weiter der beschriftete
+          Knopf weiter unten; diese Fläche ist nur für den Daumen da. Sie
+          steht zuerst im Markup; darüber liegen nur die beiden Knöpfe,
+          die dafür ausdrücklich z-10 tragen. Der übrige Inhalt bleibt
+          unpositioniert, sonst läge er über der Fläche und der Klick
+          käme nie an. */}
+      <span
+        aria-hidden
+        onClick={() => onEdit(item)}
+        className="absolute inset-0 cursor-pointer rounded-card"
+      />
+
       <div className="flex items-start gap-3">
         <CategoryIcon category={item.category} />
         <div className="min-w-0 flex-1">
@@ -73,16 +95,23 @@ export function GearItemCard({
           <div className="mt-3 flex gap-2">
             <Button
               variant="raised"
-              onClick={() => onEdit(item)}
-              className="px-3 py-2 text-[0.8125rem]"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(item);
+              }}
+              className="relative z-10 px-3 py-2 text-[0.8125rem]"
             >
               <Pencil className="h-3.5 w-3.5" />
               Bearbeiten
             </Button>
+            {/* Über der Fläche darunter, sonst öffnet Löschen das Formular. */}
             <Button
               variant="danger"
-              onClick={() => onDelete(item.id)}
-              className="px-3 py-2 text-[0.8125rem]"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(item.id);
+              }}
+              className="relative z-10 px-3 py-2 text-[0.8125rem]"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Löschen
