@@ -10,6 +10,7 @@ import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { entryFromPackingList, entryFromShared } from "@/lib/calculations";
 import { parseSharedList } from "@/lib/shareFormat";
+import { truncateToWords } from "@/lib/textUtils";
 import { useAppStore } from "@/lib/store";
 
 interface ImportedList {
@@ -103,7 +104,7 @@ export default function ComparePage() {
                   aria-hidden
                 />
               </span>
-              <span className="font-semibold text-paper-800 dark:text-paper-100">
+              <span className="min-w-0 break-words font-semibold text-paper-800 dark:text-paper-100">
                 {list.name}
               </span>
             </label>
@@ -130,8 +131,12 @@ export default function ComparePage() {
                 <Download className="h-4 w-4" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold text-paper-800 dark:text-paper-100">
-                  {shared.ownerName} — {shared.listName}
+                <p
+                  className="break-words font-semibold text-paper-800 dark:text-paper-100"
+                  title={`${shared.ownerName} — ${shared.listName}`}
+                >
+                  {truncateToWords(shared.ownerName, 2)} —{" "}
+                  {truncateToWords(shared.listName, 3)}
                 </p>
                 <p className="text-xs text-paper-700 dark:text-paper-400">
                   {shared.items.length}{" "}

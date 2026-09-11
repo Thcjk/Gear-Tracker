@@ -3,6 +3,7 @@
 import { Check, Minus, Plus } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
 import { formatComfortTemp, formatWeight } from "@/lib/categories";
+import { truncateToWords } from "@/lib/textUtils";
 
 /**
  * Mehrfachauswahl aus der Gear-Library für genau eine Kategorie,
@@ -61,8 +62,11 @@ export function LibraryPicker({
                 onClick={() => onToggle(item.id)}
                 className="min-w-0 flex-1 py-1.5 text-left"
               >
-                <p className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100">
-                  {item.name}
+                <p
+                  className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100"
+                  title={item.name}
+                >
+                  {truncateToWords(item.name, 4)}
                 </p>
                 <p className="text-xs text-paper-700 dark:text-paper-400">
                   {formatWeight(item.weightGrams)}
