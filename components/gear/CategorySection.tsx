@@ -84,8 +84,14 @@ export function CategorySection({
         }`}
         onTransitionEnd={() => setAnimating(false)}
       >
+        {/* min-w-0: ein Grid-Kind hat von sich aus min-width:auto und
+            kann damit nicht schmaler werden als sein längstes ununter-
+            brochenes Wort. overflow-wrap:break-word hilft dagegen nicht –
+            es erlaubt den Umbruch innerhalb einer Zeile, ändert aber die
+            Mindestbreite des Elements nicht. Ohne diese Zeile schob ein
+            einziger langer Name die ganze Sektion über den Bildschirm. */}
         <div
-          className={`${animating || !open ? "overflow-hidden" : ""} ${
+          className={`min-w-0 ${animating || !open ? "overflow-hidden" : ""} ${
             open || animating ? "" : "invisible"
           }`}
         >

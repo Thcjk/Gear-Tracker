@@ -8,6 +8,7 @@ import { DoodleArrow } from "@/components/doodle/Doodles";
 
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
+import { truncateToWords } from "@/lib/textUtils";
 
 /** Kopfzelle einer Liste: bei Importen Name der Person über dem Listennamen. */
 function EntryTitle({ entry }: { entry: ComparisonEntry }) {
@@ -69,8 +70,11 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
                 animated={false}
                 className="mx-auto h-24 w-24"
               />
-              <p className="truncate text-sm font-bold text-paper-800 dark:text-paper-100">
-                {row.entry.title}
+              <p
+                className="break-words text-sm font-bold text-paper-800 dark:text-paper-100"
+                title={row.entry.title}
+              >
+                {truncateToWords(row.entry.title, 3)}
               </p>
               <p className="text-sm tabular-nums text-paper-700 dark:text-paper-300">
                 {formatWeight(row.weightGrams)}

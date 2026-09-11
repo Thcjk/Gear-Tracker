@@ -162,6 +162,28 @@ html.dark body::before {
   }
 }
 
+@layer base {
+  /**
+   * Namen brechen an Wortgrenzen um, nicht mitten im Wort.
+   *
+   * break-word greift erst, wenn ein einzelnes Wort allein schon zu breit
+   * ist – genau dann soll es auch brechen, sonst sprengt es das Layout.
+   * break-all wäre falsch: das trennt jedes Wort an beliebiger Stelle.
+   */
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  td,
+  th,
+  label,
+  span {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+}
+
 @layer components {
   /* Eingabefelder wirken eingelassen ins Papier */
   .neu-field {

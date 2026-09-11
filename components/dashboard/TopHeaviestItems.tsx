@@ -2,6 +2,7 @@
 
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
+import { truncateToWords } from "@/lib/textUtils";
 
 export function TopHeaviestItems({
   items,
@@ -34,8 +35,11 @@ export function TopHeaviestItems({
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100">
-                    {item.name}
+                  <p
+                    className="break-words font-semibold leading-snug text-paper-800 dark:text-paper-100"
+                    title={item.name}
+                  >
+                    {truncateToWords(item.name, 4)}
                   </p>
                   <p className="text-xs text-paper-700 dark:text-paper-400">
                     {formatWeight(item.weightGrams)} × {item.quantity}

@@ -7,6 +7,7 @@ import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { backupToAppData, loadBackups, type BackupEntry } from "@/lib/backups";
 import { clearQuarantine, readQuarantine } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
+import { downloadText } from "@/lib/download";
 
 function formatMoment(iso: string): string {
   const date = new Date(iso);
@@ -16,16 +17,6 @@ function formatMoment(iso: string): string {
     dateStyle: "short",
     timeStyle: "short",
   }).format(date);
-}
-
-function download(name: string, content: string): void {
-  const blob = new Blob([content], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = name;
-  anchor.click();
-  URL.revokeObjectURL(url);
 }
 
 /**
@@ -90,7 +81,7 @@ export function BackupSection() {
             <div className="mt-3 flex flex-wrap gap-2">
               <Button
                 onClick={() =>
-                  download(
+                  downloadText(
                     `gear-tracker-beschaedigt-${quarantined.at.slice(0, 10)}.json`,
                     quarantined.raw,
                   )

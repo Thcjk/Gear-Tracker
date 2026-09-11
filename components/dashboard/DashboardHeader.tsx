@@ -82,10 +82,24 @@ export function DashboardHeader({
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 onBlur={() => setRenaming(false)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setRenaming(false);
+                }}
+                aria-label="Neuer Listenname"
                 className="neu-field min-w-0 flex-1 text-lg font-bold"
               />
               <button
                 type="submit"
+                /**
+                 * Verhindert, dass das Feld beim Drücken den Fokus
+                 * verliert.
+                 *
+                 * Sonst lief die Reihenfolge so: mousedown nimmt dem Feld
+                 * den Fokus, onBlur schliesst das Formular, React entfernt
+                 * den Knopf – und der Klick kam nie an. Umbenennen ging
+                 * dadurch ausschliesslich mit der Eingabetaste.
+                 */
+                onMouseDown={(e) => e.preventDefault()}
                 className="rounded-control bg-accent px-4 py-2 text-sm font-semibold text-on-accent shadow-neu-accent transition-all duration-150 active:translate-y-px active:opacity-90"
               >
                 OK
@@ -98,13 +112,19 @@ export function DashboardHeader({
                 setDraft(name);
                 setRenaming(true);
               }}
-              className="group -mx-1 mt-0.5 flex min-h-[2.75rem] items-center gap-2 rounded-lg px-1 text-left"
+              className="group -mx-1 mt-0.5 flex min-h-[2.75rem] min-w-0 items-center gap-2 rounded-lg px-1 text-left"
               title="Name bearbeiten"
             >
-              <h2 className="truncate text-2xl font-extrabold tracking-tight text-paper-800 dark:text-paper-100">
+              {/* Kein truncate: das schneidet mitten im Wort. Im Kopf ist
+                  senkrecht Platz, also darf der Name umbrechen. */}
+              <h2 className="min-w-0 break-words text-2xl font-extrabold leading-tight tracking-tight text-paper-800 dark:text-paper-100">
                 {name}
               </h2>
               <Pencil className="h-4 w-4 shrink-0 text-paper-700 opacity-0 transition group-hover:opacity-100" />
+              {/* Der zugängliche Name war bisher nur der Listenname – aus
+                  "Schweden" geht nicht hervor, dass der Knopf umbenennt.
+                  Der sichtbare Text bleibt Teil des Namens. */}
+              <span className="sr-only">umbenennen</span>
             </button>
           )}
         </div>

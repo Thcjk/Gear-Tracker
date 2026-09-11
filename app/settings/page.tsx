@@ -9,19 +9,14 @@ import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { exportJson, importJson } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
+import { downloadText } from "@/lib/download";
 
 export default function SettingsPage() {
   const { ready, data, replaceData, clearAll } = useAppStore();
   const fileRef = useRef<HTMLInputElement>(null);
 
   function handleExport() {
-    const blob = new Blob([exportJson(data)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "gear-tracker-backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadText("gear-tracker-backup.json", exportJson(data));
   }
 
   async function handleImport(file: File) {

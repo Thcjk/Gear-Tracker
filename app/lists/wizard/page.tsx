@@ -9,6 +9,7 @@ import {
   getTurtleVariant,
 } from "@/components/mascot/TurtleMascot";
 import { Footprints } from "@/components/doodle/Doodles";
+import { truncateToWords } from "@/lib/textUtils";
 import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
@@ -157,8 +158,11 @@ function WizardInner() {
                 <li key={item.gearItemId} className="flex items-center gap-3">
                   <CategoryIcon category={gear.category} className="h-4 w-4" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-paper-800 dark:text-paper-100">
-                      {gear.name}
+                    <p
+                      className="break-words font-semibold text-paper-800 dark:text-paper-100"
+                      title={gear.name}
+                    >
+                      {truncateToWords(gear.name, 4)}
                       {item.quantity > 1 && (
                         <span className="text-paper-700 dark:text-paper-400">
                           {" "}
@@ -218,8 +222,11 @@ function WizardInner() {
           <ArrowLeft className="h-5 w-5" />
         </IconButton>
         {/* Direkt auf dem Brett: paper-700 erreicht auf Kork nur 3.2:1. */}
-        <p className="truncate text-sm font-semibold text-paper-900 dark:text-paper-100">
-          {list.name}
+        <p
+          className="break-words text-sm font-semibold text-paper-900 dark:text-paper-100"
+          title={list.name}
+        >
+          {truncateToWords(list.name, 4)}
         </p>
       </div>
 

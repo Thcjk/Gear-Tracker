@@ -15,6 +15,7 @@ import {
 } from "@/lib/categories";
 import { indexGearItems } from "@/lib/calculations";
 import { readJson, writeJson } from "@/lib/storage";
+import { downloadText } from "@/lib/download";
 
 const OWNER_KEY = "ultralight-gear-tracker-owner-v1";
 const CATEGORY_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
@@ -82,15 +83,10 @@ export function sharedListFileName(listName: string): string {
 }
 
 export function downloadSharedList(shared: SharedPackingList): void {
-  const blob = new Blob([JSON.stringify(shared, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = sharedListFileName(shared.listName);
-  anchor.click();
-  URL.revokeObjectURL(url);
+  downloadText(
+    sharedListFileName(shared.listName),
+    JSON.stringify(shared, null, 2),
+  );
 }
 
 /* ------------------------------- Import ------------------------------- */
