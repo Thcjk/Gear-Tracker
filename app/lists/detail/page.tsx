@@ -82,6 +82,7 @@ function PackingListDetailInner() {
   const [selectedGearId, setSelectedGearId] = useState("");
   const [reference, setReference] = useState<WeightSnapshot | null>(null);
   const [sharing, setSharing] = useState(false);
+  const [pdfFailed, setPdfFailed] = useState(false);
   /** null = zu, "new" = neue Auswertung, sonst die zu bearbeitende. */
   const [reviewing, setReviewing] = useState<TourReview | "new" | null>(null);
 
@@ -172,8 +173,15 @@ function PackingListDetailInner() {
   // jsPDF wird nur beim Klick gebraucht und deshalb erst dann geladen.
   async function handleExportPdf() {
     if (!list) return;
-    const { exportPackingListPdf } = await import("@/lib/pdfExport");
-    exportPackingListPdf(list, data.gearItems);
+    try {
+      const { exportPackingListPdf } = await import("@/lib/pdfExport");
+      exportPackingListPdf(list, data.gearItems);
+    } catch {
+      // Der Chunk kann fehlen (offline, halb aktualisierter Cache), und
+      // jsPDF kann an ungewöhnlichen Inhalten scheitern. Vorher passierte
+      // in beiden Fällen sichtbar nichts.
+      setPdfFailed(true);
+    }
   }
 
   function addItem() {
@@ -225,6 +233,22 @@ function PackingListDetailInner() {
           nach links versetzt – mittig ausgerichtet sähe sie nach Trennlinie
           aus statt nach Notiz. */}
       <Footprints className="-my-1 ml-6 h-5 w-40 -rotate-2 text-paper-300 dark:text-paper-700" />
+
+      {pdfFailed && (
+        <SurfaceCard as="section" className="p-4" role="alert">
+          <p className="text-sm text-paper-800 dark:text-paper-100">
+            Das PDF liess sich nicht erzeugen. Versuch es noch einmal – bist
+            du offline, klappt es, sobald wieder Empfang da ist.
+          </p>
+          <Button
+            variant="raised"
+            onClick={() => setPdfFailed(false)}
+            className="mt-3"
+          >
+            Verstanden
+          </Button>
+        </SurfaceCard>
+      )}
 
       <div className="grid grid-cols-3 gap-3">
         <StatCard

@@ -48,7 +48,16 @@ export default function ComparePage() {
 
   async function handleFile(file: File) {
     setError(null);
-    const shared = parseSharedList(await file.text());
+    let raw: string;
+    try {
+      raw = await file.text();
+    } catch {
+      // Die Datei kann zwischen Auswahl und Lesen verschwinden, und auf
+      // iOS schlägt das Lesen bei entzogener Berechtigung fehl.
+      setError("Die Datei liess sich nicht lesen.");
+      return;
+    }
+    const shared = parseSharedList(raw);
 
     if (!shared) {
       setError(

@@ -17,13 +17,21 @@ const PUBLIC = join(process.cwd(), "public");
 const targets = [
   { src: "icon.svg", out: "icon-192.png", size: 192 },
   { src: "icon.svg", out: "icon-512.png", size: 512 },
-  { src: "icon.svg", out: "apple-touch-icon.png", size: 180 },
-  { src: "icon-maskable.svg", out: "icon-maskable-512.png", size: 512 },
+  // Randlos: iOS und Android maskieren selbst. Bliebe die Rundung stehen,
+  // wären die Ecken transparent – auf iOS heisst das schwarz.
+  { src: "icon.svg", out: "apple-touch-icon.png", size: 180, fullBleed: true },
+  {
+    src: "icon-maskable.svg",
+    out: "icon-maskable-512.png",
+    size: 512,
+    fullBleed: true,
+  },
 ];
 
-for (const { src, out, size } of targets) {
-  const svg = await readFile(join(PUBLIC, src));
-  const png = await sharp(svg, { density: 384 })
+for (const { src, out, size, fullBleed } of targets) {
+  let svg = await readFile(join(PUBLIC, src), "utf8");
+  if (fullBleed) svg = svg.replace(/rx="112"/, 'rx="0"');
+  const png = await sharp(Buffer.from(svg), { density: 384 })
     .resize(size, size, { fit: "cover" })
     .png({ compressionLevel: 9 })
     .toBuffer();
