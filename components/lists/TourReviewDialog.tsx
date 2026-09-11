@@ -7,6 +7,7 @@ import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot
 import { Button, IconButton } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
 import { NoteTextarea } from "@/components/ui/NoteInput";
+import { StampCheckbox } from "@/components/ui/StampCheckbox";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import type {
@@ -298,13 +299,12 @@ export function TourReviewDialog({
                       className="rounded-control px-3 py-2.5 shadow-neu-in-sm"
                     >
                       <label className="flex cursor-pointer items-start gap-3 text-sm">
-                        <input
-                          type="checkbox"
+                        <StampCheckbox
+                          seed={item.gearItemId}
                           checked={used}
                           onChange={() =>
                             setReview(item.gearItemId, { used: !used })
                           }
-                          className="mt-0.5 h-4 w-4 shrink-0 accent-rust-600 dark:accent-rust-400"
                         />
                         <span className="min-w-0 flex-1">
                           <span

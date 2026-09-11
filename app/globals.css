@@ -357,6 +357,38 @@ html.dark body::before {
     }
   }
 
+  /* ---------------------------------------------------------------- *
+   * Stempelabdruck im Kästchen
+   *
+   * transform-box/transform-origin: eine SVG-Gruppe dreht und skaliert
+   * sonst um den Ursprung des Koordinatensystems, nicht um ihre eigene
+   * Mitte – der Abdruck flöge quer aus dem Bild.
+   * ---------------------------------------------------------------- */
+  .stamp-mark {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: rotate(var(--stamp-tilt, 0deg));
+  }
+
+  .stamp-mark--drop {
+    animation: stamp-drop 250ms cubic-bezier(0.3, 1.4, 0.5, 1) both;
+  }
+
+  @keyframes stamp-drop {
+    0% {
+      opacity: 0;
+      transform: rotate(calc(var(--stamp-tilt, 0deg) - 16deg)) scale(1.7);
+    }
+    55% {
+      opacity: 1;
+      transform: rotate(calc(var(--stamp-tilt, 0deg) + 2deg)) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(var(--stamp-tilt, 0deg)) scale(1);
+    }
+  }
+
   .neu-label {
     @apply text-sm font-medium text-paper-700 dark:text-paper-300;
   }
