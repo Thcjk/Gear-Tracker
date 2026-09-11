@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check } from "lucide-react";
 import type { GearItem, PackingListItem } from "@/types";
 import { ComfortTempBadge } from "@/components/gear/ComfortTempBadge";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
+import { StampCheckbox } from "@/components/ui/StampCheckbox";
 import { formatWeight } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
 
@@ -46,7 +46,12 @@ export function PackingListItemCard({
 
   if (!gear) {
     return (
-      <SurfaceCard as="article" className="p-4 text-sm text-red-700 dark:text-red-300">
+      <SurfaceCard
+        as="article"
+        tone="postit"
+        torn
+        className="p-4 text-sm text-red-700 dark:text-red-300"
+      >
         Item fehlt in der Library.
         <button type="button" onClick={onRemove} className="ml-2 underline">
           Entfernen
@@ -59,7 +64,6 @@ export function PackingListItemCard({
     <SurfaceCard
       as="article"
       pinned={item.gearItemId}
-      pinCorner="left"
       className="animate-rise overflow-hidden p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >
@@ -70,25 +74,12 @@ export function PackingListItemCard({
         />
       )}
       <div className="relative flex items-start gap-3">
-        {/* Padding plus negativer Rand: das Kästchen bleibt 24 px gross,
-            die Trefferfläche wird 44 px – Daumen sind breiter als Kästchen. */}
-        <label className="relative -m-2.5 mt-0 flex items-center p-2.5">
-          <input
-            type="checkbox"
-            checked={item.packed}
-            onChange={handleToggle}
-            className={`h-6 w-6 cursor-pointer appearance-none rounded-lg bg-paper-200 shadow-neu-sm transition-all duration-150 checked:bg-accent checked:shadow-neu-in-sm dark:bg-paper-900 ${
-              celebrating ? "animate-pop" : ""
-            }`}
-          />
-          <Check
-            className={`pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 text-on-accent transition-opacity ${
-              item.packed ? "opacity-100" : "opacity-0"
-            }`}
-            strokeWidth={3}
-            aria-hidden
-          />
-        </label>
+        <StampCheckbox
+          seed={item.gearItemId}
+          checked={item.packed}
+          onChange={handleToggle}
+          aria-label={`${gear.name} abhaken`}
+        />
         <CategoryIcon category={gear.category} />
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">

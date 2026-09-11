@@ -15,6 +15,7 @@ import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
 import { QuickItemForm } from "@/components/wizard/QuickItemForm";
 import { Button, IconButton } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   filterGearItems,
@@ -146,7 +147,7 @@ function WizardInner() {
           </p>
         </div>
 
-        <SurfaceCard className="mt-6 p-4">
+        <SurfaceCard tone="card" className="mt-6 p-4">
           {rows.length === 0 ? (
             <p className="text-sm text-paper-700 dark:text-paper-400">
               Du hast alle Kategorien übersprungen. Items lassen sich jederzeit
@@ -194,13 +195,12 @@ function WizardInner() {
           >
             Zurück
           </Button>
-          <Button
-            variant="accent"
+          <StampButton
             onClick={() => router.replace(`/lists/detail?id=${list.id}`)}
             className="ml-auto min-w-32"
           >
             Fertig
-          </Button>
+          </StampButton>
         </div>
       </div>
     );
@@ -279,14 +279,13 @@ function WizardInner() {
         <Button variant="quiet" onClick={goNext} className="h-11 px-3">
           Überspringen
         </Button>
-        <Button
-          variant="accent"
+        <StampButton
           onClick={goNext}
           disabled={chosenInStep.length === 0}
           className="ml-auto min-w-32"
         >
           Weiter
-        </Button>
+        </StampButton>
       </div>
     </div>
   );

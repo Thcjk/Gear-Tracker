@@ -4,6 +4,8 @@ import { useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import type { Category } from "@/types";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { PinDecoration } from "@/components/ui/PinDecoration";
+import { cornerRadiusFor, pinsFor } from "@/lib/pinning";
 import { CATEGORY_NUMBER } from "@/components/flatlay/FlatlayObject";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { getCategoryMeta } from "@/lib/categories";
@@ -47,8 +49,14 @@ export function CategorySection({
           onToggle();
         }}
         aria-expanded={open}
-        className={`${SURFACE_CLASSES} flex w-full items-center gap-3 p-3 text-left transition-all duration-150 active:translate-y-px`}
+        // Ungleiche Ecken wie bei jeder Karte, aber ohne Drehung: ein
+        // schiefer Reiter über einer geraden Liste sieht nach Fehler aus.
+        style={{ borderRadius: cornerRadiusFor(category) }}
+        className={`${SURFACE_CLASSES} sheet-kraft flex w-full items-center gap-3 p-3 text-left transition-all duration-150 active:translate-y-px`}
       >
+        {pinsFor(category, 1).map((placement) => (
+          <PinDecoration key={placement.key} placement={placement} />
+        ))}
         <CategoryIcon category={category} className="h-8 w-8" />
         {/* Die laufende Nummer bleibt in Inter: Ziffern gehören nicht in
             die Handschrift, auch wenn sie hier nur ordnen. */}

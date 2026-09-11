@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { AlertTriangle, Check, Download, FileUp, X } from "lucide-react";
+import { AlertTriangle, Download, FileUp, X } from "lucide-react";
 import type { SharedPackingList } from "@/types";
 import { ComparisonTable } from "@/components/compare/ComparisonTable";
 import { Button, IconButton } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
+import { StampCheckbox } from "@/components/ui/StampCheckbox";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { entryFromPackingList, entryFromShared } from "@/lib/calculations";
 import { parseSharedList } from "@/lib/shareFormat";
@@ -88,31 +89,21 @@ export default function ComparePage() {
       />
 
       {data.packingLists.length === 0 ? (
-        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+        <EmptyState seed="leer:vergleich" illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch keine eigenen Packlisten zum Vergleichen.
         </EmptyState>
       ) : (
-        <SurfaceCard className="space-y-2 p-4">
+        <SurfaceCard tone="card" className="space-y-2 p-4">
           {data.packingLists.map((list) => (
             <label
               key={list.id}
               className="flex cursor-pointer items-center gap-3 rounded-control px-3 py-2.5 transition-shadow active:shadow-neu-in-sm"
             >
-              <span className="relative -m-3 flex items-center p-3">
-                <input
-                  type="checkbox"
-                  checked={selected.includes(list.id)}
-                  onChange={() => toggle(list.id)}
-                  className="h-5 w-5 cursor-pointer appearance-none rounded-md bg-paper-200 shadow-neu-sm transition-all checked:bg-accent checked:shadow-neu-in-sm dark:bg-paper-900"
-                />
-                <Check
-                  className={`pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-on-accent transition-opacity ${
-                    selected.includes(list.id) ? "opacity-100" : "opacity-0"
-                  }`}
-                  strokeWidth={3}
-                  aria-hidden
-                />
-              </span>
+              <StampCheckbox
+                seed={list.id}
+                checked={selected.includes(list.id)}
+                onChange={() => toggle(list.id)}
+              />
               <span className="min-w-0 break-words font-semibold text-paper-800 dark:text-paper-100">
                 {list.name}
               </span>
@@ -121,7 +112,7 @@ export default function ComparePage() {
         </SurfaceCard>
       )}
 
-      <SurfaceCard className="p-4">
+      <SurfaceCard tone="kraft" className="p-4">
         <h2 className="font-bold text-paper-800 dark:text-paper-100">
           Liste von jemand anderem
         </h2>

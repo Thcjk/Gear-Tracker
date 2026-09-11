@@ -32,6 +32,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
       <EmptyState
+        seed="leer:vergleich-tabelle"
         illustration={
           <span className="relative block">
             <TurtleMascot
@@ -60,7 +61,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
     <div className="space-y-4">
       {/* Der Gewichtsunterschied auf einen Blick, vor der Tabelle: fünf
           Stufen nebeneinander sagen mehr als fünf Zahlen untereinander. */}
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
         <ul className="flex flex-wrap justify-center gap-4">
           {rows.map((row) => (
             <li key={row.entry.key} className="w-28 text-center">
@@ -84,102 +85,111 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
         </ul>
       </SurfaceCard>
 
-      <SurfaceCard className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
-          <thead className="border-b border-paper-300 dark:border-paper-700">
-            <tr className="text-xs uppercase tracking-wider text-paper-700 dark:text-paper-400">
-              <th className="px-4 py-3 font-medium">Liste</th>
-              <th className="px-4 py-3 font-medium">Items</th>
-              <th className="px-4 py-3 font-medium">Gewicht</th>
-              <th className="px-4 py-3 font-medium">Δ Gewicht</th>
-              <th className="px-4 py-3 font-medium">Wert</th>
-              <th className="px-4 py-3 font-medium">Δ Wert</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr
-                key={row.entry.key}
-                className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
-              >
-                <td className="px-4 py-3.5">
-                  <EntryTitle entry={row.entry} />
-                </td>
-                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-300">
-                  {row.itemCount}
-                </td>
-                <td className="px-4 py-3.5 font-semibold text-olive-700 dark:text-olive-300">
-                  {formatWeight(row.weightGrams)}
-                </td>
-                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
-                  {row.isLightest
-                    ? "leichteste"
-                    : `+${formatWeight(row.weightDiff)}`}
-                </td>
-                <td className="px-4 py-3.5 text-olive-700 dark:text-olive-300">
-                  {formatPrice(row.price)}
-                </td>
-                <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
-                  {row.isCheapest ? "günstigste" : `+${formatPrice(row.priceDiff)}`}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </SurfaceCard>
-
-      {categoryRows.length > 0 && (
-        <SurfaceCard className="overflow-x-auto">
+      {/* Der Rollbereich liegt INNEN, nicht auf der Karte selbst: eine
+          Karte, die selbst rollt, nimmt ihre Kantenlinie und ihre runden
+          Ecken beim Rollen mit – sie sind absolut positioniert und liegen
+          damit im rollbaren Bereich. Nach rechts gerollt stand die Kante
+          mitten in der Karte und das rechte Drittel war ein Rechteck. */}
+      <SurfaceCard>
+        <div className="overflow-x-auto rounded-card">
           <table className="min-w-full text-left text-sm">
             <thead className="border-b border-paper-300 dark:border-paper-700">
               <tr className="text-xs uppercase tracking-wider text-paper-700 dark:text-paper-400">
-                <th className="px-4 py-3 font-medium">Kategorie</th>
-                {rows.map((row) => (
-                  <th
-                    key={row.entry.key}
-                    className="whitespace-nowrap px-4 py-3 font-medium"
-                  >
-                    {row.entry.imported && row.entry.owner
-                      ? row.entry.owner
-                      : row.entry.title}
-                  </th>
-                ))}
+                <th className="px-4 py-3 font-medium">Liste</th>
+                <th className="px-4 py-3 font-medium">Items</th>
+                <th className="px-4 py-3 font-medium">Gewicht</th>
+                <th className="px-4 py-3 font-medium">Δ Gewicht</th>
+                <th className="px-4 py-3 font-medium">Wert</th>
+                <th className="px-4 py-3 font-medium">Δ Wert</th>
               </tr>
             </thead>
             <tbody>
-              {categoryRows.map((row) => {
-                const min = Math.min(...row.weights.filter((w) => w > 0));
-                return (
-                  <tr
-                    key={row.category}
-                    className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
-                  >
-                    <td className="px-4 py-3 font-semibold text-paper-800 dark:text-paper-100">
-                      <span className="inline-flex items-center gap-2">
-                        <span
-                          className="h-2.5 w-2.5 shrink-0 rounded-full"
-                          style={{ backgroundColor: row.color }}
-                        />
-                        {row.label}
-                      </span>
-                    </td>
-                    {row.weights.map((weight, index) => (
-                      <td
-                        key={rows[index].entry.key}
-                        className={`whitespace-nowrap px-4 py-3 tabular-nums ${
-                          weight > 0 && weight === min
-                            ? "font-bold text-olive-700 dark:text-olive-300"
-                            : "text-paper-700 dark:text-paper-300"
-                        }`}
-                      >
-                        {weight > 0 ? formatWeight(weight) : "—"}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
+              {rows.map((row) => (
+                <tr
+                  key={row.entry.key}
+                  className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
+                >
+                  <td className="px-4 py-3.5">
+                    <EntryTitle entry={row.entry} />
+                  </td>
+                  <td className="px-4 py-3.5 text-paper-700 dark:text-paper-300">
+                    {row.itemCount}
+                  </td>
+                  <td className="px-4 py-3.5 font-semibold text-olive-700 dark:text-olive-300">
+                    {formatWeight(row.weightGrams)}
+                  </td>
+                  <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
+                    {row.isLightest
+                      ? "leichteste"
+                      : `+${formatWeight(row.weightDiff)}`}
+                  </td>
+                  <td className="px-4 py-3.5 text-olive-700 dark:text-olive-300">
+                    {formatPrice(row.price)}
+                  </td>
+                  <td className="px-4 py-3.5 text-paper-700 dark:text-paper-400">
+                    {row.isCheapest ? "günstigste" : `+${formatPrice(row.priceDiff)}`}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+        </div>
+      </SurfaceCard>
+
+      {categoryRows.length > 0 && (
+        <SurfaceCard>
+          <div className="overflow-x-auto rounded-card">
+            <table className="min-w-full text-left text-sm">
+              <thead className="border-b border-paper-300 dark:border-paper-700">
+                <tr className="text-xs uppercase tracking-wider text-paper-700 dark:text-paper-400">
+                  <th className="px-4 py-3 font-medium">Kategorie</th>
+                  {rows.map((row) => (
+                    <th
+                      key={row.entry.key}
+                      className="whitespace-nowrap px-4 py-3 font-medium"
+                    >
+                      {row.entry.imported && row.entry.owner
+                        ? row.entry.owner
+                        : row.entry.title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {categoryRows.map((row) => {
+                  const min = Math.min(...row.weights.filter((w) => w > 0));
+                  return (
+                    <tr
+                      key={row.category}
+                      className="border-b border-paper-300/60 last:border-0 dark:border-paper-700"
+                    >
+                      <td className="px-4 py-3 font-semibold text-paper-800 dark:text-paper-100">
+                        <span className="inline-flex items-center gap-2">
+                          <span
+                            className="h-2.5 w-2.5 shrink-0 rounded-full"
+                            style={{ backgroundColor: row.color }}
+                          />
+                          {row.label}
+                        </span>
+                      </td>
+                      {row.weights.map((weight, index) => (
+                        <td
+                          key={rows[index].entry.key}
+                          className={`whitespace-nowrap px-4 py-3 tabular-nums ${
+                            weight > 0 && weight === min
+                              ? "font-bold text-olive-700 dark:text-olive-300"
+                              : "text-paper-700 dark:text-paper-300"
+                          }`}
+                        >
+                          {weight > 0 ? formatWeight(weight) : "—"}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </SurfaceCard>
       )}
     </div>

@@ -8,6 +8,12 @@ pflegen, Packlisten zusammenstellen, Gewicht und Kosten im Blick behalten.
 Die App ist eine rein statische Single-Page-Anwendung. Es gibt **kein Backend und kein
 Konto** – alle Daten liegen ausschliesslich im LocalStorage des Browsers.
 
+Zwei Funktionen sprechen mit fremden Diensten, beide freiwillig und beide ohne
+Konto: der **Produkt-Import** (eigener Cloudflare Worker, nur wenn eingerichtet)
+und das **Wetter am Zielort** (open-meteo.com, nur wenn eine Packliste einen
+Zielort hat). Dabei geht der eingetippte Ortsname bzw. dessen Koordinaten
+hinaus – keine Packliste, keine Ausrüstung, keine Kennung.
+
 ## Features
 
 - **Gear-Library** – Items anlegen, bearbeiten, löschen; sortieren nach Name, Gewicht
@@ -17,6 +23,10 @@ Konto** – alle Daten liegen ausschliesslich im LocalStorage des Browsers.
   Vorschlag wird nie ungeprüft übernommen; unsichere Treffer sind markiert.
   Siehe [`worker/README.md`](worker/README.md). Ohne eingerichteten Worker
   bleibt die Fläche aus.
+- **Wetter am Zielort** (optional) – eine Packliste kann einen Zielort tragen;
+  dann stehen fünf Tage Vorhersage von open-meteo.com darüber, gezeichnet im
+  Stil der übrigen Bilder. Ohne Zielort geht kein Request hinaus, und wenn die
+  Abfrage scheitert, verschwindet der Streifen wortlos.
 - **Packlisten** – beliebig viele Listen, die Items aus der Library referenzieren
   (inkl. Menge)
 - **Fortschritt** – „gepackt"-Checkbox pro Item und Anzeige „X von Y gepackt"

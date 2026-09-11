@@ -1,3 +1,5 @@
+import type { Destination } from "@/lib/weather";
+
 export type Category =
   | "shelter"
   | "sleep-system"
@@ -33,6 +35,11 @@ export interface PackingList {
   id: string;
   name: string;
   items: PackingListItem[];
+  /**
+   * Wohin die Tour geht. Optional und rein für die Wetteranzeige da –
+   * ohne Zielort verlässt für diese Liste kein Byte das Gerät.
+   */
+  destination?: Destination;
   createdAt: string;
   updatedAt: string;
 }

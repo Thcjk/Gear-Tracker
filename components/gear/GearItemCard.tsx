@@ -29,6 +29,7 @@ export function GearItemCard({
     <SurfaceCard
       as="article"
       pinned={item.id}
+      tone="card"
       className="group/card animate-rise p-4"
       style={{ animationDelay: staggerDelay(index) }}
     >

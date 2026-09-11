@@ -41,7 +41,7 @@ export function TourReviewLog({
   if (reviews.length === 0) return null;
 
   return (
-    <SurfaceCard as="section" className="p-4">
+    <SurfaceCard as="section" tone="kraft" className="p-4">
       <h3 className="mb-1 flex items-center gap-2 text-base font-bold text-paper-800 dark:text-paper-100">
         <CampMark className="h-7 w-7 -rotate-6 text-accent" />
         Tourbuch

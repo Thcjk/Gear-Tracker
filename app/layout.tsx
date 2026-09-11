@@ -5,6 +5,7 @@ import { PageTransition } from "@/components/nav/PageTransition";
 import { ServiceWorkerRegistration } from "@/components/ui/ServiceWorkerRegistration";
 import { SplashScreen } from "@/components/splash/SplashScreen";
 import { StorageWarning } from "@/components/ui/StorageWarning";
+import { InkDefs } from "@/components/ui/InkDefs";
 import {
   splashBootScript,
   splashCriticalCss,
@@ -109,6 +110,9 @@ export default function RootLayout({
             )})||"{}");if(d.theme==="dark")document.documentElement.classList.add("dark");}catch(e){}})();`,
           }}
         />
+        {/* Einmal im Dokument: die Stempelkanten werden von jedem
+            StampButton über ihre ID referenziert. */}
+        <InkDefs />
         <AppStoreProvider>
           {/* Innerhalb des Providers, weil der Splash weiss, wann die App
               wirklich bereit ist. Als position:fixed-Ebene hängt seine

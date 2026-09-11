@@ -3,6 +3,9 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
+import { NoteInput, NoteTextarea } from "@/components/ui/NoteInput";
+import { NoteDropdown } from "@/components/ui/NoteDropdown";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import {
   CATEGORIES,
@@ -78,126 +81,85 @@ export function GearItemForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`${SURFACE_CLASSES} animate-rise p-5`}
+      className={`${SURFACE_CLASSES} sheet-card animate-rise p-5`}
     >
       <h2 className="text-lg font-bold text-paper-800 dark:text-paper-100">
         {title}
       </h2>
       {hint}
       <div className="mt-4 grid gap-3">
-        <label className="grid gap-1 text-sm">
-          <span className="neu-label">
-            Name
-          </span>
-          <input
+        <NoteInput
+          label="Name"
+          required
+          value={values.name}
+          onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
+        />
+        <NoteDropdown<Category>
+          label="Kategorie"
+          className={hideCategory ? "hidden" : ""}
+          value={values.category}
+          options={CATEGORIES.map((c) => ({ value: c.id, label: c.label }))}
+          onChange={(category) => setValues((v) => ({ ...v, category }))}
+        />
+        <div className="grid grid-cols-2 gap-3">
+          <NoteInput
+            label="Gewicht (g)"
             required
-            value={values.name}
-            onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
-            className="neu-field"
-          />
-        </label>
-        <label className={`grid gap-1 text-sm ${hideCategory ? "hidden" : ""}`}>
-          <span className="neu-label">
-            Kategorie
-          </span>
-          <select
-            value={values.category}
+            type="number"
+            min={1}
+            value={values.weightGrams || ""}
             onChange={(e) =>
               setValues((v) => ({
                 ...v,
-                category: e.target.value as Category,
+                weightGrams: Number(e.target.value),
               }))
             }
-            className="neu-field"
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">
-              Gewicht (g)
-            </span>
-            <input
-              required
-              type="number"
-              min={1}
-              value={values.weightGrams || ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  weightGrams: Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">
-              Preis (CHF)
-            </span>
-            <input
-              type="number"
-              min={0}
-              step="0.01"
-              value={values.price ?? ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  price:
-                    e.target.value === "" ? undefined : Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
+          />
+          <NoteInput
+            label="Preis (CHF)"
+            type="number"
+            min={0}
+            step="0.01"
+            value={values.price ?? ""}
+            onChange={(e) =>
+              setValues((v) => ({
+                ...v,
+                price:
+                  e.target.value === "" ? undefined : Number(e.target.value),
+              }))
+            }
+          />
         </div>
         {showComfortTemp && (
-          <label className="grid gap-1 text-sm">
-            <span className="neu-label">Komforttemperatur (°C)</span>
-            <input
-              type="number"
-              min={COMFORT_TEMP_MIN}
-              max={COMFORT_TEMP_MAX}
-              step="0.5"
-              // Minuszeichen sind der Normalfall; ohne die Angabe zeigt iOS
-              // ein Ziffernfeld ganz ohne Vorzeichentaste.
-              inputMode="text"
-              placeholder="z. B. -5"
-              value={values.comfortTempC ?? ""}
-              onChange={(e) =>
-                setValues((v) => ({
-                  ...v,
-                  comfortTempC:
-                    e.target.value === "" ? undefined : Number(e.target.value),
-                }))
-              }
-              className="neu-field"
-            />
-          </label>
-        )}
-        <label className="grid gap-1 text-sm">
-          <span className="neu-label">
-            Notizen
-          </span>
-          <textarea
-            rows={2}
-            value={values.notes ?? ""}
+          <NoteInput
+            label="Komforttemperatur (°C)"
+            type="number"
+            min={COMFORT_TEMP_MIN}
+            max={COMFORT_TEMP_MAX}
+            step="0.5"
+            // Minuszeichen sind der Normalfall; ohne die Angabe zeigt iOS
+            // ein Ziffernfeld ganz ohne Vorzeichentaste.
+            inputMode="text"
+            placeholder="z. B. -5"
+            value={values.comfortTempC ?? ""}
             onChange={(e) =>
-              setValues((v) => ({ ...v, notes: e.target.value }))
+              setValues((v) => ({
+                ...v,
+                comfortTempC:
+                  e.target.value === "" ? undefined : Number(e.target.value),
+              }))
             }
-            className="neu-field"
           />
-        </label>
+        )}
+        <NoteTextarea
+          label="Notizen"
+          rows={2}
+          value={values.notes ?? ""}
+          onChange={(e) => setValues((v) => ({ ...v, notes: e.target.value }))}
+        />
       </div>
       <div className="mt-4 flex gap-2">
-        <Button type="submit" variant="accent">
-          {submitLabel}
-        </Button>
+        <StampButton type="submit">{submitLabel}</StampButton>
         <Button type="button" variant="raised" onClick={onCancel}>
           Abbrechen
         </Button>

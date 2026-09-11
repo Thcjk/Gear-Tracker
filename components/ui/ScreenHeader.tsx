@@ -22,7 +22,8 @@ export function ScreenHeader({
     <SurfaceCard
       as="section"
       pinned={`header:${title}`}
-      pinCorner="both"
+      pinCount={2}
+      tone="kraft"
       className="mb-6 flex items-center justify-between gap-4 px-5 py-4"
     >
       <div className="min-w-0">

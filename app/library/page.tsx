@@ -15,6 +15,7 @@ import {
   type GearFormValues,
 } from "@/components/gear/GearItemForm";
 import { Button } from "@/components/ui/Button";
+import { NoteDropdown } from "@/components/ui/NoteDropdown";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { CATEGORIES } from "@/lib/categories";
 import { filterGearItems, sortGearItems } from "@/lib/calculations";
@@ -89,21 +90,22 @@ export default function LibraryPage() {
   return (
     <div className="space-y-4">
       <ScreenHeader
-        title="Gear-Library    "
+        title="Gear-Library"
         subtitle={`${data.gearItems.length} Items in ${CATEGORIES.length} Kategorien`}
       />
 
       <div className="flex flex-wrap items-center gap-2">
-        <select
+        <NoteDropdown<SortKey>
+          className="min-w-0 flex-1"
+          ariaLabel="Sortierung innerhalb der Kategorien"
           value={sortKey}
-          onChange={(e) => setSortKey(e.target.value as SortKey)}
-          className="neu-field h-11 w-auto flex-1 py-0 text-sm"
-          aria-label="Sortierung innerhalb der Kategorien"
-        >
-          <option value="name">Sortierung: Name</option>
-          <option value="weightGrams">Sortierung: Gewicht</option>
-          <option value="price">Sortierung: Preis</option>
-        </select>
+          options={[
+            { value: "name", label: "Sortierung: Name" },
+            { value: "weightGrams", label: "Sortierung: Gewicht" },
+            { value: "price", label: "Sortierung: Preis" },
+          ]}
+          onChange={setSortKey}
+        />
         {/* Der frühere Kategorie-Filter ist durch die Sektionen überflüssig
             geworden; an seiner Stelle steht das Auf- und Zuklappen aller
             Sektionen, was mit sieben davon deutlich mehr bringt. */}
@@ -125,13 +127,13 @@ export default function LibraryPage() {
       <ProductImport onCreate={handleImported} />
 
       {data.gearItems.length === 0 && (
-        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+        <EmptyState seed="leer:library" illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch nichts in der Library. Klapp eine Kategorie auf und leg dein
           erstes Item an – oder importiere es per Link.
         </EmptyState>
       )}
 
-      <div className="relative space-y-3">
+      <div className="relative space-y-4">
         {/* Eine einzige, die zwischen den Sektionen hindurchläuft */}
         <span className="pointer-events-none absolute inset-x-0 top-1/3 block">
           <WanderingTurtle cycle={WANDER_CYCLE} delay={17} size={20} />

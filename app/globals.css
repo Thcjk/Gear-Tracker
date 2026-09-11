@@ -48,6 +48,26 @@
   --cat-clothing: #3f4527;
   --cat-electronics: #263241;
   --cat-hygiene-misc: #625d51;
+
+  /* Papiersorten. Alle Karten sind Papier, aber nicht dasselbe Papier:
+     Notizblock, Karteikarte, Haftnotiz, Packpapier. Der Unterschied ist
+     klein gehalten – es geht um einen Stapel aus einer Schublade, nicht
+     um ein Farbleitsystem. */
+  --sheet-note: #f3ecdc;
+  --sheet-card: #fbf7ee;
+  --sheet-postit: #f6e7bf;
+  --sheet-kraft: #ecdfc6;
+
+  /* Die Schnittkante: aussen eine Spur dunkler als die Fläche, innen
+     ein heller Grat. Ohne sie sieht das Blatt aus wie ein Rechteck in
+     der Hintergrundfarbe. */
+  /* Eingabefelder liegen auf jeder Papiersorte als eigener Ton – sonst
+     verschwindet ein Feld auf der Karteikarte, auf der es steht. */
+  --sheet-field: #eae0c9;
+  /* Die Rückseite des umgeknickten Eckchens. */
+  --sheet-fold: #cdbb9a;
+  --sheet-edge: rgba(69, 66, 57, 0.32);
+  --sheet-edge-light: rgba(255, 253, 245, 0.85);
 }
 
 html.dark,
@@ -76,6 +96,16 @@ html[data-theme="dark"] {
   --cat-clothing: #c8cda8;
   --cat-electronics: #f3ecdc;
   --cat-hygiene-misc: #afa48b;
+
+  --sheet-note: #1b2430;
+  --sheet-card: #222d3b;
+  --sheet-postit: #2a2c22;
+  --sheet-kraft: #202832;
+
+  --sheet-field: #141c26;
+  --sheet-fold: #0c1118;
+  --sheet-edge: rgba(0, 0, 0, 0.6);
+  --sheet-edge-light: rgba(243, 236, 220, 0.12);
 }
 
 html,
@@ -190,6 +220,175 @@ html.dark body::before {
     @apply w-full rounded-control bg-paper-200 px-3.5 py-2.5 text-paper-800 shadow-neu-in-sm outline-none transition-shadow placeholder:text-paper-600 focus:shadow-neu dark:bg-paper-950 dark:text-paper-100 dark:placeholder:text-paper-400;
   }
 
+  /* ---------------------------------------------------------------- *
+   * Karteikarte als Eingabefeld
+   * ---------------------------------------------------------------- */
+  .note-card {
+    position: relative;
+    display: block;
+    /* Die obere rechte Ecke ist weggeschnitten; die Rückseite des
+       geknickten Papiers liegt als eigenes Dreieck darunter. */
+    clip-path: polygon(
+      0 0,
+      calc(100% - 20px) 0,
+      100% 20px,
+      100% 100%,
+      0 100%
+    );
+    border-radius: 0.75rem;
+    background-color: var(--sheet-field);
+    box-shadow: inset 0 1px 3px var(--shadow-inset);
+    padding: 0.5rem 0.875rem 0.625rem;
+    transition: box-shadow 150ms ease;
+  }
+
+  .note-card:focus-within {
+    box-shadow:
+      inset 0 1px 3px var(--shadow-inset),
+      inset 0 -2px 0 var(--accent-primary);
+  }
+
+  .note-card__label {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.15;
+    @apply text-paper-700 dark:text-paper-300;
+  }
+
+  /* Der Wert steht in der Grotesk: eine Zahl in Handschrift liest man
+     zweimal. */
+  .note-card__value {
+    display: block;
+    width: 100%;
+    min-height: 1.75rem;
+    background: transparent;
+    border: 0;
+    outline: none;
+    font-size: 1rem;
+    @apply font-semibold text-paper-800 placeholder:font-normal placeholder:text-paper-600 dark:text-paper-100 dark:placeholder:text-paper-400;
+  }
+
+  .note-card__hint {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    @apply text-paper-700 dark:text-paper-400;
+  }
+
+  .note-card__fold {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    /* Das Dreieck unterhalb der Schnittkante ist die Rückseite des
+       Blattes – etwas dunkler als die Vorderseite, mit dem Lichtverlauf
+       eines geknickten Bogens. */
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+    background-color: var(--sheet-fold);
+    /* Zur Knickkante hin heller, zur Spitze hin im Schatten – so fällt
+       Licht auf einen umgeschlagenen Bogen. */
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.35) 0%,
+      transparent 45%,
+      var(--sheet-edge) 100%
+    );
+  }
+
+  /* ---------------------------------------------------------------- *
+   * Aufgefächerter Zettelstapel (NoteDropdown)
+   * ---------------------------------------------------------------- */
+  .note-stack {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    z-index: 30;
+    max-height: 15rem;
+    overflow-y: auto;
+    padding: 0.35rem;
+    border-radius: 0.9rem;
+    background-color: var(--sheet-note);
+    box-shadow:
+      1px 2px 3px var(--shadow-card-soft),
+      3px 9px 20px var(--shadow-card);
+  }
+
+  .note-stack__item {
+    /* Jede Zeile ist ein eigener Zettel, kein Eintrag in einer Liste. */
+    padding: 0.5rem 0.75rem;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 0.55rem;
+    cursor: pointer;
+    background-color: var(--sheet-card);
+    box-shadow: 1px 2px 4px var(--shadow-card-soft);
+    @apply text-paper-800 dark:text-paper-100;
+    /* Der Ruhewinkel; die Animation endet genau darauf. */
+    transform: rotate(var(--fan, 0deg));
+    animation: note-fan 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 26ms);
+  }
+
+  .note-stack__item + .note-stack__item {
+    margin-top: 0.45rem;
+  }
+
+  .note-stack__item[data-active] {
+    background-color: var(--sheet-postit);
+    box-shadow: 2px 3px 6px var(--shadow-card);
+  }
+
+  .note-stack__item[aria-selected="true"] {
+    @apply font-bold text-accent;
+  }
+
+  @keyframes note-fan {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) rotate(calc(var(--fan, 0deg) * 3));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotate(var(--fan, 0deg));
+    }
+  }
+
+  /* ---------------------------------------------------------------- *
+   * Stempelabdruck im Kästchen
+   *
+   * transform-box/transform-origin: eine SVG-Gruppe dreht und skaliert
+   * sonst um den Ursprung des Koordinatensystems, nicht um ihre eigene
+   * Mitte – der Abdruck flöge quer aus dem Bild.
+   * ---------------------------------------------------------------- */
+  .stamp-mark {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: rotate(var(--stamp-tilt, 0deg));
+  }
+
+  .stamp-mark--drop {
+    animation: stamp-drop 250ms cubic-bezier(0.3, 1.4, 0.5, 1) both;
+  }
+
+  @keyframes stamp-drop {
+    0% {
+      opacity: 0;
+      transform: rotate(calc(var(--stamp-tilt, 0deg) - 16deg)) scale(1.7);
+    }
+    55% {
+      opacity: 1;
+      transform: rotate(calc(var(--stamp-tilt, 0deg) + 2deg)) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(var(--stamp-tilt, 0deg)) scale(1);
+    }
+  }
+
   .neu-label {
     @apply text-sm font-medium text-paper-700 dark:text-paper-300;
   }
@@ -199,8 +398,147 @@ html.dark body::before {
    * Maskottchens da – nie für Zahlen. Ein Gewicht, das man zweimal lesen
    * muss, ist ein schlechteres Gewicht.
    */
+  /**
+   * Der Stempel wird aufgedrückt, nicht angetippt: beim Drücken sinkt er
+   * in die Fläche und richtet sich dabei fast gerade aus.
+   *
+   * Der Ruhewinkel steht als Variable am Element, damit die Drehung im
+   * Stylesheet bleibt – sonst müsste jede Zustandsänderung den kompletten
+   * transform-Wert neu zusammensetzen und würde dabei die Skalierung
+   * überschreiben.
+   */
+  .stamp {
+    transform: rotate(var(--stamp-tilt, 0deg));
+  }
+
+  .stamp:active:not(:disabled) {
+    transform: rotate(calc(var(--stamp-tilt, 0deg) * 0.25)) scale(0.94);
+  }
+
   .handwritten {
     font-family: var(--font-caveat), var(--font-inter), system-ui, sans-serif;
     letter-spacing: 0.01em;
+  }
+
+  /* ---------------------------------------------------------------- *
+   * Das Blatt
+   *
+   * Jede Karte ist ein Stück Papier. Damit ein Stapel nicht wie ein
+   * Raster aus identischen Rechtecken aussieht, variieren drei Dinge pro
+   * Karte: der Papierton (Klasse), die vier Eckenradien (aus der
+   * Element-ID berechnet, inline) und die Nadel.
+   * ---------------------------------------------------------------- */
+  .sheet {
+    position: relative;
+    /* Eigener Stapelkontext: die Kanten- und Rissebenen liegen auf
+       z-index -1 und -2 und müssen innerhalb der Karte bleiben, sonst
+       verschwinden sie hinter dem Brett. */
+    isolation: isolate;
+    background-color: var(--sheet-tone, var(--sheet-note));
+  }
+
+  .sheet-card {
+    --sheet-tone: var(--sheet-card);
+  }
+  .sheet-postit {
+    --sheet-tone: var(--sheet-postit);
+  }
+  .sheet-kraft {
+    --sheet-tone: var(--sheet-kraft);
+  }
+
+  /**
+   * Die Papierkante.
+   *
+   * Eine Haarlinie entlang der Aussenkante, darüber ein heller Grat an
+   * der Oberkante und ein weicher, dunklerer Anlauf an der Unterkante –
+   * so, wie Licht auf ein leicht abstehendes Blatt fällt. Die Linie folgt
+   * border-radius:inherit und ist damit genauso ungleichmässig wie die
+   * Ecken der jeweiligen Karte.
+   */
+  .sheet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 0 0 1px var(--sheet-edge),
+      inset 0 1px 0 var(--sheet-edge-light),
+      inset 0 -10px 12px -12px var(--sheet-edge);
+  }
+
+  /**
+   * Gerissene Unterkante.
+   *
+   * clip-path schneidet alles weg, was ausserhalb der Form liegt – auch
+   * den eigenen Schlagschatten. Fläche und Schatten liegen deshalb in
+   * zwei eigenen Ebenen hinter dem Inhalt: beide mit derselben Rissform
+   * beschnitten, die hintere versetzt und weichgezeichnet. Die Karte
+   * selbst ist in diesem Fall durchsichtig und trägt keinen Schatten.
+   */
+  .sheet-torn {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .sheet-torn::after {
+    /* Die Haarlinie liefe quer über den Riss. */
+    display: none;
+  }
+
+  .sheet-torn > .sheet-layer {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    /* Unregelmässig in Tiefe und Abstand: gleichmässige Zacken sehen
+       nach Zickzackschere aus, nicht nach gerissenem Papier. */
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 4px),
+      95.5% calc(100% - 9px),
+      91% calc(100% - 2px),
+      88% calc(100% - 3px),
+      83% calc(100% - 10px),
+      78.5% calc(100% - 4px),
+      74% calc(100% - 1px),
+      69% calc(100% - 8px),
+      66% calc(100% - 6px),
+      61% calc(100% - 2px),
+      56% calc(100% - 9px),
+      52% calc(100% - 3px),
+      47.5% calc(100% - 5px),
+      43% 100%,
+      39% calc(100% - 7px),
+      34% calc(100% - 2px),
+      30% calc(100% - 4px),
+      25% calc(100% - 10px),
+      21.5% calc(100% - 3px),
+      17% calc(100% - 6px),
+      12% calc(100% - 1px),
+      8% calc(100% - 8px),
+      4% calc(100% - 4px),
+      0 calc(100% - 7px)
+    );
+  }
+
+  .sheet-torn > .sheet-face {
+    z-index: -1;
+    background-color: var(--sheet-tone, var(--sheet-note));
+    box-shadow:
+      inset 0 0 0 1px var(--sheet-edge),
+      inset 0 1px 0 var(--sheet-edge-light),
+      /* Am Riss steht die Faser hell ab, statt scharf zu schneiden. */
+      inset 0 -14px 10px -10px var(--sheet-edge);
+  }
+
+  .sheet-torn > .sheet-shadow {
+    z-index: -2;
+    background-color: var(--shadow-card);
+    transform: translate(2px, 6px);
+    filter: blur(6px);
   }
 }

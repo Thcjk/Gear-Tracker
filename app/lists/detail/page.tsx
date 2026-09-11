@@ -26,6 +26,10 @@ import { StatCard } from "@/components/dashboard/StatCard";
 import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
+import { NoteDropdown } from "@/components/ui/NoteDropdown";
+import { DestinationField } from "@/components/weather/DestinationField";
+import { ForecastStrip } from "@/components/weather/ForecastStrip";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   indexGearItems,
@@ -36,7 +40,7 @@ import {
   topHeaviestItems,
   weightByCategory,
 } from "@/lib/calculations";
-import { formatPrice, formatWeight } from "@/lib/categories";
+import { formatPriceNumber, formatWeight } from "@/lib/categories";
 import {
   buildSharedList,
   downloadSharedList,
@@ -229,13 +233,43 @@ function PackingListDetailInner() {
         </div>
       </SurfaceCard>
 
+      {/* Zielort und Wetter.
+          Ohne gesetzten Zielort steht hier nur das Suchfeld und es geht
+          kein einziger Request hinaus; mit Zielort kommen fünf Tage dazu.
+          Geht dabei etwas schief, verschwindet der Streifen ganz – eine
+          Fehlermeldung über das Wetter wäre in einer Packliste Lärm. */}
+      <SurfaceCard as="section" tone="kraft" className="p-4">
+        <DestinationField
+          destination={list.destination}
+          onChange={(destination) =>
+            saveList(
+              destination
+                ? { ...list, destination }
+                : // Das Feld ganz entfernen statt auf undefined setzen:
+                  // ein Schlüssel mit undefined überlebt JSON.stringify
+                  // nicht und sähe im Backup aus wie ein Datenverlust.
+                  (({ destination: _drop, ...rest }) => rest)(list),
+            )
+          }
+        />
+        {list.destination && (
+          <ForecastStrip destination={list.destination} withMap />
+        )}
+      </SurfaceCard>
+
       {/* Spur von der Schildkröte zu den Kennzahlen. Leicht schief und
           nach links versetzt – mittig ausgerichtet sähe sie nach Trennlinie
           aus statt nach Notiz. */}
       <Footprints className="-my-1 ml-6 h-5 w-40 -rotate-2 text-paper-300 dark:text-paper-700" />
 
       {pdfFailed && (
-        <SurfaceCard as="section" className="p-4" role="alert">
+        <SurfaceCard
+          as="section"
+          tone="postit"
+          torn
+          className="p-4 pb-6"
+          role="alert"
+        >
           <p className="text-sm text-paper-800 dark:text-paper-100">
             Das PDF liess sich nicht erzeugen. Versuch es noch einmal – bist
             du offline, klappt es, sobald wieder Empfang da ist.
@@ -252,20 +286,22 @@ function PackingListDetailInner() {
 
       <div className="grid grid-cols-3 gap-3">
         <StatCard
-          label="Gesamtgewicht"
+          label="Gewicht"
           countTo={totalWeight}
           format={formatWeight}
           duration={1100}
           index={0}
         />
         <StatCard
-          label="Gesamtwert"
+          // Die Währung steht im Etikett, nicht im Wert: "CHF 549" passt
+          // auf 320 px nicht in eine Spalte von drei.
+          label="Wert (CHF)"
           countTo={totalPrice}
-          format={formatPrice}
+          format={formatPriceNumber}
           duration={900}
           index={1}
         />
-        <StatCard label="Anzahl Items" value={String(itemCount)} index={2} />
+        <StatCard label="Items" value={String(itemCount)} index={2} />
       </div>
 
       <AchievementBadges
@@ -325,27 +361,26 @@ function PackingListDetailInner() {
           </p>
         ) : (
           <div className="flex gap-2">
-            <select
+            <NoteDropdown
+              className="min-w-0 flex-1"
+              ariaLabel="Item aus der Library wählen"
+              placeholder="Item wählen…"
               value={selectedGearId}
-              onChange={(e) => setSelectedGearId(e.target.value)}
-              className="neu-field min-w-0 flex-1 text-sm"
-            >
-              <option value="">Item wählen…</option>
-              {availableGear.map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.name} ({formatWeight(g.weightGrams)})
-                </option>
-              ))}
-            </select>
-            <Button
-              variant="accent"
+              options={availableGear.map((g) => ({
+                value: g.id,
+                label: `${g.name} (${formatWeight(g.weightGrams)})`,
+              }))}
+              onChange={setSelectedGearId}
+            />
+            <StampButton
+              stampSeed="item-hinzufuegen"
               onClick={addItem}
               disabled={!selectedGearId}
-              className="px-3"
+              className="px-4"
             >
               <Plus className="h-4 w-4" />
               Add
-            </Button>
+            </StampButton>
           </div>
         )}
       </SurfaceCard>
@@ -363,6 +398,7 @@ function PackingListDetailInner() {
       <div className="space-y-3">
         {list.items.length === 0 ? (
           <EmptyState
+            seed="leer:packliste"
             illustration={
               <TurtleMascot
                 totalWeightGrams={0}

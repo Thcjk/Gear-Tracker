@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { PackingListCard } from "@/components/lists/PackingListCard";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
+import { NoteInput } from "@/components/ui/NoteInput";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
@@ -38,34 +40,27 @@ export default function ListsPage() {
         title="Packlisten"
         subtitle={`${data.packingLists.length} Listen`}
         action={
-          <Button variant="accent" onClick={() => setShowForm((v) => !v)}>
+          <StampButton stampSeed="neue-liste" onClick={() => setShowForm((v) => !v)}>
             <Plus className="h-4 w-4" />
             Neu
-          </Button>
+          </StampButton>
         }
       />
 
       {showForm && (
         <form
           onSubmit={handleCreate}
-          className={`${SURFACE_CLASSES} animate-rise p-5`}
+          className={`${SURFACE_CLASSES} sheet-card animate-rise p-5`}
         >
-          <label className="grid gap-2 text-sm">
-            <span className="neu-label">
-              Listenname
-            </span>
-            <input
-              autoFocus
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="z.B. Weekend Alps"
-              className="neu-field"
-            />
-          </label>
+          <NoteInput
+            label="Listenname"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="z.B. Weekend Alps"
+          />
           <div className="mt-3 flex gap-2">
-            <Button type="submit" variant="cool">
-              Erstellen
-            </Button>
+            <StampButton type="submit">Erstellen</StampButton>
             <Button type="button" onClick={() => setShowForm(false)}>
               Abbrechen
             </Button>
@@ -76,6 +71,7 @@ export default function ListsPage() {
       <div className="space-y-3">
         {data.packingLists.length === 0 ? (
           <EmptyState
+            seed="leer:listen"
             illustration={
               <span className="relative block">
                 {/* Der Kompass liegt hinter der Figur und ist leicht

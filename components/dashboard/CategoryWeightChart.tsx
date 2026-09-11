@@ -103,7 +103,11 @@ export function CategoryWeightChart({ data }: { data: CategoryWeightRow[] }) {
 
   if (data.length === 0) {
     return (
-      <SurfaceCard className="p-4 text-sm text-paper-700 dark:text-paper-400">
+      <SurfaceCard
+        tone="postit"
+        torn
+        className="p-4 pb-6 text-sm text-paper-700 dark:text-paper-400"
+      >
         Noch keine Gewichtsdaten für ein Diagramm.
       </SurfaceCard>
     );

@@ -5,6 +5,9 @@ import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
 import { CampMark } from "@/components/doodle/Doodles";
 import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
+import { NoteTextarea } from "@/components/ui/NoteInput";
+import { StampCheckbox } from "@/components/ui/StampCheckbox";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
 import type {
@@ -175,15 +178,15 @@ export function TourReviewDialog({
               ? "Alles gebraucht – so kann die Liste bleiben."
               : `${unusedCount} ${unusedCount === 1 ? "Item war" : "Items waren"} umsonst dabei. Beim nächsten Packen weisst du es.`}
           </p>
-          <Button
+          <StampButton
+            stampSeed="tour-fertig"
             type="button"
-            variant="accent"
             onClick={onClose}
             className="mt-5 w-full"
           >
             <Check className="h-4 w-4" />
             Fertig
-          </Button>
+          </StampButton>
         </SurfaceCard>
       </div>
     );
@@ -296,13 +299,12 @@ export function TourReviewDialog({
                       className="rounded-control px-3 py-2.5 shadow-neu-in-sm"
                     >
                       <label className="flex cursor-pointer items-start gap-3 text-sm">
-                        <input
-                          type="checkbox"
+                        <StampCheckbox
+                          seed={item.gearItemId}
                           checked={used}
                           onChange={() =>
                             setReview(item.gearItemId, { used: !used })
                           }
-                          className="mt-0.5 h-4 w-4 shrink-0 accent-rust-600 dark:accent-rust-400"
                         />
                         <span className="min-w-0 flex-1">
                           <span
@@ -347,10 +349,10 @@ export function TourReviewDialog({
 
           <div className="flex flex-wrap gap-2">
             {step === 1 ? (
-              <Button type="button" variant="accent" onClick={() => setStep(2)}>
+              <StampButton stampSeed="tour-weiter" type="button" onClick={() => setStep(2)}>
                 Weiter
                 <ArrowRight className="h-4 w-4" />
-              </Button>
+              </StampButton>
             ) : (
               <Button type="button" onClick={() => setStep(1)}>
                 <ArrowLeft className="h-4 w-4" />
@@ -378,15 +380,12 @@ function TextField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="grid gap-1.5 text-sm">
-      <span className="neu-label">{label}</span>
-      <textarea
-        rows={2}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        maxLength={500}
-        className="neu-field"
-      />
-    </label>
+    <NoteTextarea
+      label={label}
+      rows={2}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      maxLength={500}
+    />
   );
 }

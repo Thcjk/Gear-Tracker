@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AlertTriangle, Link2, Loader2, Info } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { StampButton } from "@/components/ui/StampButton";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   GearItemForm,
@@ -71,7 +72,7 @@ export function ProductImport({
 
   return (
     <div className="space-y-3">
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
         <h2 className="mb-1 font-bold text-paper-800 dark:text-paper-100">
           Per Link importieren
         </h2>
@@ -99,9 +100,9 @@ export function ProductImport({
               className="neu-field w-full"
             />
           </label>
-          <Button
+          <StampButton
+            stampSeed="produkt-import"
             type="button"
-            variant="accent"
             onClick={() => void run()}
             disabled={!canSubmit}
             aria-busy={loading}
@@ -117,7 +118,7 @@ export function ProductImport({
                 Importieren
               </>
             )}
-          </Button>
+          </StampButton>
         </div>
         {/* role="status" statt "alert": die Meldung ist Rückmeldung auf eine
             eigene Aktion, kein Zwischenruf. */}

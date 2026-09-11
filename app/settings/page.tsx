@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { SoundToggle } from "@/components/settings/SoundToggle";
 import { exportJson, importJson } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
 import { downloadText } from "@/lib/download";
@@ -41,14 +42,21 @@ export default function SettingsPage() {
         subtitle="Design und lokale Datenverwaltung"
       />
 
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
         <h3 className="mb-4 font-bold text-paper-800 dark:text-paper-100">
           Design-Modus
         </h3>
         <ThemeToggle />
       </SurfaceCard>
 
-      <SurfaceCard as="section" className="p-4">
+      <SurfaceCard as="section" tone="card" className="p-4">
+        <h3 className="mb-4 font-bold text-paper-800 dark:text-paper-100">
+          Töne
+        </h3>
+        <SoundToggle />
+      </SurfaceCard>
+
+      <SurfaceCard as="section" tone="card" className="p-4">
         <h3 className="mb-4 font-bold text-paper-800 dark:text-paper-100">
           Daten &amp; Backup
         </h3>
@@ -96,7 +104,7 @@ export default function SettingsPage() {
 
       <BackupSection />
 
-      <SurfaceCard as="section" className="p-4 text-sm text-paper-700 dark:text-paper-400">
+      <SurfaceCard as="section" tone="kraft" className="p-4 text-sm text-paper-700 dark:text-paper-400">
         <p>
           <strong className="text-paper-800 dark:text-paper-100">
             Gear-Tracker

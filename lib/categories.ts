@@ -91,6 +91,17 @@ export function formatComfortTemp(celsius: number): string {
   return `${Math.round(celsius * 10) / 10} °C`;
 }
 
+/**
+ * Nur die Zahl, ohne Währung – für Stellen, an denen "CHF" schon im
+ * Etikett steht. Dieselbe Gruppierung wie formatPrice, damit 1'240 nicht
+ * einmal so und einmal anders aussieht.
+ */
+export function formatPriceNumber(price: number): string {
+  return new Intl.NumberFormat("de-CH", { maximumFractionDigits: 0 }).format(
+    price,
+  );
+}
+
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat("de-CH", {
     style: "currency",
