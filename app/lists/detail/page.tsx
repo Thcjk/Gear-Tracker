@@ -314,9 +314,9 @@ function PackingListDetailInner() {
       {/* Kleiner Pfeil vom Abschnitt darüber in die Item-Liste */}
       {list.items.length > 0 && (
         <div className="-mb-1 flex items-center gap-2 pl-2">
-          <DoodleArrow className="h-7 w-7 text-paper-600 dark:text-paper-400" />
-          <span className="handwritten text-base text-paper-700 dark:text-paper-300">
-            {progress.packed} von {progress.total} gepackt
+          <DoodleArrow className="h-7 w-7 text-paper-900 dark:text-paper-100" />
+          <span className="handwritten text-base text-paper-900 dark:text-paper-100">
+            abhaken, was im Rucksack liegt
           </span>
         </div>
       )}

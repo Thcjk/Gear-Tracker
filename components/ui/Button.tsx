@@ -21,9 +21,11 @@ const VARIANTS: Record<Variant, string> = {
   accent:
     "bg-accent text-on-accent shadow-neu-accent active:shadow-neu-in-sm active:opacity-90",
   cool:
-    "bg-accent-tertiary text-ink shadow-neu-accent active:shadow-neu-in-sm active:opacity-90 dark:bg-paper-900 dark:text-mustard-400 dark:shadow-neu-sm",
+    "bg-accent-tertiary text-on-accent shadow-neu-accent active:shadow-neu-in-sm active:opacity-90 dark:bg-paper-900 dark:text-mustard-400 dark:shadow-neu-sm",
+  // "quiet" steht oft direkt auf dem Brett, nicht auf Papier – dort
+  // erreicht paper-700 nur 3.2:1 auf Kork.
   quiet:
-    "bg-transparent text-paper-700 hover:text-paper-800 dark:text-paper-300 dark:hover:text-paper-50",
+    "bg-transparent text-paper-900 hover:text-accent dark:text-paper-100 dark:hover:text-accent",
   danger:
     "bg-paper-200 text-red-700 shadow-neu-sm active:shadow-neu-in-sm dark:bg-paper-900 dark:text-red-300",
 };

@@ -204,7 +204,8 @@ function WizardInner() {
         >
           <ArrowLeft className="h-5 w-5" />
         </IconButton>
-        <p className="truncate text-sm font-semibold text-paper-700 dark:text-paper-400">
+        {/* Direkt auf dem Brett: paper-700 erreicht auf Kork nur 3.2:1. */}
+        <p className="truncate text-sm font-semibold text-paper-900 dark:text-paper-100">
           {list.name}
         </p>
       </div>
