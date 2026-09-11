@@ -90,7 +90,7 @@ export default function LibraryPage() {
   return (
     <div className="space-y-4">
       <ScreenHeader
-        title="Gear-Library "
+        title="Gear-Library"
         subtitle={`${data.gearItems.length} Items in ${CATEGORIES.length} Kategorien`}
       />
 
