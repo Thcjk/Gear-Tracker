@@ -8,6 +8,7 @@ import {
   TurtleMascot,
   getTurtleVariant,
 } from "@/components/mascot/TurtleMascot";
+import { Footprints } from "@/components/doodle/Doodles";
 import type { GearDraft, GearItem, PackingListItem } from "@/types";
 import { CategoryStage } from "@/components/wizard/CategoryStage";
 import { LibraryPicker } from "@/components/wizard/LibraryPicker";
@@ -134,7 +135,8 @@ function WizardInner() {
             variant={getTurtleVariant(list.id)}
             className="h-36 w-36"
           />
-          <h2 className="animate-label-in mt-5 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
+          <Footprints className="-mt-2 h-5 w-36 rotate-3 text-paper-300 dark:text-paper-700" />
+          <h2 className="animate-label-in mt-3 text-2xl font-extrabold tracking-tight text-paper-800 [animation-delay:90ms] dark:text-paper-100">
             {list.name}
           </h2>
           <p className="animate-label-in mt-1 text-sm text-paper-700 [animation-delay:140ms] dark:text-paper-400">

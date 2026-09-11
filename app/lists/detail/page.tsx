@@ -11,7 +11,11 @@ import {
   getPackStage,
   getTurtleVariant,
 } from "@/components/mascot/TurtleMascot";
-import { DoodleArrow, WaypointLine } from "@/components/doodle/Doodles";
+import {
+  DoodleArrow,
+  Footprints,
+  WaypointLine,
+} from "@/components/doodle/Doodles";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -216,6 +220,11 @@ function PackingListDetailInner() {
           </div>
         </div>
       </SurfaceCard>
+
+      {/* Spur von der Schildkröte zu den Kennzahlen. Leicht schief und
+          nach links versetzt – mittig ausgerichtet sähe sie nach Trennlinie
+          aus statt nach Notiz. */}
+      <Footprints className="-my-1 ml-6 h-5 w-40 -rotate-2 text-paper-300 dark:text-paper-700" />
 
       <div className="grid grid-cols-3 gap-3">
         <StatCard

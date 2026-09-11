@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import { Compass } from "@/components/doodle/Doodles";
 import { useAppStore } from "@/lib/store";
 
 export default function ListsPage() {
@@ -74,7 +75,20 @@ export default function ListsPage() {
 
       <div className="space-y-3">
         {data.packingLists.length === 0 ? (
-          <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+          <EmptyState
+            illustration={
+              <span className="relative block">
+                {/* Der Kompass liegt hinter der Figur und ist leicht
+                    schief – als Deko, nicht als zweites Symbol. */}
+                <Compass className="absolute -left-10 -top-4 h-32 w-32 -rotate-12 text-paper-400 opacity-50 dark:text-paper-600" />
+                <TurtleMascot
+                  totalWeightGrams={0}
+                  animated={false}
+                  className="relative h-28 w-28"
+                />
+              </span>
+            }
+          >
             Noch keine Packlisten. Erstelle eine für deine nächste Tour.
           </EmptyState>
         ) : (

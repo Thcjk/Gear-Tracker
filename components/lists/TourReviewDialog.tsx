@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
+import { CampMark } from "@/components/doodle/Doodles";
 import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
@@ -159,7 +160,8 @@ export function TourReviewDialog({
           if (e.target === e.currentTarget) onClose();
         }}
       >
-        <SurfaceCard className="animate-rise w-full max-w-md p-6 text-center">
+        <SurfaceCard className="animate-rise relative w-full max-w-md p-6 text-center">
+          <CampMark className="absolute right-5 top-5 h-9 w-9 rotate-12 text-paper-400 dark:text-paper-600" />
           <TurtleMascot
             totalWeightGrams={carriedGrams}
             variant={getTurtleVariant(list.id)}

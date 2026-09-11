@@ -1,6 +1,7 @@
 "use client";
 
-import { Flag, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
+import { CampMark } from "@/components/doodle/Doodles";
 import { IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import type { GearItem, TourReview, WeightFeeling } from "@/types";
@@ -42,7 +43,7 @@ export function TourReviewLog({
   return (
     <SurfaceCard as="section" className="p-4">
       <h3 className="mb-1 flex items-center gap-2 text-base font-bold text-paper-800 dark:text-paper-100">
-        <Flag className="h-4 w-4 text-accent" aria-hidden />
+        <CampMark className="h-7 w-7 -rotate-6 text-accent" />
         Tourbuch
       </h3>
       <p className="mb-4 text-sm text-paper-700 dark:text-paper-400">

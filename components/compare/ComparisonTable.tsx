@@ -4,6 +4,7 @@ import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
+import { DoodleArrow } from "@/components/doodle/Doodles";
 
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
@@ -29,7 +30,22 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
 export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
-      <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
+      <EmptyState
+        illustration={
+          <span className="relative block">
+            <TurtleMascot
+              totalWeightGrams={0}
+              animated={false}
+              className="h-28 w-28"
+            />
+            <DoodleArrow
+              variant="hook"
+              flip
+              className="absolute -right-8 top-2 h-10 w-10 rotate-[18deg] text-paper-400 dark:text-paper-600"
+            />
+          </span>
+        }
+      >
         Wähle mindestens zwei Packlisten zum Vergleichen – eigene oder eine
         importierte Datei.
       </EmptyState>
