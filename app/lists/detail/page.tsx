@@ -27,6 +27,7 @@ import { TopHeaviestItems } from "@/components/dashboard/TopHeaviestItems";
 import { PackingListItemCard } from "@/components/lists/PackingListItemCard";
 import { Button } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
+import { NoteDropdown } from "@/components/ui/NoteDropdown";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
 import {
   indexGearItems,
@@ -332,18 +333,17 @@ function PackingListDetailInner() {
           </p>
         ) : (
           <div className="flex gap-2">
-            <select
+            <NoteDropdown
+              className="min-w-0 flex-1"
+              ariaLabel="Item aus der Library wählen"
+              placeholder="Item wählen…"
               value={selectedGearId}
-              onChange={(e) => setSelectedGearId(e.target.value)}
-              className="neu-field min-w-0 flex-1 text-sm"
-            >
-              <option value="">Item wählen…</option>
-              {availableGear.map((g) => (
-                <option key={g.id} value={g.id}>
-                  {g.name} ({formatWeight(g.weightGrams)})
-                </option>
-              ))}
-            </select>
+              options={availableGear.map((g) => ({
+                value: g.id,
+                label: `${g.name} (${formatWeight(g.weightGrams)})`,
+              }))}
+              onChange={setSelectedGearId}
+            />
             <StampButton
               stampSeed="item-hinzufuegen"
               onClick={addItem}

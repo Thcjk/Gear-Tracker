@@ -5,6 +5,7 @@ import type { Category, GearDraft, GearItem } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { StampButton } from "@/components/ui/StampButton";
 import { NoteInput, NoteTextarea } from "@/components/ui/NoteInput";
+import { NoteDropdown } from "@/components/ui/NoteDropdown";
 import { SURFACE_CLASSES } from "@/components/ui/SurfaceCard";
 import {
   CATEGORIES,
@@ -93,27 +94,13 @@ export function GearItemForm({
           value={values.name}
           onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
         />
-        <label className={`grid gap-1 text-sm ${hideCategory ? "hidden" : ""}`}>
-          <span className="neu-label">
-            Kategorie
-          </span>
-          <select
-            value={values.category}
-            onChange={(e) =>
-              setValues((v) => ({
-                ...v,
-                category: e.target.value as Category,
-              }))
-            }
-            className="neu-field"
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <NoteDropdown<Category>
+          label="Kategorie"
+          className={hideCategory ? "hidden" : ""}
+          value={values.category}
+          options={CATEGORIES.map((c) => ({ value: c.id, label: c.label }))}
+          onChange={(category) => setValues((v) => ({ ...v, category }))}
+        />
         <div className="grid grid-cols-2 gap-3">
           <NoteInput
             label="Gewicht (g)"
