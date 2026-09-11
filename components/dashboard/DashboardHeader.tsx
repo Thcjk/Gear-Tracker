@@ -5,7 +5,7 @@ import { ArrowLeft, FileDown, Pencil } from "lucide-react";
 import { Compass } from "@/components/doodle/Doodles";
 import { WanderingTurtle } from "@/components/mascot/WanderingTurtle";
 import { WANDER_CYCLE } from "@/lib/wander";
-import { ProgressBar } from "@/components/lists/ProgressBar";
+import { FootprintProgress } from "@/components/ui/FootprintProgress";
 import { getSeasonalTheme } from "@/lib/seasons";
 
 export function DashboardHeader({
@@ -140,7 +140,7 @@ export function DashboardHeader({
       </div>
 
       <div className="relative mt-5">
-        <ProgressBar packed={packed} total={total} />
+        <FootprintProgress packed={packed} total={total} />
       </div>
     </header>
   );

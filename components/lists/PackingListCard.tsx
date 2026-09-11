@@ -18,7 +18,7 @@ import {
 } from "@/components/mascot/TurtleMascot";
 import { WanderingTurtle } from "@/components/mascot/WanderingTurtle";
 import { WANDER_CYCLE, wanderSlot } from "@/lib/wander";
-import { ProgressBar } from "./ProgressBar";
+import { FootprintProgress } from "@/components/ui/FootprintProgress";
 
 export function PackingListCard({
   list,
@@ -93,7 +93,7 @@ export function PackingListCard({
         </IconButton>
       </div>
       <div className="mt-4">
-        <ProgressBar packed={progress.packed} total={progress.total} />
+        <FootprintProgress packed={progress.packed} total={progress.total} />
       </div>
     </SurfaceCard>
   );
