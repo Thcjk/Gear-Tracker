@@ -12,7 +12,10 @@ import { formatWeight } from "@/lib/categories";
 import { staggerDelay } from "@/lib/stagger";
 import { IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
-import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import {
+  TurtleMascot,
+  getTurtleVariant,
+} from "@/components/mascot/TurtleMascot";
 import { ProgressBar } from "./ProgressBar";
 
 export function PackingListCard({
@@ -43,6 +46,7 @@ export function PackingListCard({
             Liste mit zehn Karten liefe sonst zehnmal dasselbe. */}
         <TurtleMascot
           totalWeightGrams={weight}
+          variant={getTurtleVariant(list.id)}
           animated={false}
           className="-my-1 h-14 w-14 shrink-0"
         />

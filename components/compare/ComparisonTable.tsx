@@ -3,7 +3,7 @@
 import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
-import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
@@ -49,6 +49,7 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
             <li key={row.entry.key} className="w-28 text-center">
               <TurtleMascot
                 totalWeightGrams={row.weightGrams}
+                variant={getTurtleVariant(row.entry.key)}
                 animated={false}
                 className="mx-auto h-24 w-24"
               />

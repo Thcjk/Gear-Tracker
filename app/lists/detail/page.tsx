@@ -5,7 +5,12 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
-import { TurtleMascot, STAGE_LABEL, getPackStage } from "@/components/mascot/TurtleMascot";
+import {
+  TurtleMascot,
+  STAGE_LABEL,
+  getPackStage,
+  getTurtleVariant,
+} from "@/components/mascot/TurtleMascot";
 import { DoodleArrow, WaypointLine } from "@/components/doodle/Doodles";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
@@ -197,6 +202,7 @@ function PackingListDetailInner() {
         <div className="flex items-center gap-4">
           <TurtleMascot
             totalWeightGrams={totalWeight}
+            variant={getTurtleVariant(list.id)}
             className="h-32 w-32 shrink-0"
             title={`Schildkröte, ${STAGE_LABEL[getPackStage(totalWeight)]}`}
           />
@@ -327,6 +333,7 @@ function PackingListDetailInner() {
             illustration={
               <TurtleMascot
                 totalWeightGrams={0}
+                variant={getTurtleVariant(list.id)}
                 animated={false}
                 className="h-28 w-28"
               />

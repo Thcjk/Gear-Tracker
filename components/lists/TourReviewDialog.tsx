@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, Flag, X } from "lucide-react";
-import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+import { TurtleMascot, getTurtleVariant } from "@/components/mascot/TurtleMascot";
 import { Button, IconButton } from "@/components/ui/Button";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { formatWeight } from "@/lib/categories";
@@ -160,7 +160,11 @@ export function TourReviewDialog({
         }}
       >
         <SurfaceCard className="animate-rise w-full max-w-md p-6 text-center">
-          <TurtleMascot totalWeightGrams={carriedGrams} className="mx-auto h-32 w-32" />
+          <TurtleMascot
+            totalWeightGrams={carriedGrams}
+            variant={getTurtleVariant(list.id)}
+            className="mx-auto h-32 w-32"
+          />
           <h2 className="mt-4 text-xl font-bold text-paper-800 dark:text-paper-100">
             Tour im Buch
           </h2>

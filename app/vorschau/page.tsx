@@ -1,6 +1,11 @@
 "use client";
 
-import { TurtleMascot, STAGE_LABEL, getPackStage } from "@/components/mascot/TurtleMascot";
+import {
+  TurtleMascot,
+  STAGE_LABEL,
+  getPackStage,
+  TURTLE_VARIANTS,
+} from "@/components/mascot/TurtleMascot";
 import { SurfaceCard } from "@/components/ui/SurfaceCard";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { CATEGORIES, formatWeight } from "@/lib/categories";
@@ -33,6 +38,7 @@ export default function VorschauPage() {
             >
               <TurtleMascot
                 totalWeightGrams={grams}
+                variant={0}
                 className="mx-auto h-32 w-32"
               />
               <p className="mt-1 text-sm font-bold tabular-nums text-paper-800 dark:text-paper-100">
@@ -40,6 +46,30 @@ export default function VorschauPage() {
               </p>
               <p className="handwritten text-base leading-tight text-paper-700 dark:text-paper-300">
                 Stufe {getPackStage(grams)} · {STAGE_LABEL[getPackStage(grams)]}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </SurfaceCard>
+
+      <SurfaceCard as="section" className="p-4">
+        <h2 className="handwritten mb-3 text-xl font-bold text-paper-800 dark:text-paper-100">
+          Panzer-Varianten
+        </h2>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {TURTLE_VARIANTS.map((_, index) => (
+            <li
+              key={index}
+              className="rounded-control px-2 py-3 text-center shadow-neu-in-sm"
+            >
+              <TurtleMascot
+                totalWeightGrams={7400}
+                variant={index}
+                animated={false}
+                className="mx-auto h-28 w-28"
+              />
+              <p className="handwritten text-base text-paper-700 dark:text-paper-300">
+                Variante {index}
               </p>
             </li>
           ))}
