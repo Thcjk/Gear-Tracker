@@ -7,7 +7,7 @@ import { ComparisonTable } from "@/components/compare/ComparisonTable";
 import { Button, IconButton } from "@/components/ui/Button";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
-import { BootsSketch } from "@/components/sketch/BootsSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { entryFromPackingList, entryFromShared } from "@/lib/calculations";
 import { parseSharedList } from "@/lib/shareFormat";
 import { useAppStore } from "@/lib/store";
@@ -78,7 +78,7 @@ export default function ComparePage() {
       />
 
       {data.packingLists.length === 0 ? (
-        <EmptyState illustration={<BootsSketch />}>
+        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch keine eigenen Packlisten zum Vergleichen.
         </EmptyState>
       ) : (

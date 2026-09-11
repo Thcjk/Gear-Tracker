@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Flag, Plus, Share2, Wand2 } from "lucide-react";
-import { TentSketch } from "@/components/sketch/TentSketch";
+import { TurtleMascot, STAGE_LABEL, getPackStage } from "@/components/mascot/TurtleMascot";
 import { Suspense } from "react";
 import { AchievementBadges } from "@/components/dashboard/AchievementBadges";
 import { ShareExportDialog } from "@/components/lists/ShareExportDialog";
@@ -189,6 +189,27 @@ function PackingListDetailInner() {
         onExportPdf={handleExportPdf}
       />
 
+      {/* Die Schildkröte steht über den Zahlen: sie ordnet das Gewicht
+          ein, bevor man es gelesen hat. Der ironische Badge weiter unten
+          bleibt davon unberührt – er sagt etwas anderes. */}
+      <SurfaceCard as="section" pinned={`mascot:${list.id}`} className="p-4">
+        <div className="flex items-center gap-4">
+          <TurtleMascot
+            totalWeightGrams={totalWeight}
+            className="h-32 w-32 shrink-0"
+            title={`Schildkröte, ${STAGE_LABEL[getPackStage(totalWeight)]}`}
+          />
+          <div className="min-w-0">
+            <p className="text-2xl font-extrabold tabular-nums text-paper-800 dark:text-paper-100">
+              {formatWeight(totalWeight)}
+            </p>
+            <p className="handwritten text-lg leading-snug text-paper-700 dark:text-paper-300">
+              {STAGE_LABEL[getPackStage(totalWeight)]}
+            </p>
+          </div>
+        </div>
+      </SurfaceCard>
+
       <div className="grid grid-cols-3 gap-3">
         <StatCard
           label="Gesamtgewicht"
@@ -289,9 +310,17 @@ function PackingListDetailInner() {
 
       <div className="space-y-3">
         {list.items.length === 0 ? (
-          <EmptyState illustration={<TentSketch />}>
-            Diese Liste ist noch leer. Such dir unten ein Item aus der Library
-            oder geh die Kategorien durch.
+          <EmptyState
+            illustration={
+              <TurtleMascot
+                totalWeightGrams={0}
+                animated={false}
+                className="h-28 w-28"
+              />
+            }
+          >
+            Noch nichts gepackt. Such dir unten ein Item aus der Library oder
+            geh die Kategorien durch.
           </EmptyState>
         ) : (
           list.items.map((item, index) => {

@@ -3,7 +3,8 @@
 import { Download } from "lucide-react";
 import type { ComparisonEntry } from "@/types";
 import { EmptyState, SurfaceCard } from "@/components/ui/SurfaceCard";
-import { BootsSketch } from "@/components/sketch/BootsSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
+
 import { buildComparison, comparisonCategoryMatrix } from "@/lib/calculations";
 import { formatPrice, formatWeight } from "@/lib/categories";
 
@@ -28,7 +29,7 @@ function EntryTitle({ entry }: { entry: ComparisonEntry }) {
 export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
   if (entries.length < 2) {
     return (
-      <EmptyState illustration={<BootsSketch />}>
+      <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
         Wähle mindestens zwei Packlisten zum Vergleichen – eigene oder eine
         importierte Datei.
       </EmptyState>
@@ -40,6 +41,28 @@ export function ComparisonTable({ entries }: { entries: ComparisonEntry[] }) {
 
   return (
     <div className="space-y-4">
+      {/* Der Gewichtsunterschied auf einen Blick, vor der Tabelle: fünf
+          Stufen nebeneinander sagen mehr als fünf Zahlen untereinander. */}
+      <SurfaceCard as="section" className="p-4">
+        <ul className="flex flex-wrap justify-center gap-4">
+          {rows.map((row) => (
+            <li key={row.entry.key} className="w-28 text-center">
+              <TurtleMascot
+                totalWeightGrams={row.weightGrams}
+                animated={false}
+                className="mx-auto h-24 w-24"
+              />
+              <p className="truncate text-sm font-bold text-paper-800 dark:text-paper-100">
+                {row.entry.title}
+              </p>
+              <p className="text-sm tabular-nums text-paper-700 dark:text-paper-300">
+                {formatWeight(row.weightGrams)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </SurfaceCard>
+
       <SurfaceCard className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="border-b border-paper-300 dark:border-paper-700">

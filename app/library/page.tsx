@@ -5,7 +5,7 @@ import { ChevronsDownUp, ChevronsUpDown, Plus } from "lucide-react";
 import { CategorySection } from "@/components/gear/CategorySection";
 import { GearItemCard } from "@/components/gear/GearItemCard";
 import { ProductImport } from "@/components/gear/ProductImport";
-import { BackpackSketch } from "@/components/sketch/BackpackSketch";
+import { TurtleMascot } from "@/components/mascot/TurtleMascot";
 import { EmptyState } from "@/components/ui/SurfaceCard";
 import {
   GearItemForm,
@@ -123,7 +123,7 @@ export default function LibraryPage() {
       <ProductImport onCreate={handleImported} />
 
       {data.gearItems.length === 0 && (
-        <EmptyState illustration={<BackpackSketch />}>
+        <EmptyState illustration={<TurtleMascot totalWeightGrams={0} animated={false} className="h-28 w-28" />}>
           Noch nichts in der Library. Klapp eine Kategorie auf und leg dein
           erstes Item an – oder importiere es per Link.
         </EmptyState>
