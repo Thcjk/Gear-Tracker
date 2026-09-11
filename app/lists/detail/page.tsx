@@ -252,7 +252,9 @@ function PackingListDetailInner() {
             )
           }
         />
-        {list.destination && <ForecastStrip destination={list.destination} />}
+        {list.destination && (
+          <ForecastStrip destination={list.destination} withMap />
+        )}
       </SurfaceCard>
 
       {/* Spur von der Schildkröte zu den Kennzahlen. Leicht schief und

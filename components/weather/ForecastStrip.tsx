@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { SkyIcon } from "@/components/weather/SkyIcon";
 import {
   fetchForecast,
@@ -17,6 +18,19 @@ import {
  * Wer offline auf dem Berg steht, hat andere Sorgen als einen roten
  * Kasten, der ihm sagt, dass er offline ist.
  */
+/**
+ * Leaflet wird nachgeladen und nie auf dem Server gerendert.
+ *
+ * Es greift schon beim Laden des Moduls auf window zu – beim statischen
+ * Export gäbe es das nicht, und der Build bräche ab. Nachgeladen heisst
+ * ausserdem: wer keine Packliste mit Zielort öffnet, lädt die Bibliothek
+ * nie. Sie ist mit Abstand die schwerste Abhängigkeit der App (rund
+ * 150 kB samt Stylesheet) und trägt genau ein unbedienbares Bild bei.
+ */
+const MapPreview = dynamic(() => import("@/components/weather/MapPreview"), {
+  ssr: false,
+});
+
 const WEEKDAY = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 function dayLabel(iso: string, index: number): string {
@@ -27,7 +41,14 @@ function dayLabel(iso: string, index: number): string {
   return Number.isNaN(date.getTime()) ? iso.slice(5) : WEEKDAY[date.getDay()];
 }
 
-export function ForecastStrip({ destination }: { destination: Destination }) {
+export function ForecastStrip({
+  destination,
+  withMap = false,
+}: {
+  destination: Destination;
+  /** Kartenausschnitt darunter – nur dort, wo Platz dafür ist. */
+  withMap?: boolean;
+}) {
   const [days, setDays] = useState<ForecastDay[] | null>(null);
 
   useEffect(() => {
@@ -43,10 +64,15 @@ export function ForecastStrip({ destination }: { destination: Destination }) {
     };
   }, [destination]);
 
-  if (!days || days.length === 0) return null;
+  // Die Karte hängt nicht an der Vorhersage: der Zielort steht fest, auch
+  // wenn der Wetterdienst gerade nicht erreichbar ist.
+  const map = withMap ? <MapPreview destination={destination} /> : null;
+
+  if (!days || days.length === 0) return map;
 
   return (
-    <ul className="mt-3 flex gap-2 overflow-x-auto pb-1">
+    <>
+      <ul className="mt-3 flex gap-2 overflow-x-auto pb-1">
       {days.map((day, index) => (
         <li
           key={day.date}
@@ -69,6 +95,8 @@ export function ForecastStrip({ destination }: { destination: Destination }) {
           )}
         </li>
       ))}
-    </ul>
+      </ul>
+      {map}
+    </>
   );
 }
